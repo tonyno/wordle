@@ -1,8 +1,8 @@
-import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/outline";
-import { MiniGrid } from "../mini-grid/MiniGrid";
+import { Fragment } from "react";
 import { shareStatus } from "../../lib/share";
+import { MiniGrid } from "../mini-grid/MiniGrid";
 
 type Props = {
   isOpen: boolean;
@@ -66,11 +66,11 @@ export const WinModal = ({
                     as="h3"
                     className="text-lg leading-6 font-medium text-gray-900"
                   >
-                    You won!
+                    Vyhrál/a jsi!
                   </Dialog.Title>
                   <div className="mt-2">
                     <MiniGrid guesses={guesses} />
-                    <p className="text-sm text-gray-500">Great job.</p>
+                    <p className="text-sm text-gray-500">Skvělá práce.</p>
                   </div>
                 </div>
               </div>
@@ -83,7 +83,7 @@ export const WinModal = ({
                     handleShare();
                   }}
                 >
-                  Share
+                  Kopírovat výsledek do schránky
                 </button>
               </div>
             </div>

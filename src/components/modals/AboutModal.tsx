@@ -1,5 +1,5 @@
-import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
+import { Fragment } from "react";
 
 type Props = {
   isOpen: boolean;
@@ -50,24 +50,47 @@ export const AboutModal = ({ isOpen, handleClose }: Props) => {
                     as="h3"
                     className="text-lg leading-6 font-medium text-gray-900"
                   >
-                    About
+                    O této hře
                   </Dialog.Title>
                   <div className="mt-2">
                     <p className="text-sm text-gray-500">
-                      This is an open source clone of the game Wordle -{" "}
+                      Aplikaci přeložil a pro české podmínky upravil{" "}
+                      <a href="https://www.linkedin.com/in/tonda/">Tonda</a>.
+                      Zdrojové kódy jsou:{" "}
+                      <a
+                        href="https://github.com/tonyno/wordle"
+                        className="underline font-bold"
+                      >
+                        zde
+                      </a>
+                      .
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      Hlášení případných chyb a námětů na vylepšení:{" "}
+                      <a
+                        href="https://github.com/tonyno/wordle/issues/new"
+                        className="underline font-bold"
+                      >
+                        zde
+                      </a>
+                      .
+                    </p>
+                    <p className="text-sm text-gray-500 mt-6">
+                      Původní autorka zdrojových kódů:{" "}
                       <a
                         href="https://github.com/hannahcode/wordle"
                         className="underline font-bold"
                       >
-                        check out the code here
-                      </a>{" "}
-                      and{" "}
+                        hannahcode
+                      </a>
+                      . Původní anglická verze hry:{" "}
                       <a
                         href="https://www.powerlanguage.co.uk/wordle/"
                         className="underline font-bold"
                       >
-                        play the original here
+                        zde
                       </a>
+                      .
                     </p>
                   </div>
                 </div>

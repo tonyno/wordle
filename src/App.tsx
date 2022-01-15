@@ -1,20 +1,22 @@
 import { InformationCircleIcon } from "@heroicons/react/outline";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Alert } from "./components/alerts/Alert";
 import { Grid } from "./components/grid/Grid";
 import { Keyboard } from "./components/keyboard/Keyboard";
 import { AboutModal } from "./components/modals/AboutModal";
 import { InfoModal } from "./components/modals/InfoModal";
 import { WinModal } from "./components/modals/WinModal";
-import { isWordInWordList, isWinningWord, solution } from "./lib/words";
+import NextWord from "./components/NextWord";
 import {
   loadGameStateFromLocalStorage,
   saveGameStateToLocalStorage,
 } from "./lib/localStorage";
+import { logMyEvent } from "./lib/settingsFirebase";
+import { isWinningWord, isWordInWordList, solution } from "./lib/words";
 
 function App() {
   const [guesses, setGuesses] = useState<string[]>(
-    loadGameStateFromLocalStorage()?.guesses || []
+    loadGameStateFromLocalStorage(solution)?.guesses || []
   );
   const [currentGuess, setCurrentGuess] = useState("");
   const [isGameWon, setIsGameWon] = useState(false);
@@ -26,7 +28,11 @@ function App() {
   const [shareComplete, setShareComplete] = useState(false);
 
   useEffect(() => {
-    saveGameStateToLocalStorage(guesses);
+    logMyEvent("start");
+  }, []);
+
+  useEffect(() => {
+    saveGameStateToLocalStorage(guesses, solution);
   }, [guesses]);
 
   useEffect(() => {
@@ -73,19 +79,19 @@ function App() {
   };
 
   return (
-    <div className="py-8 max-w-7xl mx-auto sm:px-6 lg:px-8">
-      <Alert message="Word not found" isOpen={isWordNotFoundAlertOpen} />
+    <div className="py-1 max-w-7xl mx-auto sm:px-6 lg:px-8">
+      <Alert message="Slovo nenalezeno" isOpen={isWordNotFoundAlertOpen} />
       <Alert
-        message={`You lost, the word was ${solution}`}
+        message={`Prohrál jsi. Správná odpověď: ${solution}`}
         isOpen={isGameLost}
       />
       <Alert
-        message="Game copied to clipboard"
+        message="Hra zkopírována do schránky"
         isOpen={shareComplete}
         variant="success"
       />
-      <div className="flex w-80 mx-auto items-center mb-8">
-        <h1 className="text-xl grow font-bold">Not Wordle</h1>
+      <div className="flex w-80 mx-auto items-center mb-2">
+        <h1 className="text-xl grow font-bold">Wordle[cz]</h1>
         <InformationCircleIcon
           className="h-6 w-6 cursor-pointer"
           onClick={() => setIsInfoModalOpen(true)}
@@ -118,13 +124,13 @@ function App() {
         isOpen={isAboutModalOpen}
         handleClose={() => setIsAboutModalOpen(false)}
       />
-
+      <NextWord />
       <button
         type="button"
-        className="mx-auto mt-8 flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        className="mx-auto mt-4 flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         onClick={() => setIsAboutModalOpen(true)}
       >
-        About this game
+        O této hře
       </button>
     </div>
   );

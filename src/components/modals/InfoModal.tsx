@@ -1,5 +1,5 @@
-import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
+import { Fragment } from "react";
 import { Cell } from "../grid/Cell";
 
 type Props = {
@@ -51,24 +51,24 @@ export const InfoModal = ({ isOpen, handleClose }: Props) => {
                     as="h3"
                     className="text-lg leading-6 font-medium text-gray-900"
                   >
-                    How to play
+                    Jak hrát Wordle
                   </Dialog.Title>
                   <div className="mt-2">
                     <p className="text-sm text-gray-500">
-                      Guess the WORDLE in 6 tries. After each guess, the color
-                      of the tiles will change to show how close your guess was
-                      to the word.
+                      Uhodni slovo na 6 pokusů. Po každém pokusu se písmenko
+                      obarví barvou podle toho jak daleko byl Tvůj tip od
+                      uhodnutí slova.
                     </p>
 
                     <div className="flex justify-center mb-1 mt-4">
-                      <Cell value="W" status="correct" />
-                      <Cell value="E" />
+                      <Cell value="K" status="correct" />
+                      <Cell value="O" />
+                      <Cell value="Č" />
+                      <Cell value="K" />
                       <Cell value="A" />
-                      <Cell value="R" />
-                      <Cell value="Y" />
                     </div>
                     <p className="text-sm text-gray-500">
-                      The letter W is in the word and in the correct spot.
+                      Písmeno <b>K</b> je ve slově a na <b>správném</b> místě.
                     </p>
 
                     <div className="flex justify-center mb-1 mt-4">
@@ -79,18 +79,19 @@ export const InfoModal = ({ isOpen, handleClose }: Props) => {
                       <Cell value="T" />
                     </div>
                     <p className="text-sm text-gray-500">
-                      The letter L is in the word but in the wrong spot.
+                      Písmeno <b>L</b> je v hledaném slově, ale na chybném
+                      místě.
                     </p>
 
                     <div className="flex justify-center mb-1 mt-4">
-                      <Cell value="V" />
-                      <Cell value="A" />
-                      <Cell value="G" />
-                      <Cell value="U" status="absent" />
+                      <Cell value="M" />
                       <Cell value="E" />
+                      <Cell value="T" />
+                      <Cell value="R" status="absent" />
+                      <Cell value="O" />
                     </div>
                     <p className="text-sm text-gray-500">
-                      The letter U is not in the word in any spot.
+                      Písmeno <b>R</b> se v hledaném slově nevyskytuje.
                     </p>
                   </div>
                 </div>

@@ -3,12 +3,13 @@ import { solutionIndex } from "./words";
 
 export const shareStatus = (guesses: string[]) => {
   navigator.clipboard.writeText(
-    "Wordle " +
+    "Wordle[cz] č." +
       solutionIndex +
       " " +
       guesses.length +
       "/6\n\n" +
-      generateEmojiGrid(guesses)
+      generateEmojiGrid(guesses) +
+      "\n\nhttps://wordle-cz.web.app/"
   );
 };
 

@@ -1,13 +1,16 @@
-import { ReactNode } from "react";
 import classnames from "classnames";
+import { ReactNode } from "react";
 import { KeyValue } from "../../lib/keyboard";
 import { CharStatus } from "../../lib/statuses";
+
+type KeyColor = "red" | "green";
 
 type Props = {
   children?: ReactNode;
   value: KeyValue;
   width?: number;
   status?: CharStatus;
+  color?: KeyColor;
   onClick: (value: KeyValue) => void;
 };
 
@@ -16,6 +19,7 @@ export const Key = ({
   status,
   width = 40,
   value,
+  color,
   onClick,
 }: Props) => {
   const classes = classnames(
@@ -27,12 +31,14 @@ export const Key = ({
         status === "correct",
       "bg-yellow-500 hover:bg-yellow-600 active:bg-yellow-700 text-white":
         status === "present",
+      "text-red-600": color === "red",
+      "text-green-600": color === "green",
     }
   );
 
   return (
     <div
-      style={{ width: `${width}px`, height: "58px" }}
+      style={{ width: `${width}px`, height: "50px" }}
       className={classes}
       onClick={() => onClick(value)}
     >
