@@ -1,5 +1,5 @@
-import { WORDS } from "../constants/wordlist";
 import { VALIDGUESSES } from "../constants/validGuesses";
+import { WORDS } from "../constants/wordlist";
 
 export const isWordInWordList = (word: string) => {
   return (
@@ -17,8 +17,11 @@ export const getWordOfDay = () => {
   const epochMs = 1641013200000;
   const now = Date.now();
   const msInDay = 86400000;
-  const index = Math.floor((now - epochMs) / msInDay);
+  let index = Math.floor((now - epochMs) / msInDay);
+  index = 4258;
 
+  console.log("Now: ", now);
+  console.log(WORDS[index].toUpperCase());
   return {
     solution: WORDS[index].toUpperCase(),
     solutionIndex: index,

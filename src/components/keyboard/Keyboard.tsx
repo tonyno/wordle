@@ -1,7 +1,7 @@
+import { useEffect } from "react";
 import { KeyValue } from "../../lib/keyboard";
 import { getStatuses } from "../../lib/statuses";
 import { Key } from "./Key";
-import {useEffect} from "react";
 
 type Props = {
   onChar: (value: string) => void;
@@ -24,14 +24,17 @@ export const Keyboard = ({ onChar, onDelete, onEnter, guesses }: Props) => {
   };
 
   useEffect(() => {
-    const listener = (e:KeyboardEvent) => {
-      if(e.code === "Enter") {
+    const listener = (e: KeyboardEvent) => {
+      if (e.code === "Enter") {
         onEnter();
-      } else if(e.code === "Backspace") {
+      } else if (e.code === "Backspace") {
         onDelete();
       } else {
         const key = e.key.toUpperCase();
-        if(key.length === 1 && key >= "A" && key <= "Z") {
+        if (
+          (key.length === 1 && key >= "A" && key <= "Z") ||
+          "ĚŠČŘŽÝÁÍÉŮ".includes(key)
+        ) {
           onChar(key);
         }
       }
@@ -44,6 +47,18 @@ export const Keyboard = ({ onChar, onDelete, onEnter, guesses }: Props) => {
 
   return (
     <div>
+      <div className="flex justify-center mb-1">
+        <Key value="Ě" onClick={onClick} status={charStatuses["Ě"]} />
+        <Key value="Š" onClick={onClick} status={charStatuses["Š"]} />
+        <Key value="Č" onClick={onClick} status={charStatuses["Č"]} />
+        <Key value="Ř" onClick={onClick} status={charStatuses["Ř"]} />
+        <Key value="Ž" onClick={onClick} status={charStatuses["Ž"]} />
+        <Key value="Ý" onClick={onClick} status={charStatuses["Ý"]} />
+        <Key value="Á" onClick={onClick} status={charStatuses["Á"]} />
+        <Key value="Í" onClick={onClick} status={charStatuses["Í"]} />
+        <Key value="É" onClick={onClick} status={charStatuses["É"]} />
+        <Key value="Ů" onClick={onClick} status={charStatuses["Ů"]} />
+      </div>
       <div className="flex justify-center mb-1">
         <Key value="Q" onClick={onClick} status={charStatuses["Q"]} />
         <Key value="W" onClick={onClick} status={charStatuses["W"]} />

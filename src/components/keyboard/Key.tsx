@@ -1,5 +1,5 @@
-import { ReactNode } from "react";
 import classnames from "classnames";
+import { ReactNode } from "react";
 import { KeyValue } from "../../lib/keyboard";
 import { CharStatus } from "../../lib/statuses";
 
@@ -32,7 +32,7 @@ export const Key = ({
 
   return (
     <div
-      style={{ width: `${width}px`, height: "58px" }}
+      style={{ width: `${width}px`, height: "50px" }}
       className={classes}
       onClick={() => onClick(value)}
     >
