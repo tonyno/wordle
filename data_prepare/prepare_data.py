@@ -12,6 +12,18 @@ word_types = ['H', 'ZQ', 'Z', 'YKRN', 'U', 'S', 'ATN', 'PI', 'MQ', 'JTN', 'Q',
 guesses = []
 words = []
 
+
+def add_files(file_name, encoding='utf-8'):
+    global guesses
+    f = open(file_name, 'r', encoding=encoding)
+    for line in f:
+        word = line.strip()
+        if len(word) == 5:
+            if word not in guesses:
+                guesses.append(word)
+    f.close()
+
+
 f = open('data_prepare/cs_CZ.dic', 'r', encoding='utf-8')
 for line in f:
     word, word_type = line.strip(), 'DEFAULT'
@@ -27,13 +39,9 @@ for line in f:
             guesses.append(word)
 f.close()
 
-f = open('data_prepare/Česká podstatná jména.txt', 'r', encoding='utf-8')
-for line in f:
-    word = line.strip()
-    if len(word) == 5:
-        if word not in guesses:
-            guesses.append(word)
-f.close()
+add_files('data_prepare/Česká podstatná jména.txt')
+add_files('data_prepare/Czech.3-2-5.dic', 'windows-1250')
+
 
 for word_type in types:
     print(word_type, len(types[word_type]))
