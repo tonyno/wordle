@@ -1,3 +1,4 @@
+import { msInDay, startDate } from "../constants/otherConstants";
 import { VALIDGUESSES } from "../constants/validGuesses";
 import { WORDS } from "../constants/wordlist";
 
@@ -13,15 +14,10 @@ export const isWinningWord = (word: string) => {
 };
 
 export const getWordOfDay = () => {
-  // January 1, 2022 Game Epoch
-  const epochMs = 1641013200000;
+  const epochMs = startDate.getTime();
   const now = Date.now();
-  const msInDay = 86400000;
   let index = Math.floor((now - epochMs) / msInDay);
-  index = 4258;
-
-  console.log("Now: ", now);
-  console.log(WORDS[index].toUpperCase());
+  console.log("Index: ", index);
   return {
     solution: WORDS[index].toUpperCase(),
     solutionIndex: index,

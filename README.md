@@ -1,4 +1,12 @@
-# Wordle Clone
+# Česká verze hry Wordle
+
+Aplikace běží na: https://wordle-cz.web.app/
+
+Zdrojové kódy jsou v tomto repu. Jde o rozšířený kód z https://github.com/hannahcode/Wordle
+
+Případné chyby hlašte do https://github.com/tonyno/wordle/issues
+
+# Wordle Clone (původní MD file od autorky)
 
 - Go play the real Wordle [here](https://www.powerlanguage.co.uk/wordle/)
 - Read the story behind it [here](https://www.nytimes.com/2022/01/03/technology/wordle-word-game-creator.html)
@@ -22,11 +30,9 @@ I implemented Tailwind mostly because I wanted to learn how to use Tailwind CSS,
 
 _To Run Locally:_
 Clone the repository and perform the following command line actions:
+
 ```bash
 $ cd wordle
 $ npm install
 $ npm run start
 ```
-
-### I'm looking for a junior developer role
-Please feel free to contact me on [linkedin](https://www.linkedin.com/in/hannahpark1000/) and learn more about me [here](https://www.hannahmariepark.com/)

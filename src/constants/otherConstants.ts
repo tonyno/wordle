@@ -1,0 +1,4 @@
+// export const startDate = new Date(2022, 0, 14, 18, 0);
+
+export const startDate = new Date(2022, 0, 14, 18, 0);
+export const msInDay = 86400000;
