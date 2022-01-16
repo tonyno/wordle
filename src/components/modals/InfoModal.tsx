@@ -1,5 +1,6 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
+import { logMyEvent } from "../../lib/settingsFirebase";
 import { Cell } from "../grid/Cell";
 
 type Props = {
@@ -8,6 +9,7 @@ type Props = {
 };
 
 export const InfoModal = ({ isOpen, handleClose }: Props) => {
+  if (isOpen) logMyEvent("infoModal");
   return (
     <Transition.Root show={isOpen} as={Fragment}>
       <Dialog
@@ -51,7 +53,7 @@ export const InfoModal = ({ isOpen, handleClose }: Props) => {
                     as="h3"
                     className="text-lg leading-6 font-medium text-gray-900"
                   >
-                    Jak hrát Wordle
+                    Jak hrát <a href="https://hadejslova.cz/">HádejSlova.cz</a>
                   </Dialog.Title>
                   <div className="mt-2">
                     <p className="text-sm text-gray-500">

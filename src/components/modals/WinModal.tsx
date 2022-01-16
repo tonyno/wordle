@@ -1,7 +1,11 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/outline";
+import ContentPasteIcon from "@mui/icons-material/ContentPaste";
+import ShareIcon from "@mui/icons-material/Share";
+import { Box, Button } from "@mui/material";
 import { Fragment } from "react";
-import { shareStatus } from "../../lib/share";
+import { logMyEvent } from "../../lib/settingsFirebase";
+import { canShare, shareStatus } from "../../lib/share";
 import { MiniGrid } from "../mini-grid/MiniGrid";
 
 type Props = {
@@ -17,6 +21,7 @@ export const WinModal = ({
   guesses,
   handleShare,
 }: Props) => {
+  if (isOpen) logMyEvent("winModal");
   return (
     <Transition.Root show={isOpen} as={Fragment}>
       <Dialog
@@ -75,16 +80,42 @@ export const WinModal = ({
                 </div>
               </div>
               <div className="mt-5 sm:mt-6">
-                <button
+                {/* <button
                   type="button"
-                  className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
+                  className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm align-middle"
                   onClick={() => {
                     shareStatus(guesses);
                     handleShare();
                   }}
+                >*/}
+                {canShare() && (
+                  <Box sx={{ mb: 2 }}>
+                    <Button
+                      variant="contained"
+                      startIcon={<ShareIcon />}
+                      className="inline-flex justify-center w-full"
+                      onClick={() => {
+                        shareStatus(guesses, true);
+                      }}
+                    >
+                      Sdílet
+                    </Button>
+                    <p className="text-xs text-gray-500 italic">
+                      *) Pro FB použijte kopírování do schránky.
+                    </p>
+                  </Box>
+                )}
+                <Button
+                  variant={canShare() ? "outlined" : "contained"}
+                  startIcon={<ContentPasteIcon />}
+                  className="inline-flex justify-center w-full"
+                  onClick={() => {
+                    shareStatus(guesses, false);
+                    handleShare();
+                  }}
                 >
-                  Kopírovat výsledek do schránky
-                </button>
+                  Kopírovat do schránky
+                </Button>
               </div>
             </div>
           </Transition.Child>
