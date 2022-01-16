@@ -1,35 +1,37 @@
-import { InformationCircleIcon } from "@heroicons/react/outline";
 import { useEffect, useState } from "react";
 import { Alert } from "./components/alerts/Alert";
 import { Grid } from "./components/grid/Grid";
 import { Keyboard } from "./components/keyboard/Keyboard";
-import { AboutModal } from "./components/modals/AboutModal";
-import { InfoModal } from "./components/modals/InfoModal";
 import { WinModal } from "./components/modals/WinModal";
-import NextWord from "./components/NextWord";
+import TopMenu from "./components/navigation/TopMenu";
 import {
   loadGameStateFromLocalStorage,
   saveGameStateToLocalStorage,
 } from "./lib/localStorage";
 import { logMyEvent } from "./lib/settingsFirebase";
+import { loadGuessInitialState } from "./lib/statuses";
 import { isWinningWord, isWordInWordList, solution } from "./lib/words";
 
 function App() {
+  const dataFromLocalStorage = loadGameStateFromLocalStorage(solution);
   const [guesses, setGuesses] = useState<string[]>(
-    loadGameStateFromLocalStorage(solution)?.guesses || []
+    dataFromLocalStorage?.guesses || []
   );
   const [currentGuess, setCurrentGuess] = useState("");
   const [isGameWon, setIsGameWon] = useState(false);
   const [isWinModalOpen, setIsWinModalOpen] = useState(false);
-  const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
-  const [isAboutModalOpen, setIsAboutModalOpen] = useState(false);
   const [isWordNotFoundAlertOpen, setIsWordNotFoundAlertOpen] = useState(false);
   const [isGameLost, setIsGameLost] = useState(false);
   const [shareComplete, setShareComplete] = useState(false);
 
   useEffect(() => {
-    logMyEvent("start");
-  }, []);
+    logMyEvent("start", navigator.userAgent || navigator.vendor);
+    const initialStatus = loadGuessInitialState(guesses);
+    console.log(initialStatus);
+    if (initialStatus === "win" && isGameWon === false) {
+      setIsGameWon(true);
+    }
+  }, [guesses, isGameWon]);
 
   useEffect(() => {
     saveGameStateToLocalStorage(guesses, solution);
@@ -52,6 +54,7 @@ function App() {
   };
 
   const onEnter = () => {
+    const lastGuess = currentGuess;
     if (!isWordInWordList(currentGuess)) {
       setIsWordNotFoundAlertOpen(true);
       return setTimeout(() => {
@@ -66,10 +69,12 @@ function App() {
       setCurrentGuess("");
 
       if (winningWord) {
+        logMyEvent("win", lastGuess);
         return setIsGameWon(true);
       }
 
       if (guesses.length === 5) {
+        logMyEvent("loose", lastGuess);
         setIsGameLost(true);
         return setTimeout(() => {
           setIsGameLost(false);
@@ -79,60 +84,40 @@ function App() {
   };
 
   return (
-    <div className="py-1 max-w-7xl mx-auto sm:px-6 lg:px-8">
-      <Alert message="Slovo nenalezeno" isOpen={isWordNotFoundAlertOpen} />
-      <Alert
-        message={`Prohrál jsi. Správná odpověď: ${solution}`}
-        isOpen={isGameLost}
-      />
-      <Alert
-        message="Hra zkopírována do schránky"
-        isOpen={shareComplete}
-        variant="success"
-      />
-      <div className="flex w-80 mx-auto items-center mb-2">
-        <h1 className="text-xl grow font-bold">Wordle[cz]</h1>
-        <InformationCircleIcon
-          className="h-6 w-6 cursor-pointer"
-          onClick={() => setIsInfoModalOpen(true)}
+    <>
+      <TopMenu />
+      <div className="py-1 max-w-7xl mx-auto sm:px-6 lg:px-8 mt-4">
+        <Alert message="Slovo nenalezeno" isOpen={isWordNotFoundAlertOpen} />
+        <Alert
+          message={`Prohrál jsi. Správná odpověď: ${solution}`}
+          isOpen={isGameLost}
+        />
+        <Alert
+          message="Hra zkopírována do schránky"
+          isOpen={shareComplete}
+          variant="success"
+        />
+        <Grid guesses={guesses} currentGuess={currentGuess} />
+        <Keyboard
+          onChar={onChar}
+          onDelete={onDelete}
+          onEnter={onEnter}
+          guesses={guesses}
+        />
+        <WinModal
+          isOpen={isWinModalOpen}
+          handleClose={() => setIsWinModalOpen(false)}
+          guesses={guesses}
+          handleShare={() => {
+            setIsWinModalOpen(false);
+            setShareComplete(true);
+            return setTimeout(() => {
+              setShareComplete(false);
+            }, 2000);
+          }}
         />
       </div>
-      <Grid guesses={guesses} currentGuess={currentGuess} />
-      <Keyboard
-        onChar={onChar}
-        onDelete={onDelete}
-        onEnter={onEnter}
-        guesses={guesses}
-      />
-      <WinModal
-        isOpen={isWinModalOpen}
-        handleClose={() => setIsWinModalOpen(false)}
-        guesses={guesses}
-        handleShare={() => {
-          setIsWinModalOpen(false);
-          setShareComplete(true);
-          return setTimeout(() => {
-            setShareComplete(false);
-          }, 2000);
-        }}
-      />
-      <InfoModal
-        isOpen={isInfoModalOpen}
-        handleClose={() => setIsInfoModalOpen(false)}
-      />
-      <AboutModal
-        isOpen={isAboutModalOpen}
-        handleClose={() => setIsAboutModalOpen(false)}
-      />
-      <NextWord />
-      <button
-        type="button"
-        className="mx-auto mt-4 flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        onClick={() => setIsAboutModalOpen(true)}
-      >
-        O této hře
-      </button>
-    </div>
+    </>
   );
 }
 

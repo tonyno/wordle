@@ -111,3 +111,19 @@ export const getGuessStatuses = (guess: string): CharStatus[] => {
 
   return statuses;
 };
+
+export type GuessInitialState = "win" | "loose" | "notStarted" | "playing";
+
+export const loadGuessInitialState = (guesses: string[]): GuessInitialState => {
+  if (!guesses || guesses.length === 0) {
+    return "notStarted";
+  }
+  const lastItem = guesses.at(-1);
+  if (lastItem === solution) {
+    return "win";
+  }
+  if (guesses.length === 6) {
+    return "loose";
+  }
+  return "playing";
+};

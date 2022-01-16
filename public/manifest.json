@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "HádejSlova.cz",
+  "name": "HádejSlova.cz - Česká verze logické hry Wordle",
   "icons": [
     {
       "src": "favicon.ico",
