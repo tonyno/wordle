@@ -118,7 +118,7 @@ export const loadGuessInitialState = (guesses: string[]): GuessInitialState => {
   if (!guesses || guesses.length === 0) {
     return "notStarted";
   }
-  const lastItem = guesses.at(-1);
+  const lastItem = guesses[guesses.length - 1];
   if (lastItem === solution) {
     return "win";
   }
