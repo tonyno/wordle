@@ -13,20 +13,20 @@ const getShareDataText = (
   includeUrl: boolean = true
 ): string => {
   return (
-    "HadejSlova.cz č." +
+    "HadejSlova.cz den " +
     solutionIndex +
-    " " +
+    ". [" +
     guesses.length +
-    "/6\n\n" +
+    "/6]\n\n" +
     generateEmojiGrid(guesses) +
-    "\n\n" +
+    "\n#hadejSlova - Česká verze Wordle\n" +
     (includeUrl ? ourUrl : "")
   );
 };
 
 const getShareData = (guesses: string[]): SharaData => {
   let shareData = {
-    title: "HádejSlova.cz",
+    title: "HadejSlova.cz",
     text: getShareDataText(guesses, false),
     url: ourUrl,
   };
@@ -51,7 +51,12 @@ const isMobile = (): boolean => {
 };
 
 export const canShare = (): boolean => {
-  return navigator && isMobile() && navigator.canShare(getShareData(["TONDA"]));
+  return (
+    navigator &&
+    isMobile() &&
+    typeof navigator.canShare === "function" && // https://stackoverflow.com/questions/1042138/how-to-check-if-function-exists-in-javascript?rq=1
+    navigator.canShare(getShareData(["TONDA"]))
+  );
 };
 
 export const shareStatus = (guesses: string[], directShare: boolean) => {

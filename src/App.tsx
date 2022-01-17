@@ -27,11 +27,13 @@ function App() {
   useEffect(() => {
     logMyEvent("start", navigator.userAgent || navigator.vendor);
     const initialStatus = loadGuessInitialState(guesses);
-    console.log(initialStatus);
+    console.log("useEffect() start: ", initialStatus);
     if (initialStatus === "win" && isGameWon === false) {
       setIsGameWon(true);
     }
-  }, [guesses, isGameWon]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  // TODO https://github.com/facebook/create-react-app/issues/6880#issuecomment-485912528
 
   useEffect(() => {
     saveGameStateToLocalStorage(guesses, solution);
@@ -65,6 +67,7 @@ function App() {
     const winningWord = isWinningWord(currentGuess);
 
     if (currentGuess.length === 5 && guesses.length < 6 && !isGameWon) {
+      logMyEvent("guess", lastGuess);
       setGuesses([...guesses, currentGuess]);
       setCurrentGuess("");
 

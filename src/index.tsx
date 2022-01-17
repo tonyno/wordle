@@ -1,3 +1,5 @@
+// import Bugsnag from "@bugsnag/js";
+// import BugsnagPluginReact from "@bugsnag/plugin-react";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
 import React from "react";
@@ -6,6 +8,12 @@ import App from "./App";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import theme from "./theme";
+
+// Bugsnag.start({
+//   apiKey: "cf18ffb74341638909c7b250c17b8718",
+//   plugins: [new BugsnagPluginReact()],
+// });
+// const ErrorBoundary = Bugsnag.getPlugin("react").createErrorBoundary(React);
 
 ReactDOM.render(
   <React.StrictMode>

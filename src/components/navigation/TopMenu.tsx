@@ -7,9 +7,9 @@ import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
+import CountDownTimer from "../counter/CountDownTimer";
 import { AboutModal } from "../modals/AboutModal";
 import { InfoModal } from "../modals/InfoModal";
-import NextWord from "../NextWord";
 import logo from "./logo.png";
 
 const TopMenu = () => {
@@ -34,7 +34,7 @@ const TopMenu = () => {
               <img src={logo} alt={"Logo"} />
             </IconButton>
 
-            <NextWord />
+            <CountDownTimer />
             <Typography
               variant="h6"
               color="inherit"
