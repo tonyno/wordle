@@ -77,11 +77,21 @@ const TopMenu = () => {
                 </MenuItem>
                 <MenuItem
                   onClick={() => {
+                    window.open(
+                      "https://docs.google.com/forms/d/e/1FAIpQLSfMHytWem1XZZ6uLG3qP7IdBMKmSZ3LBNnjJPQ6M_LEi7_UVQ/viewform",
+                      "_blank"
+                    );
+                  }}
+                >
+                  Nápad na zlepšení?
+                </MenuItem>{" "}
+                <MenuItem
+                  onClick={() => {
                     setIsAboutModalOpen(true);
                     handleClose();
                   }}
                 >
-                  O aplikaci
+                  O aplikaci..
                 </MenuItem>
               </Menu>
             </div>

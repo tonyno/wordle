@@ -34,8 +34,13 @@ export const AboutModal = ({ isOpen, handleClose }: Props) => {
           <Link href="https://www.linkedin.com/in/tonda/">Tonda</Link>.{" "}
         </DialogContentText>{" "}
         <DialogContentText id="alert-dialog-description">
-          Případné chyby nebo náměty na vylepšení prosím hlašte:{" "}
-          <Link href="https://github.com/tonyno/wordle/issues/new">zde</Link>.
+          Chyby a náměty na zlepšení hlašte:{" "}
+          <Link href="https://docs.google.com/forms/d/e/1FAIpQLSfMHytWem1XZZ6uLG3qP7IdBMKmSZ3LBNnjJPQ6M_LEi7_UVQ/viewform">
+            zde
+          </Link>
+          . Nebo rovnou na{" "}
+          <Link href="https://github.com/tonyno/wordle/issues/new">GitHub</Link>
+          .
         </DialogContentText>{" "}
         <DialogContentText id="alert-dialog-description" sx={{ mt: 3 }}>
           Zdrojové kódy jsou:{" "}

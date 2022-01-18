@@ -24,3 +24,4 @@ yarn-error.log*
 data_prepare/.exploration*
 .firebase/*.cache
 public/google*.html
+.media/*
