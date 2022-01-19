@@ -1,3 +1,4 @@
+import EqualizerIcon from "@mui/icons-material/Equalizer";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import { Badge } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
@@ -8,6 +9,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { PlayContext } from "../../lib/playContext";
 import CountDownTimer from "../counter/CountDownTimer";
 import { AboutModal } from "../modals/AboutModal";
@@ -19,6 +21,7 @@ type Props = {
 };
 
 const TopMenu = ({ playContext }: Props) => {
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
   const [isAboutModalOpen, setIsAboutModalOpen] = useState(false);
@@ -53,13 +56,25 @@ const TopMenu = ({ playContext }: Props) => {
                 aria-label="account of current user"
                 aria-controls="menu-appbar"
                 aria-haspopup="true"
-                onClick={handleMenu}
+                onClick={() => {
+                  navigate("/stats");
+                }}
                 color="inherit"
               >
                 <Badge badgeContent={"+1"} color="secondary">
                   {" "}
-                  <HelpOutlineIcon />
+                  <EqualizerIcon />
                 </Badge>
+              </IconButton>
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleMenu}
+                color="inherit"
+              >
+                <HelpOutlineIcon />
               </IconButton>
               <Menu
                 id="menu-appbar"
@@ -92,9 +107,15 @@ const TopMenu = ({ playContext }: Props) => {
                     );
                   }}
                 >
-                  <Badge badgeContent={"+1"} variant="dot" color="secondary">
-                    Nápad na zlepšení?
-                  </Badge>
+                  Nápad na zlepšení?
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    navigate("/faq");
+                    handleClose();
+                  }}
+                >
+                  Časté otázky a odpovědi (FAQ)
                 </MenuItem>
                 <MenuItem
                   onClick={() => {

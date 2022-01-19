@@ -25,3 +25,4 @@ data_prepare/.exploration*
 .firebase/*.cache
 public/google*.html
 .media/*
+data_calculate/wordle-cz-firebase-adminsdk-*.json
