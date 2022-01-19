@@ -118,12 +118,12 @@ export const getGuessStatuses = (
   return statuses;
 };
 
-export type GuessInitialState = "win" | "loose" | "notStarted" | "playing";
+export type PlayState = "win" | "loose" | "notStarted" | "playing";
 
 export const loadGuessInitialState = (
   playContext: PlayContext,
   guesses: string[]
-): GuessInitialState => {
+): PlayState => {
   const solution = playContext.solution;
   if (!guesses || guesses.length === 0) {
     return "notStarted";

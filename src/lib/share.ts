@@ -20,7 +20,11 @@ const getShareDataText = (
     guesses.length +
     "/6]\n\n" +
     generateEmojiGrid(playContext, guesses) +
-    "\n#hadejSlova - Česká verze Wordle\n" +
+    "\n#hadejSlova #den" +
+    playContext.solutionIndex +
+    " #krok" +
+    guesses.length +
+    "\nČeská verze Wordle\n" +
     (includeUrl ? ourUrl : "")
   );
 };
