@@ -3,6 +3,7 @@ import { Alert } from "./components/alerts/Alert";
 import { Grid } from "./components/grid/Grid";
 import { Keyboard } from "./components/keyboard/Keyboard";
 import { WinModal } from "./components/modals/WinModal";
+import { saveGameResultFirebase } from "./lib/dataAdapter";
 import {
   loadGameStateFromLocalStorage,
   saveGameStateToLocalStorage,
@@ -90,6 +91,13 @@ const WordlePlay = ({ playContext }: Props) => {
 
       if (winningWord) {
         logMyEvent("win", lastGuess);
+        saveGameResultFirebase(
+          playContext,
+          "TBD",
+          "win",
+          guesses,
+          actualGuessAttempt
+        );
         updateFinishedGameStats(true, actualGuessAttempt);
         return setIsGameWon(true);
       }
@@ -98,6 +106,13 @@ const WordlePlay = ({ playContext }: Props) => {
         logMyEvent("loose", lastGuess);
         updateFinishedGameStats(false, actualGuessAttempt);
         setIsGameLost(true);
+        saveGameResultFirebase(
+          playContext,
+          "TBD",
+          "loose",
+          guesses,
+          actualGuessAttempt
+        );
         return setTimeout(() => {
           setIsGameLost(false);
         }, 2000);
@@ -108,7 +123,10 @@ const WordlePlay = ({ playContext }: Props) => {
   return (
     <>
       <div className="py-1 max-w-7xl mx-auto sm:px-6 lg:px-8 mt-4">
-        <Alert message="Slovo nenalezeno" isOpen={isWordNotFoundAlertOpen} />
+        <Alert
+          message="Slovo nenalezeno ve slovníku!"
+          isOpen={isWordNotFoundAlertOpen}
+        />
         <Alert message={`Prohrál jsi.`} isOpen={isGameLost} />
         <Alert
           message="Hra zkopírována do schránky"
