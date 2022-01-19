@@ -34,9 +34,24 @@ export const AboutModal = ({ isOpen, handleClose }: Props) => {
           <Link href="https://www.linkedin.com/in/tonda/">Tonda</Link>.{" "}
         </DialogContentText>{" "}
         <DialogContentText id="alert-dialog-description">
-          Případné chyby nebo náměty na vylepšení prosím hlašte:{" "}
-          <Link href="https://github.com/tonyno/wordle/issues/new">zde</Link>.
+          Chyby a náměty na zlepšení hlašte:{" "}
+          <Link href="https://docs.google.com/forms/d/e/1FAIpQLSfMHytWem1XZZ6uLG3qP7IdBMKmSZ3LBNnjJPQ6M_LEi7_UVQ/viewform">
+            zde
+          </Link>
+          . Nebo rovnou na{" "}
+          <Link href="https://github.com/tonyno/wordle/issues/new">GitHub</Link>
+          .
         </DialogContentText>{" "}
+        <DialogContentText id="alert-dialog-description">
+          Napsali o nás:{" "}
+          <Link href="https://doupe.zive.cz/clanek/wordle-vas-nauci-hrat-si-se-slovy-ted-uz-i-cesky">
+            Doupě
+          </Link>
+          ,{" "}
+          <Link href="https://denikn.cz/789690/fenomen-wordle-proc-nas-bavi-divat-se-na-nudnou-stranku-a-cekat-na-nova-slova/">
+            DeníkN
+          </Link>
+        </DialogContentText>
         <DialogContentText id="alert-dialog-description" sx={{ mt: 3 }}>
           Zdrojové kódy jsou:{" "}
           <Link href="https://github.com/tonyno/wordle">zde</Link>.

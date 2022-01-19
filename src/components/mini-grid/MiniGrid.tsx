@@ -1,14 +1,16 @@
+import { PlayContext } from "../../lib/playContext";
 import { MiniCompletedRow } from "./MiniCompletedRow";
 
 type Props = {
+  playContext: PlayContext;
   guesses: string[];
 };
 
-export const MiniGrid = ({ guesses }: Props) => {
+export const MiniGrid = ({ playContext, guesses }: Props) => {
   return (
     <div className="pb-6">
       {guesses.map((guess, i) => (
-        <MiniCompletedRow key={i} guess={guess} />
+        <MiniCompletedRow playContext={playContext} key={i} guess={guess} />
       ))}
     </div>
   );

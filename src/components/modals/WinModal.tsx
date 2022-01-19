@@ -4,11 +4,13 @@ import ContentPasteIcon from "@mui/icons-material/ContentPaste";
 import ShareIcon from "@mui/icons-material/Share";
 import { Box, Button } from "@mui/material";
 import { Fragment } from "react";
+import { PlayContext } from "../../lib/playContext";
 import { logMyEvent } from "../../lib/settingsFirebase";
 import { canShare, shareStatus } from "../../lib/share";
 import { MiniGrid } from "../mini-grid/MiniGrid";
 
 type Props = {
+  playContext: PlayContext;
   isOpen: boolean;
   handleClose: () => void;
   guesses: string[];
@@ -16,6 +18,7 @@ type Props = {
 };
 
 export const WinModal = ({
+  playContext,
   isOpen,
   handleClose,
   guesses,
@@ -74,7 +77,7 @@ export const WinModal = ({
                     Vyhrál/a jsi!
                   </Dialog.Title>
                   <div className="mt-2">
-                    <MiniGrid guesses={guesses} />
+                    <MiniGrid playContext={playContext} guesses={guesses} />
                     <p className="text-sm text-gray-500">Skvělá práce.</p>
                   </div>
                 </div>
@@ -95,7 +98,7 @@ export const WinModal = ({
                       startIcon={<ShareIcon />}
                       className="inline-flex justify-center w-full"
                       onClick={() => {
-                        shareStatus(guesses, true);
+                        shareStatus(playContext, guesses, true);
                       }}
                     >
                       Sdílet
@@ -110,7 +113,7 @@ export const WinModal = ({
                   startIcon={<ContentPasteIcon />}
                   className="inline-flex justify-center w-full"
                   onClick={() => {
-                    shareStatus(guesses, false);
+                    shareStatus(playContext, guesses, false);
                     handleShare();
                   }}
                 >

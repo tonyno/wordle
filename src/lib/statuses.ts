@@ -1,4 +1,4 @@
-import { solution } from "./words";
+import { PlayContext } from "./playContext";
 
 export type CharStatus = "absent" | "present" | "correct";
 
@@ -42,8 +42,10 @@ export type CharValue =
   | "Ů";
 
 export const getStatuses = (
+  playContext: PlayContext,
   guesses: string[]
 ): { [key: string]: CharStatus } => {
+  const solution = playContext.solution;
   const charObj: { [key: string]: CharStatus } = {};
 
   guesses.forEach((word) => {
@@ -68,7 +70,11 @@ export const getStatuses = (
   return charObj;
 };
 
-export const getGuessStatuses = (guess: string): CharStatus[] => {
+export const getGuessStatuses = (
+  playContext: PlayContext,
+  guess: string
+): CharStatus[] => {
+  const solution = playContext.solution;
   const splitSolution = solution.split("");
   const splitGuess = guess.split("");
 
@@ -114,7 +120,11 @@ export const getGuessStatuses = (guess: string): CharStatus[] => {
 
 export type GuessInitialState = "win" | "loose" | "notStarted" | "playing";
 
-export const loadGuessInitialState = (guesses: string[]): GuessInitialState => {
+export const loadGuessInitialState = (
+  playContext: PlayContext,
+  guesses: string[]
+): GuessInitialState => {
+  const solution = playContext.solution;
   if (!guesses || guesses.length === 0) {
     return "notStarted";
   }
