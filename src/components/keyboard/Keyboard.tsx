@@ -2,18 +2,26 @@ import BackspaceIcon from "@mui/icons-material/Backspace";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { useEffect } from "react";
 import { KeyValue } from "../../lib/keyboard";
+import { PlayContext } from "../../lib/playContext";
 import { getStatuses } from "../../lib/statuses";
 import { Key } from "./Key";
 
 type Props = {
+  playContext: PlayContext;
   onChar: (value: string) => void;
   onDelete: () => void;
   onEnter: () => void;
   guesses: string[];
 };
 
-export const Keyboard = ({ onChar, onDelete, onEnter, guesses }: Props) => {
-  const charStatuses = getStatuses(guesses);
+export const Keyboard = ({
+  playContext,
+  onChar,
+  onDelete,
+  onEnter,
+  guesses,
+}: Props) => {
+  const charStatuses = getStatuses(playContext, guesses);
 
   const onClick = (value: KeyValue) => {
     if (value === "ENTER") {

@@ -1,12 +1,14 @@
+import { PlayContext } from "../../lib/playContext";
 import { getGuessStatuses } from "../../lib/statuses";
 import { MiniCell } from "./MiniCell";
 
 type Props = {
+  playContext: PlayContext;
   guess: string;
 };
 
-export const MiniCompletedRow = ({ guess }: Props) => {
-  const statuses = getGuessStatuses(guess);
+export const MiniCompletedRow = ({ playContext, guess }: Props) => {
+  const statuses = getGuessStatuses(playContext, guess);
 
   return (
     <div className="flex justify-center mb-1">

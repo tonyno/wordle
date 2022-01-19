@@ -1,6 +1,7 @@
 import { msInDay, startDate } from "../constants/otherConstants";
 import { VALIDGUESSES } from "../constants/validGuesses";
 import { WORDS } from "../constants/wordlist";
+import { PlayContext } from "./playContext";
 
 export const isWordInWordList = (word: string) => {
   return (
@@ -9,11 +10,11 @@ export const isWordInWordList = (word: string) => {
   );
 };
 
-export const isWinningWord = (word: string) => {
+export const isWinningWord = (solution: string, word: string) => {
   return solution === word;
 };
 
-export const getWordOfDay = () => {
+export const getWordOfDay = (): PlayContext => {
   const epochMs = startDate.getTime();
   const now = Date.now();
   let index = Math.floor((now - epochMs) / msInDay);
@@ -24,4 +25,4 @@ export const getWordOfDay = () => {
   };
 };
 
-export const { solution, solutionIndex } = getWordOfDay();
+//export const { solution, solutionIndex } = getWordOfDay();

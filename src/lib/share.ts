@@ -1,6 +1,6 @@
 import { ourUrl } from "../constants/otherConstants";
+import { defaultPlayContext, PlayContext } from "./playContext";
 import { getGuessStatuses } from "./statuses";
-import { solutionIndex } from "./words";
 
 type SharaData = {
   title: string;
@@ -9,25 +9,29 @@ type SharaData = {
 };
 
 const getShareDataText = (
+  playContext: PlayContext,
   guesses: string[],
   includeUrl: boolean = true
 ): string => {
   return (
     "HadejSlova.cz den " +
-    solutionIndex +
+    playContext.solutionIndex +
     ". [" +
     guesses.length +
     "/6]\n\n" +
-    generateEmojiGrid(guesses) +
+    generateEmojiGrid(playContext, guesses) +
     "\n#hadejSlova - Česká verze Wordle\n" +
     (includeUrl ? ourUrl : "")
   );
 };
 
-const getShareData = (guesses: string[]): SharaData => {
+const getShareData = (
+  playContext: PlayContext,
+  guesses: string[]
+): SharaData => {
   let shareData = {
     title: "HadejSlova.cz",
-    text: getShareDataText(guesses, false),
+    text: getShareDataText(playContext, guesses, false),
     url: ourUrl,
   };
   return shareData;
@@ -55,22 +59,29 @@ export const canShare = (): boolean => {
     navigator &&
     isMobile() &&
     typeof navigator.canShare === "function" && // https://stackoverflow.com/questions/1042138/how-to-check-if-function-exists-in-javascript?rq=1
-    navigator.canShare(getShareData(["TONDA"]))
+    navigator.canShare(getShareData(defaultPlayContext, ["TONDA"]))
   );
 };
 
-export const shareStatus = (guesses: string[], directShare: boolean) => {
+export const shareStatus = (
+  playContext: PlayContext,
+  guesses: string[],
+  directShare: boolean
+) => {
   if (directShare) {
-    navigator.share(getShareData(guesses));
+    navigator.share(getShareData(playContext, guesses));
   } else {
-    navigator.clipboard.writeText(getShareDataText(guesses));
+    navigator.clipboard.writeText(getShareDataText(playContext, guesses));
   }
 };
 
-export const generateEmojiGrid = (guesses: string[]) => {
+export const generateEmojiGrid = (
+  playContext: PlayContext,
+  guesses: string[]
+) => {
   return guesses
     .map((guess) => {
-      const status = getGuessStatuses(guess);
+      const status = getGuessStatuses(playContext, guess);
       return guess
         .split("")
         .map((letter, i) => {

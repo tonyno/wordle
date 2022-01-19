@@ -1,4 +1,5 @@
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import { Badge } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
@@ -7,12 +8,17 @@ import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
+import { PlayContext } from "../../lib/playContext";
 import CountDownTimer from "../counter/CountDownTimer";
 import { AboutModal } from "../modals/AboutModal";
 import { InfoModal } from "../modals/InfoModal";
 import logo from "./logo.png";
 
-const TopMenu = () => {
+type Props = {
+  playContext: PlayContext;
+};
+
+const TopMenu = ({ playContext }: Props) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
   const [isAboutModalOpen, setIsAboutModalOpen] = useState(false);
@@ -34,7 +40,7 @@ const TopMenu = () => {
               <img src={logo} alt={"Logo"} />
             </IconButton>
 
-            <CountDownTimer />
+            <CountDownTimer playContext={playContext} />
             <Typography
               variant="h6"
               color="inherit"
@@ -50,7 +56,10 @@ const TopMenu = () => {
                 onClick={handleMenu}
                 color="inherit"
               >
-                <HelpOutlineIcon />
+                <Badge badgeContent={"+1"} color="secondary">
+                  {" "}
+                  <HelpOutlineIcon />
+                </Badge>
               </IconButton>
               <Menu
                 id="menu-appbar"
@@ -83,8 +92,10 @@ const TopMenu = () => {
                     );
                   }}
                 >
-                  Nápad na zlepšení?
-                </MenuItem>{" "}
+                  <Badge badgeContent={"+1"} variant="dot" color="secondary">
+                    Nápad na zlepšení?
+                  </Badge>
+                </MenuItem>
                 <MenuItem
                   onClick={() => {
                     setIsAboutModalOpen(true);
