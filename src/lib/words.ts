@@ -15,7 +15,7 @@ export const isWinningWord = (solution: string, word: string) => {
 };
 
 export const getWordOfDay = (): PlayContext => {
-  //return { solution: "ROBOT", solutionIndex: 5 };
+  //return { solution: "ROBOT", solutionIndex: 1 };
   const epochMs = startDate.getTime();
   const now = Date.now();
   let index = Math.floor((now - epochMs) / msInDay);

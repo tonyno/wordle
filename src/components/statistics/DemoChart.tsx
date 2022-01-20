@@ -86,3 +86,9 @@ export default function DemoChart() {
     </ResponsiveContainer>
   );
 }
+
+// File sizes after gzip:
+
+//   380.3 kB (+104.42 kB)  build\static\js\main.831e4a3b.js
+//   3.25 kB                build\static\css\main.8a35a9f5.css
+//   1.73 kB                build\static\js\27.5dbfd2fb.chunk.js

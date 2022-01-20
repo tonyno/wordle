@@ -61,10 +61,6 @@ export default function Faq() {
     console.error(faqError);
   }
 
-  faqData &&
-    faqData.map((faq: any, indx: number) => {
-      console.log(faq);
-    });
   /*  const faqs = [
     [
       "Jaké slovní druhy se ve hře použávají?",

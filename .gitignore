@@ -26,3 +26,5 @@ data_prepare/.exploration*
 public/google*.html
 .media/*
 data_calculate/wordle-cz-firebase-adminsdk-*.json
+src/constants/wordlist.ts
+src/lib/settingsFirebase.ts
