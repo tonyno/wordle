@@ -1,9 +1,13 @@
-import { addDoc, collection, orderBy, query } from "firebase/firestore";
-import { useCollectionDataOnce } from "react-firebase-hooks/firestore";
+import { addDoc, collection, doc, orderBy, query } from "firebase/firestore";
+import {
+  useCollectionDataOnce,
+  useDocumentDataOnce,
+} from "react-firebase-hooks/firestore";
 import { isProduction } from "./environments";
 import { PlayContext } from "./playContext";
 import { firestore } from "./settingsFirebase";
 import { PlayState } from "./statuses";
+import { dateToStr } from "./timeFunctions";
 
 export const saveGameResultFirebase = async (
   playContext: PlayContext,
@@ -46,3 +50,22 @@ export const useGetFaq = (): any => {
 
 // getting based on data from FS:
 // https://stackoverflow.com/questions/59416677/how-to-get-all-record-with-todays-date-from-firebase/65635901
+
+export const useGetWordOfDay = (date: Date): any => {
+  const dateStr = dateToStr(date);
+  console.log("Getting data from FireStore for date: ", dateStr);
+  const wordRef = doc(firestore, "word", dateStr);
+  let [data, loading, error] = useDocumentDataOnce(wordRef, {
+    idField: "id",
+  });
+  let context: PlayContext;
+  if (!error && !loading && data) {
+    context = {
+      solution: data?.solution,
+      solutionIndex: data?.solutionIndex,
+    };
+  } else {
+    context = { solution: "", solutionIndex: -1 };
+  }
+  return [context, loading, error];
+};

@@ -1,3 +1,8 @@
+export type ApplicationContext = {
+  solutionIndex: number;
+  typeOfGame: "wordle" | "challange";
+};
+
 export type PlayContext = {
   solution: string;
   solutionIndex: number;

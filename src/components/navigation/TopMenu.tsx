@@ -10,17 +10,17 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { PlayContext } from "../../lib/playContext";
+import { ApplicationContext } from "../../lib/playContext";
 import CountDownTimer from "../counter/CountDownTimer";
 import { AboutModal } from "../modals/AboutModal";
 import { InfoModal } from "../modals/InfoModal";
 import logo from "./logo.png";
 
 type Props = {
-  playContext: PlayContext;
+  appContext: ApplicationContext;
 };
 
-const TopMenu = ({ playContext }: Props) => {
+const TopMenu = ({ appContext }: Props) => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
@@ -43,7 +43,7 @@ const TopMenu = ({ playContext }: Props) => {
               <img src={logo} alt={"Logo"} />
             </IconButton>
 
-            <CountDownTimer playContext={playContext} />
+            <CountDownTimer appContext={appContext} />
             <Typography
               variant="h6"
               color="inherit"

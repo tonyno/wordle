@@ -30,3 +30,4 @@ other/*
 data_prepare/input/*.dic
 data_prepare/input/*.txt
 data_prepare/output/*.ts
+src/constants/wordlist_OLD.txt

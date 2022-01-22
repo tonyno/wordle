@@ -1,0 +1,28 @@
+rules_version = '2';
+
+// A read rule can be broken into get and list, while a write rule can be broken into create, update, and delete
+// https://firebase.google.com/docs/firestore/security/rules-structure
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    match /{document=**} {
+      allow read, write: if false;
+    }
+    
+    match /gameResult/{document=**} {
+      allow write: if true;
+    }
+    
+    match /faq/{document=**} {
+      allow read: if true;
+    }
+    
+    match /word/{document=**} {
+      allow read: if !resource.data.locked;
+    }
+    
+  }
+}
+
+

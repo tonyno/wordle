@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
-import { Alert } from "./components/alerts/Alert";
-import { Grid } from "./components/grid/Grid";
-import { Keyboard } from "./components/keyboard/Keyboard";
-import { WinModal } from "./components/modals/WinModal";
-import { saveGameResultFirebase } from "./lib/dataAdapter";
+import { saveGameResultFirebase } from "../lib/dataAdapter";
 import {
   loadGameStateFromLocalStorage,
   saveGameStateToLocalStorage,
   updateFinishedGameStats,
-} from "./lib/localStorage";
-import { PlayContext } from "./lib/playContext";
-import { logMyEvent } from "./lib/settingsFirebase";
-import { loadGuessInitialState } from "./lib/statuses";
-import { isWinningWord, isWordInWordList } from "./lib/words";
+} from "../lib/localStorage";
+import { PlayContext } from "../lib/playContext";
+import { logMyEvent } from "../lib/settingsFirebase";
+import { loadGuessInitialState } from "../lib/statuses";
+import { isWinningWord, isWordInWordList } from "../lib/words";
+import { Alert } from "./alerts/Alert";
+import { Grid } from "./grid/Grid";
+import { Keyboard } from "./keyboard/Keyboard";
+import { WinModal } from "./modals/WinModal";
 
 type Props = {
   playContext: PlayContext;
@@ -74,7 +74,7 @@ const WordlePlay = ({ playContext }: Props) => {
 
   const onEnter = () => {
     const lastGuess = currentGuess;
-    if (!isWordInWordList(currentGuess)) {
+    if (!isWordInWordList(playContext.solution, currentGuess)) {
       setIsWordNotFoundAlertOpen(true);
       return setTimeout(() => {
         setIsWordNotFoundAlertOpen(false);

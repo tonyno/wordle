@@ -5,3 +5,6 @@ https://stackoverflow.com/questions/48589821/firebase-hosting-how-to-prevent-cac
 
 Analyzing bundle
 https://stackoverflow.com/questions/58109769/how-to-configure-webpack-bundle-analyzer-for-react
+
+Firebase rules
+https://dev.to/jamalmoir/firestore-rules-examples-must-know-patterns-to-secure-your-data-bm1
