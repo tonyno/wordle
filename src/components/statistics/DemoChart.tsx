@@ -3,7 +3,6 @@ import {
   Bar,
   BarChart,
   CartesianGrid,
-  Legend,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -13,45 +12,31 @@ import {
 const data = [
   {
     name: "1",
-    uv: 4000,
-    pv: 2400,
-    amt: 2400,
+    g: 535,
   },
   {
     name: "2",
-    uv: 3000,
-    pv: 1398,
-    amt: 2210,
+    g: 439,
   },
   {
     name: "3",
-    uv: 2000,
-    pv: 9800,
-    amt: 2290,
+    g: 1295,
   },
   {
     name: "4",
-    uv: 2780,
-    pv: 3908,
-    amt: 2000,
+    g: 2387,
   },
   {
     name: "5",
-    uv: 1890,
-    pv: 4800,
-    amt: 2181,
+    g: 2356,
   },
   {
     name: "6",
-    uv: 2390,
-    pv: 3800,
-    amt: 2500,
+    g: 1533,
   },
   {
     name: "N",
-    uv: 3490,
-    pv: 4300,
-    amt: 2100,
+    g: 1642,
     fill: "red",
     key: "X",
   },
@@ -80,8 +65,7 @@ export default function DemoChart() {
         <XAxis dataKey="name" />
         <YAxis />
         <Tooltip formatter={myFormatter} />
-        <Legend />
-        <Bar dataKey="pv" fill="#8884d8"></Bar>
+        <Bar dataKey="g" fill="#8884d8"></Bar>
       </BarChart>
     </ResponsiveContainer>
   );

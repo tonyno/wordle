@@ -1,6 +1,6 @@
 import EqualizerIcon from "@mui/icons-material/Equalizer";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
-import { Badge } from "@mui/material";
+import { Badge, Divider } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
@@ -109,6 +109,7 @@ const TopMenu = ({ playContext }: Props) => {
                 >
                   Nápad na zlepšení?
                 </MenuItem>
+                <Divider light />
                 <MenuItem
                   onClick={() => {
                     navigate("/faq");

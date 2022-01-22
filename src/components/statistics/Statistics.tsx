@@ -3,6 +3,7 @@ import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import DemoChart from "./DemoChart";
+import PieChartStats from "./PieChartStats";
 export default function Statistics() {
   /*const [faqData, faqLoading, faqError] = useGetFaq();*/
   const navigate = useNavigate();
@@ -27,6 +28,11 @@ export default function Statistics() {
         </Grid>
         <Grid item xs={12}>
           <DemoChart />
+        </Grid>
+      </Grid>
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <PieChartStats />
         </Grid>
       </Grid>
     </Box>
