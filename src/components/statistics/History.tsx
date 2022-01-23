@@ -68,27 +68,29 @@ export default function History() {
 
   const maxSolutionIndex = getWordIndex();
 
-  const rows = getDaysListUpToday().map((item) => {
-    const key: string = "day" + item.solutionIndex;
-    const record: RowType = {
-      solutionIndex: item.solutionIndex,
-      playable:
-        item.solutionIndex >= 0 && item.solutionIndex <= maxSolutionIndex,
-      date: item.date,
-      dateStr: dateToStrCZShort(item.date) + " (" + item.solutionIndex + ")",
-      dateCode: dateToStr(item.date),
-      myScore:
-        myStatsLocalStorage && myStatsLocalStorage[key]
-          ? getMyScore(myStatsLocalStorage[key])
-          : "",
-      playsCount: statsDict && statsDict[key] ? statsDict[key]?.games : "-",
-      successRate:
-        statsDict && statsDict[key]
-          ? "" + calculateStatsScore(statsDict[key]) + "%"
-          : "-",
-    };
-    return record;
-  });
+  const rows = getDaysListUpToday()
+    .reverse()
+    .map((item) => {
+      const key: string = "day" + item.solutionIndex;
+      const record: RowType = {
+        solutionIndex: item.solutionIndex,
+        playable:
+          item.solutionIndex >= 0 && item.solutionIndex <= maxSolutionIndex,
+        date: item.date,
+        dateStr: dateToStrCZShort(item.date) + " (" + item.solutionIndex + ")",
+        dateCode: dateToStr(item.date),
+        myScore:
+          myStatsLocalStorage && myStatsLocalStorage[key]
+            ? getMyScore(myStatsLocalStorage[key])
+            : "",
+        playsCount: statsDict && statsDict[key] ? statsDict[key]?.games : "-",
+        successRate:
+          statsDict && statsDict[key]
+            ? "" + calculateStatsScore(statsDict[key]) + "%"
+            : "-",
+      };
+      return record;
+    });
 
   //   const getMyScore = (solutionIndex: number): string => {
   //   }
