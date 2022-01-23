@@ -1,29 +1,35 @@
-import { Box, LinearProgress, Typography } from "@mui/material";
+import { useEffect } from "react";
 import { useGetWordOfDay } from "../lib/dataAdapter";
 import { ApplicationContext } from "../lib/playContext";
-import { getDateFromSolutionIndex } from "../lib/words";
+import { getDateFromSolutionIndex, getWordIndex } from "../lib/words";
 import MyAlert from "./alerts/MyAlert";
+import MainLoader from "./muiStyled/MainLoader";
 import WordlePlay from "./WordlePlay";
 
-type Props = { appContext: ApplicationContext };
+type Props = {
+  appContext: ApplicationContext;
+  setNewMessage: (newText: string) => void;
+};
 
-const WordlePlayContext = ({ appContext }: Props) => {
+const WordlePlayContext = ({ appContext, setNewMessage }: Props) => {
   const [playContext, loading, currentWordError] = useGetWordOfDay(
     getDateFromSolutionIndex(appContext.solutionIndex)
   );
 
-  const Loader = () => {
-    return (
-      <Box component="main" sx={{ flexGrow: 1, p: 2 }}>
-        <LinearProgress />
-        <Typography>Načítám další šlovo...</Typography>
-      </Box>
-    );
-  };
+  useEffect(() => {
+    if (playContext && playContext.solutionIndex === getWordIndex()) {
+      setNewMessage("");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [playContext]);
 
   return (
     <>
-      {loading ? <Loader /> : <WordlePlay playContext={playContext} />}
+      {loading ? (
+        <MainLoader title="Načítám další slovo..." />
+      ) : (
+        <WordlePlay playContext={playContext} />
+      )}
 
       {currentWordError && (
         <MyAlert

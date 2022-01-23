@@ -44,6 +44,6 @@ if __name__ == '__main__':
             'exactTimeStamp': actual_date,
             'solution': word,
             'solutionIndex': id,
-            'solutionMd5':  hashlib.md5(word.encode('utf-16')).hexdigest(),
+            'solutionMd5':  hashlib.md5(word.encode('utf-8')).hexdigest(),
             'locked': True
         })

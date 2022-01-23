@@ -22,6 +22,9 @@ service cloud.firestore {
       allow read: if !resource.data.locked;
     }
     
+    match /stats/{document=**} {
+      allow read: if true;
+    }    
   }
 }
 

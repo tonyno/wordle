@@ -1,8 +1,12 @@
 import { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import DumpLocalStorage from "./components/debugTools/DumpLocalStorage";
 import Faq from "./components/faq/Faq";
+import HistoryPlay from "./components/HistoryPlay";
 import TopMenu from "./components/navigation/TopMenu";
-import Statistics from "./components/statistics/Statistics";
+import AllUsersStatsDay from "./components/statistics/AllUsersStatsDay";
+import History from "./components/statistics/History";
+import PersonalStats from "./components/statistics/PersonalStats";
 import WordlePlayWrapper from "./components/WordlePlayWrapper";
 import { ApplicationContext } from "./lib/playContext";
 import { getWordIndex } from "./lib/words";
@@ -12,6 +16,13 @@ function App() {
     solutionIndex: getWordIndex(),
     typeOfGame: "wordle",
   });
+  const [differentTopMessage, setDifferentTopMessage] = useState<
+    string | undefined
+  >(undefined);
+  const setNewMessage = (newMessage: string) => {
+    //console.log("NEW message ", newMessage);
+    setDifferentTopMessage(newMessage);
+  };
   //const [playContext] = useState<PlayContext>(getWordOfDay());
 
   // const changeWord = () => {
@@ -19,14 +30,32 @@ function App() {
   // };
   return (
     <BrowserRouter>
-      <TopMenu appContext={appContext} />
+      <TopMenu
+        appContext={appContext}
+        differentTopMessage={differentTopMessage}
+      />
       <Routes>
         <Route
           path="/"
-          element={<WordlePlayWrapper appContext={appContext} />}
+          element={
+            <WordlePlayWrapper
+              appContext={appContext}
+              setNewMessage={setNewMessage}
+            />
+          }
+        />
+        <Route
+          path="/day/:solutionIndex"
+          element={<HistoryPlay setNewMessage={setNewMessage} />}
+        />
+        <Route
+          path="/stats/:solutionIndex"
+          element={<AllUsersStatsDay setNewMessage={setNewMessage} />}
         />
         <Route path="/faq" element={<Faq />} />
-        <Route path="/stats" element={<Statistics />} />
+        <Route path="/mystats" element={<PersonalStats />} />
+        <Route path="/history" element={<History />} />
+        <Route path="/localstorage" element={<DumpLocalStorage />} />
       </Routes>
 
       {/*<button onClick={changeWord}>ds</button>*/}

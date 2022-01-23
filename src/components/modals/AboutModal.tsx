@@ -15,7 +15,7 @@ type Props = {
 export const AboutModal = ({ isOpen, handleClose }: Props) => {
   if (isOpen) {
     logMyEvent("aboutModal");
-    console.log("aboutModal opened");
+    //console.log("aboutModal opened");
   }
   return (
     <Dialog

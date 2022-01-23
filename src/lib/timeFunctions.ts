@@ -51,6 +51,7 @@ export const timeToNextWord = (): number => {
   //return msToTime(t);
 };
 
+// returns like 2022-01-19
 export const dateToStr = (date: Date): string => {
   return (
     "" +
@@ -60,4 +61,9 @@ export const dateToStr = (date: Date): string => {
     "-" +
     pad(date.getDate(), 2)
   );
+};
+
+// returns like 22.01.
+export const dateToStrCZShort = (date: Date): string => {
+  return "" + pad(date.getDate(), 2) + "." + pad(date.getMonth() + 1, 2) + ".";
 };

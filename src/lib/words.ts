@@ -40,4 +40,32 @@ export const getDateFromSolutionIndex = (solutionIndex: number): Date => {
   return newDate;
 };
 
+type DaysListItem = {
+  solutionIndex: number;
+  date: Date;
+};
+
+export const getDaysListUpToday = (): DaysListItem[] => {
+  let days: DaysListItem[] = [];
+  for (let i = 0; i <= getWordIndex(); ++i) {
+    const item: DaysListItem = {
+      solutionIndex: i,
+      date: addDays(new Date(startDate), i),
+    };
+    days.push(item);
+  }
+  return days;
+};
+
+export const getSolutionIndexFromUrlSafe = (
+  solutionIndex: string | undefined
+): number => {
+  return solutionIndex &&
+    (parseInt(solutionIndex) === 0 || parseInt(solutionIndex)) &&
+    parseInt(solutionIndex) >= 0 &&
+    parseInt(solutionIndex) <= getWordIndex()
+    ? parseInt(solutionIndex)
+    : -1;
+};
+
 //export const { solution, solutionIndex } = getWordOfDay();

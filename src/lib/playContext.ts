@@ -1,6 +1,6 @@
 export type ApplicationContext = {
   solutionIndex: number;
-  typeOfGame: "wordle" | "challange";
+  typeOfGame: "wordle" | "challange" | "wordle-history";
 };
 
 export type PlayContext = {

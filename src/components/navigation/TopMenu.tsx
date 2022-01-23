@@ -1,5 +1,6 @@
+import BarChartIcon from "@mui/icons-material/BarChart";
 import EqualizerIcon from "@mui/icons-material/Equalizer";
-import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import MenuIcon from "@mui/icons-material/Menu";
 import { Badge, Divider } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -18,9 +19,10 @@ import logo from "./logo.png";
 
 type Props = {
   appContext: ApplicationContext;
+  differentTopMessage?: string;
 };
 
-const TopMenu = ({ appContext }: Props) => {
+const TopMenu = ({ appContext, differentTopMessage }: Props) => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
@@ -39,11 +41,21 @@ const TopMenu = ({ appContext }: Props) => {
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static">
           <Toolbar variant="dense" className="bg-slate-400">
-            <IconButton edge="start" color="inherit" aria-label="menu">
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              onClick={() => {
+                navigate("/");
+              }}
+            >
               <img src={logo} alt={"Logo"} />
             </IconButton>
 
-            <CountDownTimer appContext={appContext} />
+            <CountDownTimer
+              appContext={appContext}
+              differentTopMessage={differentTopMessage}
+            />
             <Typography
               variant="h6"
               color="inherit"
@@ -57,7 +69,7 @@ const TopMenu = ({ appContext }: Props) => {
                 aria-controls="menu-appbar"
                 aria-haspopup="true"
                 onClick={() => {
-                  navigate("/stats");
+                  navigate("/mystats");
                 }}
                 color="inherit"
               >
@@ -74,7 +86,7 @@ const TopMenu = ({ appContext }: Props) => {
                 onClick={handleMenu}
                 color="inherit"
               >
-                <HelpOutlineIcon />
+                <MenuIcon />
               </IconButton>
               <Menu
                 id="menu-appbar"
@@ -93,23 +105,21 @@ const TopMenu = ({ appContext }: Props) => {
               >
                 <MenuItem
                   onClick={() => {
+                    navigate("/history");
+                    handleClose();
+                  }}
+                >
+                  Předchozí slova + <BarChartIcon />
+                </MenuItem>
+                <Divider light />
+                <MenuItem
+                  onClick={() => {
                     setIsInfoModalOpen(true);
                     handleClose();
                   }}
                 >
                   Pravidla hry
                 </MenuItem>
-                <MenuItem
-                  onClick={() => {
-                    window.open(
-                      "https://docs.google.com/forms/d/e/1FAIpQLSfMHytWem1XZZ6uLG3qP7IdBMKmSZ3LBNnjJPQ6M_LEi7_UVQ/viewform",
-                      "_blank"
-                    );
-                  }}
-                >
-                  Nápad na zlepšení?
-                </MenuItem>
-                <Divider light />
                 <MenuItem
                   onClick={() => {
                     navigate("/faq");

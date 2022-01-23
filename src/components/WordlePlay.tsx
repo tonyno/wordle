@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { saveGameResultFirebase } from "../lib/dataAdapter";
 import {
   loadGameStateFromLocalStorage,
+  migration1,
   saveGameStateToLocalStorage,
   updateFinishedGameStats,
 } from "../lib/localStorage";
@@ -19,9 +20,7 @@ type Props = {
 };
 
 const WordlePlay = ({ playContext }: Props) => {
-  const dataFromLocalStorage = loadGameStateFromLocalStorage(
-    playContext.solution
-  );
+  const dataFromLocalStorage = loadGameStateFromLocalStorage(playContext);
   const [guesses, setGuesses] = useState<string[]>(
     dataFromLocalStorage?.guesses || []
   );
@@ -32,18 +31,24 @@ const WordlePlay = ({ playContext }: Props) => {
   const [isGameLost, setIsGameLost] = useState(false);
   const [shareComplete, setShareComplete] = useState(false);
 
+  try {
+    migration1();
+  } catch (err) {
+    console.error(err);
+  }
+
   // Only as part of the start of the app
   useEffect(() => {
     logMyEvent("start", navigator.userAgent || navigator.vendor);
-    console.log("Loaded from localStorage: ", dataFromLocalStorage);
-    console.log("guesses ", guesses);
+    //console.log("Loaded from localStorage: ", dataFromLocalStorage);
+    //console.log("guesses ", guesses);
     if (!dataFromLocalStorage) {
       setCurrentGuess("");
       setGuesses([]);
       setIsGameWon(false);
     } else {
       const initialStatus = loadGuessInitialState(playContext, guesses);
-      console.log("useEffect() start: ", initialStatus);
+      //console.log("useEffect() start: ", initialStatus);
       if (initialStatus === "win" && isGameWon === false) {
         setIsGameWon(true);
       }
@@ -52,9 +57,9 @@ const WordlePlay = ({ playContext }: Props) => {
   }, [playContext]);
   // TODO https://github.com/facebook/create-react-app/issues/6880#issuecomment-485912528
 
-  useEffect(() => {
-    saveGameStateToLocalStorage(guesses, playContext.solution, isGameWon);
-  }, [guesses, playContext, isGameWon]);
+  // useEffect(() => {
+  //   saveGameStateToLocalStorage(guesses, playContext.solution, isGameWon);
+  // }, [guesses, playContext, isGameWon]);
 
   useEffect(() => {
     if (isGameWon) {
@@ -86,7 +91,9 @@ const WordlePlay = ({ playContext }: Props) => {
     const actualGuessAttempt = guesses.length;
     if (currentGuess.length === 5 && actualGuessAttempt < 6 && !isGameWon) {
       logMyEvent("guess", lastGuess);
-      setGuesses([...guesses, currentGuess]);
+      const newGuesses = [...guesses, currentGuess];
+      saveGameStateToLocalStorage(newGuesses, playContext, winningWord);
+      setGuesses(newGuesses);
       setCurrentGuess("");
 
       if (winningWord) {

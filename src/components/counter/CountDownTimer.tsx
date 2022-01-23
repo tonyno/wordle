@@ -31,16 +31,19 @@ const getDurationMsg = (solutionIndex: number | undefined): string | null => {
 
 type Props = {
   appContext: ApplicationContext;
+  differentTopMessage?: string;
 };
 
-const CountDownTimer = ({ appContext }: Props) => {
+const CountDownTimer = ({ appContext, differentTopMessage }: Props) => {
   const [timeStr, setTimeStr] = useState(
     getDurationMsg(appContext?.solutionIndex)
   );
   const [stop, setStop] = useState(false);
 
+  //console.log("UVNITR countdownu hlasim " + differentTopMessage);
+
   const tick = () => {
-    if (stop) return;
+    if (stop || differentTopMessage) return;
     let timeStr = getDurationMsg(appContext?.solutionIndex);
     if (!timeStr) {
       setStop(true);
@@ -51,8 +54,10 @@ const CountDownTimer = ({ appContext }: Props) => {
   };
 
   useEffect(() => {
-    const timerId = setInterval(() => tick(), 1000);
-    return () => clearInterval(timerId);
+    if (!differentTopMessage) {
+      const timerId = setInterval(() => tick(), 1000);
+      return () => clearInterval(timerId);
+    }
   });
 
   useEffect(() => {
@@ -62,7 +67,7 @@ const CountDownTimer = ({ appContext }: Props) => {
 
   return (
     <Typography variant="body2" display="block" className="white">
-      {timeStr}
+      {differentTopMessage ? differentTopMessage : timeStr}
     </Typography>
   );
 };
