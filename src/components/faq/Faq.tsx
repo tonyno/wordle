@@ -1,55 +1,15 @@
-import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp";
-import { Box, Button, Grid, LinearProgress } from "@mui/material";
-import MuiAccordion, { AccordionProps } from "@mui/material/Accordion";
-import MuiAccordionDetails from "@mui/material/AccordionDetails";
-import MuiAccordionSummary, {
-  AccordionSummaryProps,
-} from "@mui/material/AccordionSummary";
-import { styled } from "@mui/material/styles";
-import Typography from "@mui/material/Typography";
+import { Box, LinearProgress, Link, Typography } from "@mui/material";
 import * as React from "react";
-import { useNavigate } from "react-router-dom";
 import { useGetFaq } from "../../lib/dataAdapter";
-
-const Accordion = styled((props: AccordionProps) => (
-  <MuiAccordion disableGutters elevation={0} square {...props} />
-))(({ theme }) => ({
-  border: `1px solid ${theme.palette.divider}`,
-  "&:not(:last-child)": {
-    borderBottom: 0,
-  },
-  "&:before": {
-    display: "none",
-  },
-}));
-
-const AccordionSummary = styled((props: AccordionSummaryProps) => (
-  <MuiAccordionSummary
-    expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: "0.9rem" }} />}
-    {...props}
-  />
-))(({ theme }) => ({
-  backgroundColor:
-    theme.palette.mode === "dark"
-      ? "rgba(255, 255, 255, .05)"
-      : "rgba(0, 0, 0, .03)",
-  flexDirection: "row-reverse",
-  "& .MuiAccordionSummary-expandIconWrapper.Mui-expanded": {
-    transform: "rotate(90deg)",
-  },
-  "& .MuiAccordionSummary-content": {
-    marginLeft: theme.spacing(1),
-  },
-}));
-
-const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
-  padding: theme.spacing(2),
-  borderTop: "1px solid rgba(0, 0, 0, .125)",
-}));
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+} from "../muiStyled/AccordionStyled";
+import PageTitle from "../statistics/PageTitle";
 
 export default function Faq() {
   const [faqData, faqLoading, faqError] = useGetFaq();
-  const navigate = useNavigate();
   const [expanded, setExpanded] = React.useState<string | false>("panel0");
 
   const handleChange =
@@ -61,10 +21,6 @@ export default function Faq() {
     console.error(faqError);
   }
 
-  faqData &&
-    faqData.map((faq: any, indx: number) => {
-      console.log(faq);
-    });
   /*  const faqs = [
     [
       "Jaké slovní druhy se ve hře použávají?",
@@ -77,43 +33,38 @@ export default function Faq() {
   ];*/
 
   return (
-    <Box component="main" sx={{ flexGrow: 1, p: 2 }}>
-      <Grid container spacing={2}>
-        <Grid item xs={8}>
-          <Typography variant="h4" gutterBottom component="div">
-            Časté dotazy
-          </Typography>
-        </Grid>
-        <Grid item xs={4}>
-          <Button
-            variant="contained"
-            onClick={() => {
-              navigate("/");
-            }}
-          >
-            Zpět na hru
-          </Button>
-        </Grid>
-      </Grid>
-      {faqLoading && <LinearProgress />}
-      {faqData &&
-        faqData.map((faq: any, indx: number) => (
-          <Accordion
-            expanded={expanded === "panel" + indx}
-            onChange={handleChange("panel" + indx)}
-            key={indx}
-          >
-            <AccordionSummary
-              aria-controls={"panel-content" + indx}
-              id={"panel-header" + indx}
+    <>
+      <Box component="main" sx={{ flexGrow: 1, p: 2 }}>
+        <PageTitle title="Časté dotazy" />
+        {faqLoading && <LinearProgress />}
+
+        {faqData &&
+          faqData.map((faq: any, indx: number) => (
+            <Accordion
+              expanded={expanded === "panel" + indx}
+              onChange={handleChange("panel" + indx)}
+              key={indx}
             >
-              <Typography>{faq?.title}</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography>{faq?.description}</Typography>
-            </AccordionDetails>
-          </Accordion>
-        ))}
-    </Box>
+              <AccordionSummary
+                aria-controls={"panel-content" + indx}
+                id={"panel-header" + indx}
+              >
+                <Typography>{faq?.title}</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography>{faq?.description}</Typography>
+              </AccordionDetails>
+            </Accordion>
+          ))}
+      </Box>
+      <Box component="main" sx={{ flexGrow: 1, pl: 2, pr: 2 }}>
+        <Typography>
+          Máte další dotaz nebo chcete nahlásit chybu? Použijte prosím{" "}
+          <Link href="https://docs.google.com/forms/d/e/1FAIpQLSfMHytWem1XZZ6uLG3qP7IdBMKmSZ3LBNnjJPQ6M_LEi7_UVQ/viewform">
+            tento formulář.
+          </Link>
+        </Typography>
+      </Box>
+    </>
   );
 }

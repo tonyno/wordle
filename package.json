@@ -3,8 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@bugsnag/js": "^7.14.1",
-    "@bugsnag/plugin-react": "^7.14.0",
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
     "@headlessui/react": "^1.4.2",
@@ -32,9 +30,11 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "set \"GENERATE_SOURCEMAP=false\" && react-scripts build",
-    "build2": "react-scripts build",
+    "build": "set \"GENERATE_SOURCEMAP=false\" && react-scripts build ",
+    "buildwithstats": "set \"GENERATE_SOURCEMAP=false\" && react-scripts build --stats",
+    "buildwithsourcemap": "react-scripts build --stats",
     "test": "react-scripts test",
+    "analyze": "webpack-bundle-analyzer build/bundle-stats.json",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -59,6 +59,7 @@
     "@types/md5": "^2.3.1",
     "autoprefixer": "^10.4.2",
     "postcss": "^8.4.5",
-    "tailwindcss": "^3.0.12"
+    "tailwindcss": "^3.0.12",
+    "webpack-bundle-analyzer": "^4.5.0"
   }
 }

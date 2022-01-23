@@ -10,14 +10,14 @@ Případné chyby hlašte do https://github.com/tonyno/wordle/issues
 
 ### Implementation instructions
 
-1. Install NodeJs, for example:
+#### 1. Install NodeJs, for example:
 
 ```bash
 brew update
 brew install node
 ```
 
-2. Install firebase tools:
+#### 2. Install firebase tools:
 
 ```bash
 npm install -g firebase-tools
@@ -25,18 +25,31 @@ npm update -g
 npm update
 ```
 
-3. Then clone the repo, install packages and run the dev...
+#### 3. Then clone the repo and install node packages
 
 ```bash
 git clone ....
 cd wordle-czech
 npm install
+```
+
+#### 4. Configure the Firebase
+
+```bash
 firebase login
 firebase init
+```
+
+- copy `settingsFirebase.example.ts` to `settingsFirebase.ts` and update to your data
+- copy `wordlist.example.ts` to `wordlist.ts`
+
+#### 5. Run the dev
+
+```bash
 npm start
 ```
 
-4. Make the build and deploy:
+#### 6. Make the build and deploy:
 
 ```bash
 npm run build

@@ -21,8 +21,14 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-data_prepare/.exploration*
 .firebase/*.cache
 public/google*.html
-.media/*
 data_calculate/wordle-cz-firebase-adminsdk-*.json
+src/constants/wordlist.ts
+src/lib/settingsFirebase.ts
+other/*
+data_prepare/input/*.dic
+data_prepare/input/*.txt
+data_prepare/output/*.ts
+src/constants/wordlist_OLD.txt
+data_prepare/input/localstorage_analysis/*

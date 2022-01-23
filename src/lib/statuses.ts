@@ -120,7 +120,7 @@ export const getGuessStatuses = (
 
 export type PlayState = "win" | "loose" | "notStarted" | "playing";
 
-export const loadGuessInitialState = (
+export const getGameStateFromGuesses = (
   playContext: PlayContext,
   guesses: string[]
 ): PlayState => {
