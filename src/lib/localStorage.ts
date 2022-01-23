@@ -12,6 +12,8 @@ type StoredGameState = {
 type GameStateItem = {
   guesses: string[];
   isGameWon?: boolean;
+  isGameLoose?: boolean;
+  solutionMd5?: string; // just to have verification of not cheating and not bug on our side saving to wrong day
 };
 
 type Stats = {
@@ -50,18 +52,29 @@ export const getFinishedGameStatsFromLocalStorage = (): Stats => {
 export const saveGameStateToLocalStorageNew = (
   guesses: string[],
   playContext: PlayContext,
-  isGameWon: boolean
+  isGameWon: boolean,
+  isGameLoose: boolean
 ) => {
   const state = localStorage.getItem(gameStateKeyNew);
   let data: any; // TODO Jonas. Nejaka moznost definovat strukturu kde klice jsou ruzne hodnoty? Map?
   if (state) {
-    data = JSON.parse(state);
+    try {
+      data = JSON.parse(state);
+    } catch (err) {
+      console.error(
+        "saveGameStateToLocalStorageNew error when loading old data, removing them. ",
+        err
+      );
+      data = {};
+    }
   } else {
     data = {};
   }
   const gameState: GameStateItem = {
     guesses: guesses,
     isGameWon: isGameWon,
+    isGameLoose: isGameLoose,
+    solutionMd5: md5(playContext.solution), // this field was added later, will be missing in some previous data
   };
   data["day" + playContext.solutionIndex] = gameState;
   localStorage.setItem(gameStateKeyNew, JSON.stringify(data));
@@ -77,40 +90,46 @@ export const loadGameStateFromLocalStorageNew = (): any => {
 export const saveGameStateToLocalStorage = (
   guesses: string[],
   playContext: PlayContext,
-  isGameWon: boolean
+  isGameWon: boolean,
+  isGameLoose: boolean
 ) => {
+  console.log("Saving to localstorage ", guesses, isGameWon);
   const gameState = {
     guesses,
     solutionMd5: md5(playContext.solution),
   };
   localStorage.setItem(gameStateKey, JSON.stringify(gameState));
-  saveGameStateToLocalStorageNew(guesses, playContext, isGameWon);
+  saveGameStateToLocalStorageNew(guesses, playContext, isGameWon, isGameLoose);
 };
 
 export const loadGameStateFromLocalStorage = (
   playContext: PlayContext
 ): any => {
-  const state = localStorage.getItem(gameStateKey);
-  // the word was not changed and was found in local storage
-  if (state) {
-    const data = JSON.parse(state) as StoredGameState;
-    if (data?.solutionMd5 === md5(playContext.solution)) {
-      return data;
+  try {
+    const state = localStorage.getItem(gameStateKey);
+    // the word was not changed and was found in local storage
+    if (state) {
+      const data = JSON.parse(state) as StoredGameState;
+      if (data?.solutionMd5 === md5(playContext.solution)) {
+        return data;
+      }
     }
-  }
 
-  // if we fail, let's look to the history
-  const dataHistory = loadGameStateFromLocalStorageNew();
-  if (!dataHistory) {
+    // if we fail, let's look to the history
+    const dataHistory = loadGameStateFromLocalStorageNew();
+    if (!dataHistory) {
+      return null;
+    }
+    if (dataHistory["day" + playContext.solutionIndex]) {
+      return {
+        guesses: dataHistory["day" + playContext.solutionIndex]?.guesses,
+        solutionIndex: md5(playContext.solution),
+      };
+    }
     return null;
+  } catch (err) {
+    console.error("loadGameStateFromLocalStorage error ", err);
   }
-  if (dataHistory["day" + playContext.solutionIndex]) {
-    return {
-      guesses: dataHistory["day" + playContext.solutionIndex]?.guesses,
-      solutionIndex: md5(playContext.solution),
-    };
-  }
-  return null;
 };
 
 export const migration1 = () => {
@@ -139,13 +158,25 @@ export const migration1 = () => {
     md5("psina".toUpperCase()),
     md5("verze".toUpperCase()),
   ];
+  let statsData: Stats = { guessesDistribution: [0, 0, 0, 0, 0, 0, 0] };
   let newObject: any = {};
   if (data) {
     for (const prop in data) {
       const index = migrationData.indexOf(prop);
-      //console.log(">>>>>>>>>>", prop, " - ", index);
-      const newKey = index && index >= 0 ? "day" + index : prop; // if we don't know the index, let's keep it, better not to safe data
-      newObject[newKey] = data[prop];
+      let record = { ...data[prop] };
+      let newKey: string;
+      if (index && index >= 0) {
+        newKey = "day" + index;
+        record["solutionMd5"] = prop; // keep the original md5 item in solutionMd5 field
+        const newStatsPosition = getMyHistoricalResultToGraphs(record); // !!!! starting with 1, not 0
+        if (newStatsPosition) {
+          record["isGameLoose"] = newStatsPosition === 7; // !!!! starting with 1, not 0
+          statsData.guessesDistribution[newStatsPosition - 1] += 1; // !!!! starting with 1, not 0
+        }
+      } else {
+        newKey = prop; // if we don't know the index, let's keep it, better not to safe data
+      }
+      newObject[newKey] = record;
     }
   }
   //console.log(newObject);
@@ -155,6 +186,7 @@ export const migration1 = () => {
       "migration1",
       JSON.stringify({ timestamp: Date.now() })
     );
+    localStorage.setItem(gameStatisticsKey, JSON.stringify(statsData));
   }
 };
 
@@ -185,13 +217,14 @@ export const getMyHistoricalResultToGraphs = (
 };
 
 export const dumpLocalStorage = (): string => {
-  let retVal: any = {};
+  let retVal: string = "{";
   for (let i = 0; i < localStorage.length; ++i) {
     const itemKey = localStorage.key(i);
     if (itemKey) {
       const item = localStorage.getItem(itemKey);
-      retVal[itemKey] = item;
+      retVal += '"' + itemKey + '": ' + item + ",\n\n\n";
     }
   }
-  return JSON.stringify(retVal);
+  retVal += "}";
+  return retVal;
 };

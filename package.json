@@ -30,8 +30,9 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "set \"GENERATE_SOURCEMAP=false\" && react-scripts build --stats",
-    "build2": "react-scripts build --stats",
+    "build": "set \"GENERATE_SOURCEMAP=false\" && react-scripts build ",
+    "buildwithstats": "set \"GENERATE_SOURCEMAP=false\" && react-scripts build --stats",
+    "buildwithsourcemap": "react-scripts build --stats",
     "test": "react-scripts test",
     "analyze": "webpack-bundle-analyzer build/bundle-stats.json",
     "eject": "react-scripts eject"

@@ -1,7 +1,8 @@
-import { Box, Button, Grid } from "@mui/material";
+import { Box, Button, Grid, Typography } from "@mui/material";
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import { getFinishedGameStatsFromLocalStorage } from "../../lib/localStorage";
+import { logMyEvent } from "../../lib/settingsFirebase";
 import ChartBar from "./ChartBar";
 import PageTitle from "./PageTitle";
 
@@ -9,6 +10,10 @@ const Statistics = () => {
   /*const [faqData, faqLoading, faqError] = useGetFaq();*/
   const personalStats = getFinishedGameStatsFromLocalStorage();
   const navigate = useNavigate();
+
+  React.useEffect(() => {
+    logMyEvent("stats");
+  }, []);
 
   return (
     <Box component="main" sx={{ flexGrow: 1, p: 2 }}>
@@ -28,6 +33,14 @@ const Statistics = () => {
           >
             Porovnání vašich výsledků s ostatními hráči
           </Button>
+        </Grid>
+      </Grid>
+      <Grid container spacing={2} justifyContent="flex-center">
+        <Grid item xs={12}>
+          <Typography>
+            Zaznamenávání odehraných her bylo spuštěno až 23.1. Do té doby
+            nemusí být data přesná a mohou vykazovat nepřesnosti. Omlouvám se.
+          </Typography>
         </Grid>
       </Grid>
     </Box>

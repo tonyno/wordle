@@ -2,6 +2,7 @@ import { Box, Grid, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useGetStatsDocument } from "../../lib/dataAdapter";
+import { logMyEvent } from "../../lib/settingsFirebase";
 import { getSolutionIndexFromUrlSafe } from "../../lib/words";
 import MyAlert from "../alerts/MyAlert";
 import MainLoader from "../muiStyled/MainLoader";
@@ -24,6 +25,7 @@ const AllUsersStatsDay = ({ setNewMessage }: Props) => {
   console.log(data);
 
   useEffect(() => {
+    logMyEvent("history-day", "" + day);
     setNewMessage("Slovo č." + day);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

@@ -8,7 +8,7 @@ import {
 } from "../lib/localStorage";
 import { PlayContext } from "../lib/playContext";
 import { logMyEvent } from "../lib/settingsFirebase";
-import { loadGuessInitialState } from "../lib/statuses";
+import { getGameStateFromGuesses } from "../lib/statuses";
 import { isWinningWord, isWordInWordList } from "../lib/words";
 import { Alert } from "./alerts/Alert";
 import { Grid } from "./grid/Grid";
@@ -34,7 +34,7 @@ const WordlePlay = ({ playContext }: Props) => {
   try {
     migration1();
   } catch (err) {
-    console.error(err);
+    console.error("migration1 error ", err);
   }
 
   // Only as part of the start of the app
@@ -47,7 +47,7 @@ const WordlePlay = ({ playContext }: Props) => {
       setGuesses([]);
       setIsGameWon(false);
     } else {
-      const initialStatus = loadGuessInitialState(playContext, guesses);
+      const initialStatus = getGameStateFromGuesses(playContext, guesses);
       //console.log("useEffect() start: ", initialStatus);
       if (initialStatus === "win" && isGameWon === false) {
         setIsGameWon(true);
@@ -68,7 +68,7 @@ const WordlePlay = ({ playContext }: Props) => {
   }, [isGameWon]);
 
   const onChar = (value: string) => {
-    if (currentGuess.length < 5 && guesses.length < 6) {
+    if (currentGuess.length < 5 && guesses.length < 6 && !isGameWon) {
       setCurrentGuess(`${currentGuess}${value}`);
     }
   };
@@ -86,17 +86,23 @@ const WordlePlay = ({ playContext }: Props) => {
       }, 2000);
     }
 
-    const winningWord = isWinningWord(playContext.solution, currentGuess);
-
     const actualGuessAttempt = guesses.length;
     if (currentGuess.length === 5 && actualGuessAttempt < 6 && !isGameWon) {
-      logMyEvent("guess", lastGuess);
       const newGuesses = [...guesses, currentGuess];
-      saveGameStateToLocalStorage(newGuesses, playContext, winningWord);
+      const winningWord = isWinningWord(playContext.solution, currentGuess);
+      const newGameState = getGameStateFromGuesses(playContext, newGuesses);
+
+      logMyEvent("guess", lastGuess);
+      saveGameStateToLocalStorage(
+        newGuesses,
+        playContext,
+        winningWord,
+        newGameState === "loose"
+      );
       setGuesses(newGuesses);
       setCurrentGuess("");
 
-      if (winningWord) {
+      if (newGameState === "win") {
         logMyEvent("win", lastGuess);
         saveGameResultFirebase(
           playContext,
@@ -109,7 +115,7 @@ const WordlePlay = ({ playContext }: Props) => {
         return setIsGameWon(true);
       }
 
-      if (actualGuessAttempt === 5) {
+      if (newGameState === "loose") {
         logMyEvent("loose", lastGuess);
         updateFinishedGameStats(false, actualGuessAttempt);
         setIsGameLost(true);
@@ -122,7 +128,7 @@ const WordlePlay = ({ playContext }: Props) => {
         );
         return setTimeout(() => {
           setIsGameLost(false);
-        }, 2000);
+        }, 5000);
       }
     }
   };
@@ -134,7 +140,10 @@ const WordlePlay = ({ playContext }: Props) => {
           message="Slovo nenalezeno ve slovníku!"
           isOpen={isWordNotFoundAlertOpen}
         />
-        <Alert message={`Prohrál jsi.`} isOpen={isGameLost} />
+        <Alert
+          message={"Prohrál jsi. Správná odpověď: " + playContext.solution}
+          isOpen={isGameLost}
+        />
         <Alert
           message="Hra zkopírována do schránky"
           isOpen={shareComplete}

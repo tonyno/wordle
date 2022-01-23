@@ -20,6 +20,7 @@ import {
   getMyHistoricalResultToGraphs,
   loadGameStateFromLocalStorageNew,
 } from "../../lib/localStorage";
+import { logMyEvent } from "../../lib/settingsFirebase";
 import { dateToStr, dateToStrCZShort } from "../../lib/timeFunctions";
 import { getDaysListUpToday, getWordIndex } from "../../lib/words";
 import MyAlert from "../alerts/MyAlert";
@@ -46,6 +47,7 @@ export default function History() {
   useEffect(() => {
     // convert list to dictionary
     if (stats && !loadingStats && !errorStats) {
+      logMyEvent("history");
       let dictionary = stats.reduce(
         (a: any, x: StatsType) => ({ ...a, [x.id]: x }), // TODO any
         {}
@@ -168,6 +170,10 @@ export default function History() {
               slovo neuhodl. 100% hypotetickou situaci, že by všichni uhodli
               slovo na 1.pokus). Čím je číslo nižší, tím bylo dané slovo na
               uhodnutí těžší.
+            </Typography>
+            <Typography>
+              Zaznamenávání odehraných her bylo spuštěno až 23.1. Do té doby
+              nemusí být data přesná a mohou vykazovat nepřesnosti. Omlouvám se.
             </Typography>
           </Grid>
         </Grid>

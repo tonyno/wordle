@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ApplicationContext } from "../lib/playContext";
+import { logMyEvent } from "../lib/settingsFirebase";
 import { getSolutionIndexFromUrlSafe } from "../lib/words";
 import MyAlert from "./alerts/MyAlert";
 import WordlePlayWrapper from "./WordlePlayWrapper";
@@ -17,6 +18,7 @@ function HistoryPlay({ setNewMessage }: Props) {
   });
 
   useEffect(() => {
+    logMyEvent("history-play", "" + appContext.solutionIndex);
     setNewMessage("Slovo č." + appContext.solutionIndex);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
