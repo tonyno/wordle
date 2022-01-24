@@ -1,7 +1,7 @@
 import BarChartIcon from "@mui/icons-material/BarChart";
 import EqualizerIcon from "@mui/icons-material/Equalizer";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Badge, Divider } from "@mui/material";
+import { Divider } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
@@ -73,10 +73,7 @@ const TopMenu = ({ appContext, differentTopMessage }: Props) => {
                 }}
                 color="inherit"
               >
-                <Badge badgeContent={"+1"} color="secondary">
-                  {" "}
-                  <EqualizerIcon />
-                </Badge>
+                <EqualizerIcon />
               </IconButton>
               <IconButton
                 size="large"

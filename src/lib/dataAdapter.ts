@@ -1,4 +1,4 @@
-import { addDoc, collection, doc, orderBy, query } from "firebase/firestore";
+import { addDoc, collection, doc, query } from "firebase/firestore";
 import {
   useCollectionDataOnce,
   useDocumentDataOnce,
@@ -39,13 +39,15 @@ export const saveGameResultFirebase = async (
   );
 };
 
+export type FaqType = {
+  category: string;
+  title: string;
+  description: string;
+};
+
 export const useGetFaq = (): any => {
-  // https://firebase.google.com/docs/firestore/query-data/get-data
-  const colRef = collection(firestore, "faq");
-  const queryRef = query(colRef, orderBy("order")); // https://firebase.google.com/docs/firestore/query-data/order-limit-data
-  return useCollectionDataOnce(queryRef, {
-    idField: "id",
-  }); // https://github.com/CSFrequency/react-firebase-hooks/tree/v3.0.4/firestore
+  const faqRef = doc(firestore, "content", "faq");
+  return useDocumentDataOnce(faqRef);
 };
 
 export type StatsType = {

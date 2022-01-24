@@ -176,6 +176,8 @@ export default function History() {
             <Typography>
               Zaznamenávání odehraných her bylo spuštěno až 23.1. Do té doby
               nemusí být data přesná a mohou vykazovat nepřesnosti. Omlouvám se.
+              Zároveň se omlouvám za nulté (0.) slovo, je ze soboty z první
+              verze kterou jsem nasadil.
             </Typography>
           </Grid>
         </Grid>
