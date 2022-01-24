@@ -1,0 +1,11 @@
+.Faq ul {
+  list-style: circle;
+  margin: revert;
+  padding: revert;
+}
+
+.Faq a {
+  color: #556cd6;
+  text-decoration: underline;
+  text-decoration-color: rgba(85, 108, 214, 0.4);
+}

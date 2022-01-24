@@ -41,7 +41,9 @@ if __name__ == '__main__':
     result = ContingencyField()
     exceptions = 0
 
-    DAY = 8
+    DAY = 9
+
+    loosers = []
 
     # https://firebase.google.com/docs/firestore/query-data/queries#python_6
     doc_ref = db.collection(u'gameResult').document(
@@ -52,11 +54,18 @@ if __name__ == '__main__':
             result.add('result', data['result'])
             if data['result'] == 'win':
                 result.add('numberOfGuesses', str(data['numberOfGuesses']))
+            if data['result'] == 'loose':
+                loosers.append(data)
             if data['guesses'] and len(data['guesses']) > 0:
                 result.add('word1', data['guesses'][0])
         except Exception as e:
             print(e)
             exceptions += 1
+
+    f = open('data_prepare/output/loosers_{}.json'.format(DAY),
+             'wb')
+    f.write(json.dumps(loosers, indent=4, ensure_ascii=False).encode('utf-8'))
+    f.close()
 
     print(result.get('result'))
     print(result.get('numberOfGuesses'))

@@ -1,12 +1,15 @@
 import { Box, LinearProgress, Link, Typography } from "@mui/material";
 import * as React from "react";
-import { useGetFaq } from "../../lib/dataAdapter";
+import { FaqType, useGetFaq } from "../../lib/dataAdapter";
+import MyAlert from "../alerts/MyAlert";
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
 } from "../muiStyled/AccordionStyled";
 import PageTitle from "../statistics/PageTitle";
+import styles from "./Faq.module.css";
+//import "./Faq.module.css";
 
 export default function Faq() {
   const [faqData, faqLoading, faqError] = useGetFaq();
@@ -17,20 +20,20 @@ export default function Faq() {
       setExpanded(newExpanded ? panel : false);
     };
 
+  let errorMessage: string = "";
   if (faqError) {
     console.error(faqError);
+    errorMessage =
+      "Nepodařilo se načíst FAQ. Ujistěte se, že máte funkční připojení k internetu. Chyba: " +
+      faqError.message;
   }
-
-  /*  const faqs = [
-    [
-      "Jaké slovní druhy se ve hře použávají?",
-      "Hádané slovo může být podstatné jméno, přídavné jméno, zájmeno, číslovka nebo sloveso. Vždy je uvedeno v 1.osobě (neskloňované).",
-    ],
-    [
-      "Proč mi hra hlásí, že slovo není ve slovníku?",
-      "Hra obsahuje kombinaci několika volně dostupných českých slovníků. Aktuálně je v databázi kolem 20tis slov. Může se snadno stát, že některé slovo ve slovníku chybí a hra vám ho nedovolí zadat. Nezoufejte, ničemu to nevadí - aplikace vždy vybírá k hádání jen ta slova co ve slovníku jsou.",
-    ],
-  ];*/
+  if (!faqLoading && faqData && !faqData.items[0].title) {
+    errorMessage =
+      "Nepodařilo se správně načíst FAQ. Zkuste to prosím později.";
+  }
+  if (errorMessage) {
+    return <MyAlert message={errorMessage} variant="error" />;
+  }
 
   return (
     <>
@@ -39,7 +42,7 @@ export default function Faq() {
         {faqLoading && <LinearProgress />}
 
         {faqData &&
-          faqData.map((faq: any, indx: number) => (
+          faqData?.items.map((faq: FaqType, indx: number) => (
             <Accordion
               expanded={expanded === "panel" + indx}
               onChange={handleChange("panel" + indx)}
@@ -52,7 +55,11 @@ export default function Faq() {
                 <Typography>{faq?.title}</Typography>
               </AccordionSummary>
               <AccordionDetails>
-                <Typography>{faq?.description}</Typography>
+                {/*<Typography>{faq?.description}</Typography>*/}
+                <div
+                  dangerouslySetInnerHTML={{ __html: faq?.description }}
+                  className={styles.Faq}
+                />
               </AccordionDetails>
             </Accordion>
           ))}

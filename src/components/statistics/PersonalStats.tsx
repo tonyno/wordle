@@ -23,6 +23,20 @@ const Statistics = () => {
           <ChartBar distribution={personalStats.guessesDistribution} />
         </Grid>
       </Grid>
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <Typography sx={{ mt: 3 }}>
+            Graf výše znázorňuje počet jednotlivých her dokončených na uvedený
+            počet pokusů. Např. hodnota 2 ve sloupci 3 znamená, že jste 2 hry
+            dokončil/a na 3. uhodnuté slovo. Sloupec "N" značí prohru, kdy dané
+            slovo nebylo uhodnuto ani na 6.pokus.
+          </Typography>
+          <Typography>
+            Zaznamenávání odehraných her bylo spuštěno až 23.1. Do té doby
+            nemusí být data přesná a mohou vykazovat nepřesnosti. Omlouvám se.
+          </Typography>
+        </Grid>
+      </Grid>
       <Grid container spacing={2} justifyContent="flex-center">
         <Grid item xs={12}>
           <Button
@@ -33,14 +47,6 @@ const Statistics = () => {
           >
             Porovnání vašich výsledků s ostatními hráči
           </Button>
-        </Grid>
-      </Grid>
-      <Grid container spacing={2} justifyContent="flex-center">
-        <Grid item xs={12}>
-          <Typography>
-            Zaznamenávání odehraných her bylo spuštěno až 23.1. Do té doby
-            nemusí být data přesná a mohou vykazovat nepřesnosti. Omlouvám se.
-          </Typography>
         </Grid>
       </Grid>
     </Box>

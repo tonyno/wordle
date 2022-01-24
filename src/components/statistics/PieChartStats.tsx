@@ -13,8 +13,8 @@ const PieChartStats = ({ win, loose }: Props) => {
   ];
 
   return (
-    <ResponsiveContainer width={"99%"} height={300}>
-      <PieChart width={500} height={300}>
+    <ResponsiveContainer width={"99%"} height={200}>
+      <PieChart width={500} height={200}>
         <Pie
           dataKey="value"
           startAngle={0}

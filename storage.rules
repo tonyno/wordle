@@ -18,6 +18,10 @@ service cloud.firestore {
       allow read: if true;
     }
     
+    match /content/{document=**} {
+      allow read: if true;
+    }    
+    
     match /word/{document=**} {
       allow read: if !resource.data.locked;
     }

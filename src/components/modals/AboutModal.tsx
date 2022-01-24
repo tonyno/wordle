@@ -50,6 +50,23 @@ export const AboutModal = ({ isOpen, handleClose }: Props) => {
           <Link href="https://denikn.cz/789690/fenomen-wordle-proc-nas-bavi-divat-se-na-nudnou-stranku-a-cekat-na-nova-slova/">
             DeníkN
           </Link>
+          ,{" "}
+          <Link href="https://tech.hn.cz/c1-67022700-tyden-s-technologiemi-falesny-inkoust-primo-od-canonu-a-same-dobre-zpravy">
+            HN
+          </Link>
+          ,{" "}
+          <Link href="https://www.idnes.cz/hry/magazin/wordle-hra-slovni-viralni-scrabble.A220119_110315_bw-magazin_oma">
+            iDNES
+          </Link>
+          ,{" "}
+          <Link href="https://www.lidovky.cz/relax/co-to-ted-vsichni-najednou-hltaji-jednoducha-hra-s-pismeny-vzala-internet-utokem.A220120_091319_ln_magazin_lros">
+            Lidovky
+          </Link>
+          ,{" "}
+          <Link href="https://insmart.cz/wordle-hra-fenomen-cesky/">
+            inSmart
+          </Link>
+          .
         </DialogContentText>
         <DialogContentText id="alert-dialog-description" sx={{ mt: 3 }}>
           Zdrojové kódy jsou:{" "}

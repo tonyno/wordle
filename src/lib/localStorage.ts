@@ -147,16 +147,7 @@ export const migration1 = () => {
     md5("šarže".toUpperCase()),
     md5("tepot".toUpperCase()),
     md5("ježíš".toUpperCase()),
-    md5("písař".toUpperCase()),
-    md5("čéška".toUpperCase()),
-    md5("věžák".toUpperCase()),
-    md5("zadák".toUpperCase()),
-    md5("nicka".toUpperCase()),
-    md5("boxer".toUpperCase()),
-    md5("žeton".toUpperCase()),
-    md5("řízek".toUpperCase()),
-    md5("psina".toUpperCase()),
-    md5("verze".toUpperCase()),
+    md5("písař".toUpperCase()), // 1 hour before this word was published the migration1 was deployed as part of 6f7876c397e1c95af9d1c1f81cc61cf7964cf76f
   ];
   let statsData: Stats = { guessesDistribution: [0, 0, 0, 0, 0, 0, 0] };
   let newObject: any = {};
