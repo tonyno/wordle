@@ -35,3 +35,4 @@ data_prepare/input/localstorage_analysis/*
 data_prepare/input/*.tsv
 data_prepare/output/*.json
 !deploy_prod.bat
+ui-debug.log
