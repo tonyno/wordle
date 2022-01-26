@@ -1,0 +1,5 @@
+.Welcome ul {
+  list-style: disc;
+  margin: revert;
+  padding-left: 2rem;
+}

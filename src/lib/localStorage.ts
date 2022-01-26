@@ -87,6 +87,11 @@ export const loadGameStateFromLocalStorageNew = (): any => {
   return data;
 };
 
+export const firstTimeVisit = (): boolean => {
+  const state = localStorage.getItem(gameStateKeyNew);
+  return !Boolean(state);
+};
+
 export const saveGameStateToLocalStorage = (
   guesses: string[],
   playContext: PlayContext,

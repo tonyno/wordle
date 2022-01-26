@@ -24,7 +24,7 @@ def add_files(file_name, encoding='utf-8'):
     f.close()
 
 
-f = open('data_prepare/cs_CZ.dic', 'r', encoding='utf-8')
+f = open('data_prepare/input/cs_CZ.dic', 'r', encoding='utf-8')
 for line in f:
     word, word_type = line.strip(), 'DEFAULT'
     if '/' in word:
@@ -39,32 +39,37 @@ for line in f:
             guesses.append(word)
 f.close()
 
-add_files('data_prepare/Česká podstatná jména.txt')
-add_files('data_prepare/Czech.3-2-5.dic', 'windows-1250')
+add_files('data_prepare/input/Česká podstatná jména.txt')
+add_files('data_prepare/input/Czech.3-2-5.dic', 'windows-1250')
 
 
 for word_type in types:
     print(word_type, len(types[word_type]))
     if (len(types[word_type]) > 20):
-        fw = open('data_prepare/.exploration_{}'.format(word_type),
+        fw = open('data_prepare/output/.exploration_{}'.format(word_type),
                   'w', encoding='utf-8')
         fw.write('\n'.join(types[word_type]))
         fw.close()
 
+words = list(set(word.upper() for word in words))
 random.shuffle(words)
 random.shuffle(words)
 random.shuffle(words)
 random.shuffle(words)
 
 
-fw = open('data_prepare/wordlist.ts', 'w', encoding='utf-8')
+fw = open('data_prepare/output/wordlist.ts', 'w', encoding='utf-8')
 fw.write('export const WORDS = [')
 fw.write(''.join('"{}",\n'.format(w.lower()) for w in words))
 fw.write('];')
 fw.close()
 
-fw = open('data_prepare/validGuesses.ts', 'w', encoding='utf-8')
+fw = open('data_prepare/output/validGuesses.ts', 'w', encoding='utf-8')
 fw.write('export const VALIDGUESSES = [')
 fw.write(''.join('"{}",\n'.format(w.lower()) for w in guesses))
 fw.write('];')
 fw.close()
+
+fw = open('data_prepare/input/final_words_new1.txt', 'w', encoding='utf-8')
+fw.write('\n'.join(w.upper() for w in words))
+fw.close
