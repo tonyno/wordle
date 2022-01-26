@@ -7,11 +7,14 @@ import TopMenu from "./components/navigation/TopMenu";
 import AllUsersStatsDay from "./components/statistics/AllUsersStatsDay";
 import History from "./components/statistics/History";
 import PersonalStats from "./components/statistics/PersonalStats";
+import Welcome from "./components/Welcome";
 import WordlePlayWrapper from "./components/WordlePlayWrapper";
+import { firstTimeVisit } from "./lib/localStorage";
 import { ApplicationContext } from "./lib/playContext";
 import { getWordIndex } from "./lib/words";
 
 function App() {
+  const [firstTime, setFirstTime] = useState(firstTimeVisit());
   const [appContext] = useState<ApplicationContext>({
     solutionIndex: getWordIndex(),
     typeOfGame: "wordle",
@@ -38,10 +41,14 @@ function App() {
         <Route
           path="/"
           element={
-            <WordlePlayWrapper
-              appContext={appContext}
-              setNewMessage={setNewMessage}
-            />
+            firstTime ? (
+              <Welcome startGame={() => setFirstTime(false)} />
+            ) : (
+              <WordlePlayWrapper
+                appContext={appContext}
+                setNewMessage={setNewMessage}
+              />
+            )
           }
         />
         <Route

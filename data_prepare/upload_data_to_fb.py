@@ -12,7 +12,7 @@ from firebase_admin import credentials, firestore
 def get_data() -> List[str]:
     words_list = []
     all_words = {}
-    f = open('data_prepare/input/final_words_cleaned.txt',
+    f = open('data_prepare/input/final_words_cleaned_iteration1.txt',
              'r', encoding='utf-8')
     for line in f:
         word = line.strip().lower()
@@ -40,7 +40,10 @@ if __name__ == '__main__':
 
     db = firestore.client()
 
-    words_original = list(set(get_data()))
+    w = get_data()
+    words_original = list(set(w))
+    print("Original amount {}, deduplicated to {}".format(
+        len(w), len(words_original)))
     # The date where everything started. Do not change this so the solutionIndex has corrent numbers.
     actual_date = datetime.datetime(2022, 1, 13, 18, 0)
 
@@ -60,7 +63,6 @@ if __name__ == '__main__':
     random.shuffle(words)
     random.shuffle(words)
     random.shuffle(words)
-    words = words[0:30]
 
     for id, word in enumerate(words):
         actual_date = actual_date + datetime.timedelta(days=1)
@@ -70,7 +72,7 @@ if __name__ == '__main__':
         print(actual_date, word)
         word = words[id]
         actual_date_str = actual_date.strftime('%Y-%m-%d')
-        doc_ref = db.collection(u'word2').document(actual_date_str)
+        doc_ref = db.collection(u'word').document(actual_date_str)
         doc_ref.set({
             'exactTimeStamp': actual_date,
             'solution': word,
