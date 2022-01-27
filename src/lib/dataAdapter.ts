@@ -8,6 +8,7 @@ import { PlayContext } from "./playContext";
 import { firestore } from "./settingsFirebase";
 import { PlayState } from "./statuses";
 import { dateToStr } from "./timeFunctions";
+import { DEBUG_WORD } from "./words";
 
 export const saveGameResultFirebase = async (
   playContext: PlayContext,
@@ -120,6 +121,12 @@ export const useGetWordOfDay = (date: Date): any => {
       solution: data?.solution,
       solutionIndex: data?.solutionIndex,
     };
+    if (DEBUG_WORD) {
+      context = {
+        solution: DEBUG_WORD,
+        solutionIndex: 99,
+      };
+    }
   } else {
     context = { solution: "", solutionIndex: -1 };
   }

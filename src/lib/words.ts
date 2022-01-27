@@ -1,7 +1,11 @@
 import { msInDay, startDate } from "../constants/otherConstants";
 import { VALIDGUESSES } from "../constants/validGuesses";
 
-export const isWordInWordList = (solution: string, word: string) => {
+// if set, then no validation of incoming words
+export const DEBUG_WORD: string | null | undefined = null;
+
+export const isWordInWordList = (solution: string, word: string): boolean => {
+  if (DEBUG_WORD) return true;
   return solution === word || VALIDGUESSES.includes(word.toLowerCase());
 };
 

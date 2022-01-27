@@ -26,9 +26,18 @@ def get_data() -> List[str]:
 
 # https://stackoverflow.com/questions/67654272/using-document-id-name-to-query-with-where-operators
 def get_previous_words(db, lastDate):
-    doc_ref = db.collection(u'word2').where(
+    doc_ref = db.collection(u'word').where(
         u'exactTimeStamp', u'<=', lastDate).stream()
     return [item.to_dict()['solution'] for item in doc_ref]
+
+
+def delete_last_words(db, lastDate):
+    print("Deleting data after {}".format(lastDate))
+    doc_ref = db.collection(u'word').where(
+        u'exactTimeStamp', u'>=', lastDate).stream()
+    for doc in doc_ref:
+        # https://firebase.google.com/docs/firestore/manage-data/delete-data#python_5
+        doc.reference.delete()
 
 
 if __name__ == '__main__':
@@ -56,7 +65,7 @@ if __name__ == '__main__':
     print("Original words: ", words_original)
     words = list(
         filter(lambda x: x not in already_existing_words, words_original))
-    print("Words after removal existing: ", words)
+    print("Words after removal existing: ", len(words))
     print("Updating words since ", min_date)
 
     random.shuffle(words)
@@ -64,12 +73,19 @@ if __name__ == '__main__':
     random.shuffle(words)
     random.shuffle(words)
 
+    # in order if any removal happens not need to remove from db
+    words = words[0:530]
+
+    # need to run this if we reduce the count of words compared to previous run
+    #delete_last_words(db, datetime.datetime(2023, 5, 1))
+
+    id = 0
     for id, word in enumerate(words):
         actual_date = actual_date + datetime.timedelta(days=1)
         if (actual_date < min_date):
             continue
 
-        print(actual_date, word)
+        #print(actual_date, word)
         word = words[id]
         actual_date_str = actual_date.strftime('%Y-%m-%d')
         doc_ref = db.collection(u'word').document(actual_date_str)
@@ -80,3 +96,4 @@ if __name__ == '__main__':
             'solutionMd5':  hashlib.md5(word.encode('utf-8')).hexdigest(),
             'locked': True
         })
+    print("Uploaded, final index: ", id)
