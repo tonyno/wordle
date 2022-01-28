@@ -66,6 +66,14 @@ export const AboutModal = ({ isOpen, handleClose }: Props) => {
           <Link href="https://insmart.cz/wordle-hra-fenomen-cesky/">
             inSmart
           </Link>
+          ,{" "}
+          <Link href="https://www.svetandroida.cz/wordle-cesky-cz-hra/">
+            SvětAndroida
+          </Link>
+          ,{" "}
+          <Link href="https://www.expressinfo.cz/recenze/recenze-her/hadej-slova-cz-zahrajte-si-hru-wordle-cesky-zdarma/8420/">
+            EI
+          </Link>
           .
         </DialogContentText>
         <DialogContentText id="alert-dialog-description" sx={{ mt: 3 }}>

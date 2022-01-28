@@ -7,11 +7,13 @@ import { Fragment } from "react";
 import { PlayContext } from "../../lib/playContext";
 import { logMyEvent } from "../../lib/settingsFirebase";
 import { canShare, shareStatus } from "../../lib/share";
+import { PlayState } from "../../lib/statuses";
 import { MiniGrid } from "../mini-grid/MiniGrid";
 
 type Props = {
   playContext: PlayContext;
   isOpen: boolean;
+  gameStatus: PlayState;
   handleClose: () => void;
   guesses: string[];
   handleShare: () => void;
@@ -20,6 +22,7 @@ type Props = {
 export const WinModal = ({
   playContext,
   isOpen,
+  gameStatus,
   handleClose,
   guesses,
   handleShare,
@@ -98,7 +101,7 @@ export const WinModal = ({
                       startIcon={<ShareIcon />}
                       className="inline-flex justify-center w-full"
                       onClick={() => {
-                        shareStatus(playContext, guesses, true);
+                        shareStatus(playContext, guesses, gameStatus, true);
                       }}
                     >
                       Sdílet
@@ -113,7 +116,7 @@ export const WinModal = ({
                   startIcon={<ContentPasteIcon />}
                   className="inline-flex justify-center w-full"
                   onClick={() => {
-                    shareStatus(playContext, guesses, false);
+                    shareStatus(playContext, guesses, gameStatus, false);
                     handleShare();
                   }}
                 >
