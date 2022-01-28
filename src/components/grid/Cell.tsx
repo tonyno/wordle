@@ -15,6 +15,7 @@ export const Cell = ({ value, status, skipAnimation }: Props) => {
     if (value !== undefined && skipAnimation) {
       setCellAnimation("cellAnimation"); // this doesn't matter, it just needs to change the state so the component gets re-rendered
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
   const classes = classnames(
