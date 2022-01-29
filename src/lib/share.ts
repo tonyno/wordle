@@ -1,6 +1,7 @@
 import { ourUrl } from "../constants/otherConstants";
 import { defaultPlayContext, PlayContext } from "./playContext";
-import { getGuessStatuses } from "./statuses";
+import { getGuessStatuses, PlayState } from "./statuses";
+import { msToTime } from "./timeFunctions";
 
 type SharaData = {
   title: string;
@@ -11,19 +12,33 @@ type SharaData = {
 const getShareDataText = (
   playContext: PlayContext,
   guesses: string[],
+  gameStatus: PlayState,
+  gameDurationMs?: number,
   includeUrl: boolean = true
 ): string => {
+  const attempts = gameStatus === "win" ? "" + guesses.length : "N";
+  let timeStr = "";
+  if (gameDurationMs && gameDurationMs > 1) {
+    const duration = msToTime(gameDurationMs);
+    timeStr =
+      "\nČas: " +
+      (duration.hours * 60 + duration.minutes) +
+      "min " +
+      duration.seconds +
+      "s";
+  }
   return (
-    "HadejSlova.cz den " +
+    "@HadejSlova den " +
     playContext.solutionIndex +
     ". [" +
-    guesses.length +
+    attempts +
     "/6]\n\n" +
     generateEmojiGrid(playContext, guesses) +
     "\n#hadejSlova #den" +
     playContext.solutionIndex +
     " #krok" +
     guesses.length +
+    timeStr +
     "\nČeská verze Wordle\n" +
     (includeUrl ? ourUrl : "")
   );
@@ -31,11 +46,19 @@ const getShareDataText = (
 
 const getShareData = (
   playContext: PlayContext,
-  guesses: string[]
+  guesses: string[],
+  gameStatus: PlayState,
+  gameDurationMs?: number
 ): SharaData => {
   let shareData = {
     title: "HadejSlova.cz",
-    text: getShareDataText(playContext, guesses, false),
+    text: getShareDataText(
+      playContext,
+      guesses,
+      gameStatus,
+      gameDurationMs,
+      false
+    ),
     url: ourUrl,
   };
   return shareData;
@@ -63,19 +86,25 @@ export const canShare = (): boolean => {
     navigator &&
     isMobile() &&
     typeof navigator.canShare === "function" && // https://stackoverflow.com/questions/1042138/how-to-check-if-function-exists-in-javascript?rq=1
-    navigator.canShare(getShareData(defaultPlayContext, ["TONDA"]))
+    navigator.canShare(getShareData(defaultPlayContext, ["TONDA"], "win"))
   );
 };
 
 export const shareStatus = (
   playContext: PlayContext,
   guesses: string[],
-  directShare: boolean
+  gameStatus: PlayState,
+  directShare: boolean,
+  gameDurationMs?: number
 ) => {
   if (directShare) {
-    navigator.share(getShareData(playContext, guesses));
+    navigator.share(
+      getShareData(playContext, guesses, gameStatus, gameDurationMs)
+    );
   } else {
-    navigator.clipboard.writeText(getShareDataText(playContext, guesses));
+    navigator.clipboard.writeText(
+      getShareDataText(playContext, guesses, gameStatus, gameDurationMs)
+    );
   }
 };
 

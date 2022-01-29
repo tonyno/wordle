@@ -8,12 +8,12 @@ import {
 } from "../lib/localStorage";
 import { PlayContext } from "../lib/playContext";
 import { logMyEvent } from "../lib/settingsFirebase";
-import { getGameStateFromGuesses } from "../lib/statuses";
+import { getGameStateFromGuesses, PlayState } from "../lib/statuses";
 import { isWinningWord, isWordInWordList } from "../lib/words";
 import { Alert } from "./alerts/Alert";
 import { Grid } from "./grid/Grid";
 import { Keyboard } from "./keyboard/Keyboard";
-import { WinModal } from "./modals/WinModal";
+import EndGameModal from "./modals/EndGameModal";
 
 type Props = {
   playContext: PlayContext;
@@ -25,11 +25,14 @@ const WordlePlay = ({ playContext }: Props) => {
     dataFromLocalStorage?.guesses || []
   );
   const [currentGuess, setCurrentGuess] = useState("");
-  const [isGameWon, setIsGameWon] = useState(false);
+  //const [isGameWon, setIsGameWon] = useState(false);
+  //const [isGameLost, setIsGameLost] = useState(false);
+  const [gameStatus, setGameStatus] = useState<PlayState>("notStarted");
   const [isWinModalOpen, setIsWinModalOpen] = useState(false);
   const [isWordNotFoundAlertOpen, setIsWordNotFoundAlertOpen] = useState(false);
-  const [isGameLost, setIsGameLost] = useState(false);
   const [shareComplete, setShareComplete] = useState(false);
+  const [gameStartTime, setGameStartTime] = useState<Date | null>(null);
+  const [gameDurationMs, setGameDurationMs] = useState(0);
 
   try {
     migration1();
@@ -42,15 +45,20 @@ const WordlePlay = ({ playContext }: Props) => {
     logMyEvent("start", navigator.userAgent || navigator.vendor);
     //console.log("Loaded from localStorage: ", dataFromLocalStorage);
     //console.log("guesses ", guesses);
+    setGameStartTime(null); // if word changed, then clean the time
+    setGameDurationMs(0);
     if (!dataFromLocalStorage) {
       setCurrentGuess("");
       setGuesses([]);
-      setIsGameWon(false);
+      setGameStatus("notStarted");
     } else {
       const initialStatus = getGameStateFromGuesses(playContext, guesses);
       //console.log("useEffect() start: ", initialStatus);
-      if (initialStatus === "win" && isGameWon === false) {
-        setIsGameWon(true);
+      if (initialStatus === "win" && gameStatus !== "win") {
+        setGameStatus("win");
+      }
+      if (initialStatus === "loose" && gameStatus !== "loose") {
+        setGameStatus("loose");
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -62,13 +70,13 @@ const WordlePlay = ({ playContext }: Props) => {
   // }, [guesses, playContext, isGameWon]);
 
   useEffect(() => {
-    if (isGameWon) {
+    if (gameStatus === "win" || gameStatus === "loose") {
       setIsWinModalOpen(true);
     }
-  }, [isGameWon]);
+  }, [gameStatus]);
 
   const onChar = (value: string) => {
-    if (currentGuess.length < 5 && guesses.length < 6 && !isGameWon) {
+    if (currentGuess.length < 5 && guesses.length < 6 && gameStatus !== "win") {
       setCurrentGuess(`${currentGuess}${value}`);
     }
   };
@@ -79,6 +87,7 @@ const WordlePlay = ({ playContext }: Props) => {
 
   const onEnter = () => {
     const lastGuess = currentGuess;
+
     if (!isWordInWordList(playContext.solution, currentGuess)) {
       setIsWordNotFoundAlertOpen(true);
       return setTimeout(() => {
@@ -87,12 +96,26 @@ const WordlePlay = ({ playContext }: Props) => {
     }
 
     const actualGuessAttempt = guesses.length;
-    if (currentGuess.length === 5 && actualGuessAttempt < 6 && !isGameWon) {
+
+    if (
+      currentGuess.length === 5 &&
+      actualGuessAttempt < 6 &&
+      gameStatus !== "win"
+    ) {
       const newGuesses = [...guesses, currentGuess];
       const winningWord = isWinningWord(playContext.solution, currentGuess);
       const newGameState = getGameStateFromGuesses(playContext, newGuesses);
 
       logMyEvent("guess", lastGuess);
+
+      if (actualGuessAttempt === 0) {
+        // entering first word, remember the time when started
+        setGameStartTime(new Date());
+      }
+      setGameDurationMs(
+        gameStartTime ? Date.now() - gameStartTime?.getTime() : 0
+      );
+
       saveGameStateToLocalStorage(
         newGuesses,
         playContext,
@@ -112,13 +135,11 @@ const WordlePlay = ({ playContext }: Props) => {
           actualGuessAttempt
         );
         updateFinishedGameStats(true, actualGuessAttempt);
-        return setIsGameWon(true);
+        return setGameStatus("win");
       }
 
       if (newGameState === "loose") {
         logMyEvent("loose", lastGuess);
-        updateFinishedGameStats(false, actualGuessAttempt);
-        setIsGameLost(true);
         saveGameResultFirebase(
           playContext,
           "TBD",
@@ -126,9 +147,8 @@ const WordlePlay = ({ playContext }: Props) => {
           guesses,
           actualGuessAttempt
         );
-        return setTimeout(() => {
-          setIsGameLost(false);
-        }, 5000);
+        updateFinishedGameStats(false, actualGuessAttempt);
+        return setGameStatus("loose");
       }
     }
   };
@@ -139,10 +159,6 @@ const WordlePlay = ({ playContext }: Props) => {
         <Alert
           message="Slovo nenalezeno ve slovníku!"
           isOpen={isWordNotFoundAlertOpen}
-        />
-        <Alert
-          message={"Prohrál jsi. Správná odpověď: " + playContext.solution}
-          isOpen={isGameLost}
         />
         <Alert
           message="Hra zkopírována do schránky"
@@ -161,18 +177,20 @@ const WordlePlay = ({ playContext }: Props) => {
           onEnter={onEnter}
           guesses={guesses}
         />
-        <WinModal
+        <EndGameModal
           playContext={playContext}
           isOpen={isWinModalOpen}
+          gameStatus={gameStatus}
           handleClose={() => setIsWinModalOpen(false)}
           guesses={guesses}
           handleShare={() => {
-            setIsWinModalOpen(false);
+            //setIsWinModalOpen(false);
             setShareComplete(true);
             return setTimeout(() => {
               setShareComplete(false);
-            }, 2000);
+            }, 6000);
           }}
+          gameDurationMs={gameDurationMs}
         />
       </div>
     </>

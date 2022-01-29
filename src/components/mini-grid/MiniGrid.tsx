@@ -8,7 +8,7 @@ type Props = {
 
 export const MiniGrid = ({ playContext, guesses }: Props) => {
   return (
-    <div className="pb-6">
+    <div>
       {guesses.map((guess, i) => (
         <MiniCompletedRow playContext={playContext} key={i} guess={guess} />
       ))}

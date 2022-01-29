@@ -42,33 +42,33 @@ const Welcome = ({ startGame }: Props) => {
         18:00.
       </Typography>
       <div className="flex mb-1 mt-4">
-        <Cell value="K" status="correct" />
-        <Cell value="O" />
-        <Cell value="Č" />
-        <Cell value="K" />
-        <Cell value="A" />
+        <Cell value="K" status="correct" skipAnimation={true} />
+        <Cell value="O" skipAnimation={true} />
+        <Cell value="Č" skipAnimation={true} />
+        <Cell value="K" skipAnimation={true} />
+        <Cell value="A" skipAnimation={true} />
       </div>
       <Typography>
         Písmeno <b>K</b> je ve slově a na <b>správném</b> místě.
       </Typography>
 
       <div className="flex mb-1 mt-4">
-        <Cell value="P" />
-        <Cell value="I" />
-        <Cell value="L" status="present" />
-        <Cell value="O" />
-        <Cell value="T" />
+        <Cell value="P" skipAnimation={true} />
+        <Cell value="I" skipAnimation={true} />
+        <Cell value="L" status="present" skipAnimation={true} />
+        <Cell value="O" skipAnimation={true} />
+        <Cell value="T" skipAnimation={true} />
       </div>
       <Typography>
         Písmeno <b>L</b> je v hledaném slově, ale na chybném místě.
       </Typography>
 
       <div className="flex mb-1 mt-4">
-        <Cell value="M" />
-        <Cell value="E" />
-        <Cell value="T" />
-        <Cell value="R" status="absent" />
-        <Cell value="O" />
+        <Cell value="M" skipAnimation={true} />
+        <Cell value="E" skipAnimation={true} />
+        <Cell value="T" skipAnimation={true} />
+        <Cell value="R" status="absent" skipAnimation={true} />
+        <Cell value="O" skipAnimation={true} />
       </div>
       <Typography>
         Písmeno <b>R</b> se v hledaném slově nevyskytuje.

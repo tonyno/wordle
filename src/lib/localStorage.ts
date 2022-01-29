@@ -98,7 +98,7 @@ export const saveGameStateToLocalStorage = (
   isGameWon: boolean,
   isGameLoose: boolean
 ) => {
-  console.log("Saving to localstorage ", guesses, isGameWon);
+  //console.log("Saving to localstorage ", guesses, isGameWon);
   const gameState = {
     guesses,
     solutionMd5: md5(playContext.solution),
