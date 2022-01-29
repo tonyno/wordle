@@ -184,11 +184,11 @@ const WordlePlay = ({ playContext }: Props) => {
           handleClose={() => setIsWinModalOpen(false)}
           guesses={guesses}
           handleShare={() => {
-            setIsWinModalOpen(false);
+            //setIsWinModalOpen(false);
             setShareComplete(true);
             return setTimeout(() => {
               setShareComplete(false);
-            }, 2000);
+            }, 6000);
           }}
           gameDurationMs={gameDurationMs}
         />

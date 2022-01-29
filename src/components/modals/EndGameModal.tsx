@@ -129,6 +129,14 @@ const EndGameModal = ({
             Sdílet
           </Button>
           <p className="text-xs text-gray-500 italic text-center mt-2">
+            {canShare() ? (
+              <>
+                Sdílení vloží výsledek do schránky + zobrazí dialog na výběr
+                aplikace ke sdílení. <br />
+              </>
+            ) : (
+              ""
+            )}
             Okno zavřete kliknutím mimo okno.
           </p>
         </div>
