@@ -1,3 +1,9 @@
+import {
+  createTheme,
+  CssBaseline,
+  StyledEngineProvider,
+  ThemeProvider,
+} from "@mui/material";
 import { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import DumpLocalStorage from "./components/debugTools/DumpLocalStorage";
@@ -12,6 +18,7 @@ import WordlePlayWrapper from "./components/WordlePlayWrapper";
 import { firstTimeVisit } from "./lib/localStorage";
 import { ApplicationContext } from "./lib/playContext";
 import { getWordIndex } from "./lib/words";
+import { getDesignTheme } from "./theme";
 
 function App() {
   const [firstTime, setFirstTime] = useState(firstTimeVisit());
@@ -31,42 +38,55 @@ function App() {
   // const changeWord = () => {
   //   setPlayContext({ solution: "PECKA", solutionIndex: 6 });
   // };
-  return (
-    <BrowserRouter>
-      <TopMenu
-        appContext={appContext}
-        differentTopMessage={differentTopMessage}
-      />
-      <Routes>
-        <Route
-          path="/"
-          element={
-            firstTime ? (
-              <Welcome startGame={() => setFirstTime(false)} />
-            ) : (
-              <WordlePlayWrapper
-                appContext={appContext}
-                setNewMessage={setNewMessage}
-              />
-            )
-          }
-        />
-        <Route
-          path="/day/:solutionIndex"
-          element={<HistoryPlay setNewMessage={setNewMessage} />}
-        />
-        <Route
-          path="/stats/:solutionIndex"
-          element={<AllUsersStatsDay setNewMessage={setNewMessage} />}
-        />
-        <Route path="/faq" element={<Faq />} />
-        <Route path="/mystats" element={<PersonalStats />} />
-        <Route path="/history" element={<History />} />
-        <Route path="/localstorage" element={<DumpLocalStorage />} />
-      </Routes>
 
-      {/*<button onClick={changeWord}>ds</button>*/}
-    </BrowserRouter>
+  const x = getDesignTheme("dark");
+  // https://mui.com/customization/theming/
+  // https://mui.com/customization/dark-mode/
+  //
+  console.log(x);
+  const currentTheme = createTheme(x);
+
+  return (
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={currentTheme}>
+        <CssBaseline />
+        <BrowserRouter>
+          <TopMenu
+            appContext={appContext}
+            differentTopMessage={differentTopMessage}
+          />
+          <Routes>
+            <Route
+              path="/"
+              element={
+                firstTime ? (
+                  <Welcome startGame={() => setFirstTime(false)} />
+                ) : (
+                  <WordlePlayWrapper
+                    appContext={appContext}
+                    setNewMessage={setNewMessage}
+                  />
+                )
+              }
+            />
+            <Route
+              path="/day/:solutionIndex"
+              element={<HistoryPlay setNewMessage={setNewMessage} />}
+            />
+            <Route
+              path="/stats/:solutionIndex"
+              element={<AllUsersStatsDay setNewMessage={setNewMessage} />}
+            />
+            <Route path="/faq" element={<Faq />} />
+            <Route path="/mystats" element={<PersonalStats />} />
+            <Route path="/history" element={<History />} />
+            <Route path="/localstorage" element={<DumpLocalStorage />} />
+          </Routes>
+
+          {/*<button onClick={changeWord}>ds</button>*/}
+        </BrowserRouter>
+      </ThemeProvider>
+    </StyledEngineProvider>
   );
 }
 

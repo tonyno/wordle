@@ -14,6 +14,7 @@ import { Alert } from "./alerts/Alert";
 import { Grid } from "./grid/Grid";
 import { Keyboard } from "./keyboard/Keyboard";
 import EndGameModal from "./modals/EndGameModal";
+import styles from "./WordlePlay.module.css";
 
 type Props = {
   playContext: PlayContext;
@@ -155,7 +156,7 @@ const WordlePlay = ({ playContext }: Props) => {
 
   return (
     <>
-      <div className="py-1 max-w-7xl mx-auto sm:px-6 lg:px-8 mt-4">
+      <div className={styles.WordlePlay}>
         <Alert
           message="Slovo nenalezeno ve slovníku!"
           isOpen={isWordNotFoundAlertOpen}
