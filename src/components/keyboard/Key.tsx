@@ -47,7 +47,7 @@ export const Key = ({
 
   return (
     <div
-      style={{ width: `${width}px`, height: "50px", color: "red" }}
+      style={{ width: `${width}px`, height: "50px"}}
       className={classes}
       onClick={() => onClick(value)}
     >

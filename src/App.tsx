@@ -39,7 +39,7 @@ function App() {
   //   setPlayContext({ solution: "PECKA", solutionIndex: 6 });
   // };
 
-  const x = getDesignTheme("dark");
+  const x = getDesignTheme("light");
   // https://mui.com/customization/theming/
   // https://mui.com/customization/dark-mode/
   //
