@@ -1,6 +1,26 @@
 import { PaletteMode } from "@mui/material";
 import { red } from "@mui/material/colors";
 
+declare module "@mui/material/styles" {
+  interface Theme {
+    wordle: {
+      style: {
+        color: string;
+        fontSize: string;
+      };
+    };
+  }
+  // allow configuration using `createTheme`
+  interface ThemeOptions {
+    wordle?: {
+      style?: {
+        color?: string;
+        fontSize?: string;
+      };
+    };
+  }
+}
+
 export const getDesignTheme = (mode: PaletteMode) => ({
   palette: {
     mode,
@@ -12,9 +32,6 @@ export const getDesignTheme = (mode: PaletteMode) => ({
     },
     error: {
       main: red.A400,
-    },
-    wordle: {
-      absent: "#ff0000",
     },
 
     // primary: {
@@ -40,6 +57,13 @@ export const getDesignTheme = (mode: PaletteMode) => ({
     //         secondary: grey[500],
     //       }),
     // },
+  },
+  wordle: {
+    absent: "#ff0000",
+    style: {
+      color: "yellow",
+      fontSize: "30px",
+    },
   },
 });
 
