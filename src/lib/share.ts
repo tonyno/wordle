@@ -27,8 +27,9 @@ const getShareDataText = (
       duration.seconds +
       "s";
   }
+  const step = gameStatus === "win" ? " #krok" + guesses.length : " #prohra";
   return (
-    "@HadejSlova den " +
+    "\nHadejSlova.cz den " +
     playContext.solutionIndex +
     ". [" +
     attempts +
@@ -36,8 +37,7 @@ const getShareDataText = (
     generateEmojiGrid(playContext, guesses) +
     "\n#hadejSlova #den" +
     playContext.solutionIndex +
-    " #krok" +
-    guesses.length +
+    step +
     timeStr +
     "\nČeská verze Wordle\n" +
     (includeUrl ? ourUrl : "")
