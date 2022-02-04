@@ -1,4 +1,4 @@
-import { styled } from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 import cx from "classnames";
 import { ReactNode } from "react";
 import { KeyValue } from "../../lib/keyboard";
@@ -17,10 +17,10 @@ type Props = {
 };
 
 // https://mui.com/system/styled/
-const KeyWithTheme = styled("div")(({ theme }) => ({
-  color: theme.wordle.style.color,
-  //fontSize: theme.wordle.style.fontSize,
-}));
+// const KeyWithTheme = styled("div")(({ theme }) => ({
+//   //color: theme.wordle.style.color,
+//   //fontSize: theme.wordle.style.fontSize,
+// }));
 
 export const Key = ({
   children,
@@ -30,22 +30,28 @@ export const Key = ({
   color,
   onClick,
 }: Props) => {
+  const theme = useTheme();
+  console.log(theme);
   const classes = cx(styles.Key, {
-    [styles.KeyUnselected]: !status,
-    [styles.KeyAbsent]: status === "absent",
-    [styles.KeyCorrect]: status === "correct",
-    [styles.KeyPresent]: status === "present",
+    // [styles.KeyUnselected]: !status,
+    // [styles.KeyAbsent]: status === "absent",
+    // [styles.KeyCorrect]: status === "correct",
+    // [styles.KeyPresent]: status === "present",
     [styles.KeyRed]: color === "red",
     [styles.KeyGreen]: color === "green",
   });
+  let mySx = status
+    ? theme.wordle.keyboard[status]
+    : theme.wordle.keyboard.default;
 
   return (
-    <KeyWithTheme
+    <Box
       style={{ width: `${width}px`, height: "50px" }}
       className={classes}
+      sx={mySx}
       onClick={() => onClick(value)}
     >
       {children || value}
-    </KeyWithTheme>
+    </Box>
   );
 };

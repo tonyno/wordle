@@ -3,30 +3,40 @@ import { useState } from "react";
 
 type Props = {
   message: string;
+  open?: boolean;
+  onClose?: () => void;
   variant?: "success" | "warning" | "error";
   autoHide?: number;
 };
 
 const MyAlert = (props: Props) => {
-  const [open, setOpen] = useState(props.message ? true : false);
+  const [simpleOpen, setSimpleOpen] = useState(true);
+  const simpleAlert =
+    typeof props.open === "undefined" || !props.onClose ? true : false;
 
   const handleClose = (
     event?: React.SyntheticEvent | Event,
     reason?: string
   ) => {
-    if (reason === "clickaway") {
-      return;
-    }
+    // if (reason === "clickaway") {
+    //   return;
+    // }
 
-    setOpen(false);
+    if (simpleAlert) {
+      setSimpleOpen(false);
+    } else {
+      if (props && props.onClose) {
+        props.onClose();
+      }
+    }
   };
 
   return (
     <Snackbar
-      open={open}
+      open={simpleAlert ? simpleOpen : props.open}
       autoHideDuration={props?.autoHide ? props.autoHide : null}
       onClose={handleClose}
-      anchorOrigin={{ horizontal: "left", vertical: "top" }}
+      anchorOrigin={{ horizontal: "center", vertical: "top" }}
     >
       <Alert
         onClose={handleClose}

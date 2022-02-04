@@ -40,7 +40,7 @@ const TopMenu = ({ appContext, differentTopMessage }: Props) => {
     <div>
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static">
-          <Toolbar variant="dense" className="bg-slate-400">
+          <Toolbar variant="dense" sx={{ backgroundColor: "rgb(148 163 184)" }}>
             <IconButton
               edge="start"
               color="inherit"
@@ -124,6 +124,14 @@ const TopMenu = ({ appContext, differentTopMessage }: Props) => {
                   }}
                 >
                   Časté otázky a odpovědi (FAQ)
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    navigate("/settings");
+                    handleClose();
+                  }}
+                >
+                  Nastavení
                 </MenuItem>
                 <MenuItem
                   onClick={() => {

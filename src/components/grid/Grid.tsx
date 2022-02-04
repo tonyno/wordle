@@ -1,3 +1,4 @@
+import { Box } from "@mui/material";
 import { PlayContext } from "../../lib/playContext";
 import { CompletedRow } from "./CompletedRow";
 import { CurrentRow } from "./CurrentRow";
@@ -14,7 +15,7 @@ export const Grid = ({ playContext, guesses, currentGuess }: Props) => {
     guesses.length < 5 ? Array.from(Array(5 - guesses.length)) : [];
 
   return (
-    <div className="pb-6">
+    <Box sx={{ pb: "1.5rem" }}>
       {guesses.map((guess, i) => (
         <CompletedRow playContext={playContext} key={i} guess={guess} />
       ))}
@@ -22,6 +23,6 @@ export const Grid = ({ playContext, guesses, currentGuess }: Props) => {
       {empties.map((_, i) => (
         <EmptyRow key={i} />
       ))}
-    </div>
+    </Box>
   );
 };

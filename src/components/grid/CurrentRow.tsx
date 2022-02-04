@@ -1,3 +1,4 @@
+import { Box } from "@mui/material";
 import { Cell } from "./Cell";
 
 type Props = {
@@ -11,13 +12,13 @@ export const CurrentRow = ({ guess }: Props) => {
   const emptyCells = Array.from(Array(5 - splitGuess.length));
 
   return (
-    <div className="flex justify-center mb-1">
+    <Box sx={{ display: "flex", mb: "0.25rem", justifyContent: "center" }}>
       {splitGuess.map((letter, i) => (
         <Cell key={i} value={letter} />
       ))}
       {emptyCells.map((_, i) => (
         <Cell key={i} />
       ))}
-    </div>
+    </Box>
   );
 };

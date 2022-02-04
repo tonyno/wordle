@@ -25,20 +25,6 @@
   background-color: rgb(148 163 184);
 }
 
-.KeyUnselectedDark {
-  background-color: "#818384";
-  color: "#d7dadc";
-  /* https://tailwindcss.com/docs/background-color */
-}
-
-.KeyUnselectedDark:hover {
-  background-color: rgb(203 213 225);
-}
-
-.KeyUnselectedDark:active {
-  background-color: rgb(148 163 184);
-}
-
 .KeyAbsent {
   background-color: rgb(148 163 184);
   color: #ffffff;
@@ -76,8 +62,4 @@
 
 .KeyGreen {
   color: rgb(22 163 74);
-}
-
-.Big {
-  font-size: 1.875rem;
 }

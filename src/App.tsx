@@ -1,15 +1,17 @@
 import {
   createTheme,
   CssBaseline,
+  PaletteMode,
   StyledEngineProvider,
   ThemeProvider,
 } from "@mui/material";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import DumpLocalStorage from "./components/debugTools/DumpLocalStorage";
 import Faq from "./components/faq/Faq";
 import HistoryPlay from "./components/HistoryPlay";
 import TopMenu from "./components/navigation/TopMenu";
+import Settings from "./components/settings/Settings";
 import AllUsersStatsDay from "./components/statistics/AllUsersStatsDay";
 import History from "./components/statistics/History";
 import PersonalStats from "./components/statistics/PersonalStats";
@@ -22,33 +24,34 @@ import { getDesignTheme } from "./theme";
 
 function App() {
   const [firstTime, setFirstTime] = useState(firstTimeVisit());
+  const [currentTheme, setCurrentTheme] = useState<PaletteMode>("light");
+
   const [appContext] = useState<ApplicationContext>({
     solutionIndex: getWordIndex(),
     typeOfGame: "wordle",
   });
+
   const [differentTopMessage, setDifferentTopMessage] = useState<
     string | undefined
   >(undefined);
+
   const setNewMessage = (newMessage: string) => {
     //console.log("NEW message ", newMessage);
     setDifferentTopMessage(newMessage);
   };
-  //const [playContext] = useState<PlayContext>(getWordOfDay());
 
-  // const changeWord = () => {
-  //   setPlayContext({ solution: "PECKA", solutionIndex: 6 });
-  // };
+  const theme = useMemo(
+    () => createTheme(getDesignTheme(currentTheme)),
+    [currentTheme]
+  );
 
-  const x = getDesignTheme("light");
-  // https://mui.com/customization/theming/
-  // https://mui.com/customization/dark-mode/
-  //
-  console.log(x);
-  const currentTheme = createTheme(x);
+  const themeChange = (theme: PaletteMode, colorBlindMode: boolean) => {
+    setCurrentTheme(theme);
+  };
 
   return (
     <StyledEngineProvider injectFirst>
-      <ThemeProvider theme={currentTheme}>
+      <ThemeProvider theme={theme}>
         <CssBaseline />
         <BrowserRouter>
           <TopMenu
@@ -80,6 +83,10 @@ function App() {
             <Route path="/faq" element={<Faq />} />
             <Route path="/mystats" element={<PersonalStats />} />
             <Route path="/history" element={<History />} />
+            <Route
+              path="/settings"
+              element={<Settings onThemeChange={themeChange} />}
+            />
             <Route path="/localstorage" element={<DumpLocalStorage />} />
           </Routes>
 

@@ -1,3 +1,4 @@
+import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
 import { saveGameResultFirebase } from "../lib/dataAdapter";
 import {
@@ -10,7 +11,7 @@ import { PlayContext } from "../lib/playContext";
 import { logMyEvent } from "../lib/settingsFirebase";
 import { getGameStateFromGuesses, PlayState } from "../lib/statuses";
 import { isWinningWord, isWordInWordList } from "../lib/words";
-import { Alert } from "./alerts/Alert";
+import MyAlert from "./alerts/MyAlert";
 import { Grid } from "./grid/Grid";
 import { Keyboard } from "./keyboard/Keyboard";
 import EndGameModal from "./modals/EndGameModal";
@@ -30,8 +31,8 @@ const WordlePlay = ({ playContext }: Props) => {
   //const [isGameLost, setIsGameLost] = useState(false);
   const [gameStatus, setGameStatus] = useState<PlayState>("notStarted");
   const [isWinModalOpen, setIsWinModalOpen] = useState(false);
-  const [isWordNotFoundAlertOpen, setIsWordNotFoundAlertOpen] = useState(false);
-  const [shareComplete, setShareComplete] = useState(false);
+  const [errorWordNotInDictionary, setErrorWordNotInDictionary] =
+    useState(false);
   const [gameStartTime, setGameStartTime] = useState<Date | null>(null);
   const [gameDurationMs, setGameDurationMs] = useState(0);
 
@@ -90,10 +91,7 @@ const WordlePlay = ({ playContext }: Props) => {
     const lastGuess = currentGuess;
 
     if (!isWordInWordList(playContext.solution, currentGuess)) {
-      setIsWordNotFoundAlertOpen(true);
-      return setTimeout(() => {
-        setIsWordNotFoundAlertOpen(false);
-      }, 2000);
+      return setErrorWordNotInDictionary(true);
     }
 
     const actualGuessAttempt = guesses.length;
@@ -155,46 +153,36 @@ const WordlePlay = ({ playContext }: Props) => {
   };
 
   return (
-    <>
-      <div className={styles.WordlePlay}>
-        <Alert
-          message="Slovo nenalezeno ve slovníku!"
-          isOpen={isWordNotFoundAlertOpen}
-        />
-        <Alert
-          message="Hra zkopírována do schránky"
-          isOpen={shareComplete}
-          variant="success"
-        />
-        <Grid
-          playContext={playContext}
-          guesses={guesses}
-          currentGuess={currentGuess}
-        />
-        <Keyboard
-          playContext={playContext}
-          onChar={onChar}
-          onDelete={onDelete}
-          onEnter={onEnter}
-          guesses={guesses}
-        />
-        <EndGameModal
-          playContext={playContext}
-          isOpen={isWinModalOpen}
-          gameStatus={gameStatus}
-          handleClose={() => setIsWinModalOpen(false)}
-          guesses={guesses}
-          handleShare={() => {
-            //setIsWinModalOpen(false);
-            setShareComplete(true);
-            return setTimeout(() => {
-              setShareComplete(false);
-            }, 6000);
-          }}
-          gameDurationMs={gameDurationMs}
-        />
-      </div>
-    </>
+    <Box className={styles.WordlePlay}>
+      <MyAlert
+        open={errorWordNotInDictionary}
+        onClose={() => setErrorWordNotInDictionary(false)}
+        message="Slovo nenalezeno ve slovníku!"
+        variant="error"
+        autoHide={2000}
+      />
+
+      <Grid
+        playContext={playContext}
+        guesses={guesses}
+        currentGuess={currentGuess}
+      />
+      <Keyboard
+        playContext={playContext}
+        onChar={onChar}
+        onDelete={onDelete}
+        onEnter={onEnter}
+        guesses={guesses}
+      />
+      <EndGameModal
+        playContext={playContext}
+        isOpen={isWinModalOpen}
+        gameStatus={gameStatus}
+        handleClose={() => setIsWinModalOpen(false)}
+        guesses={guesses}
+        gameDurationMs={gameDurationMs}
+      />
+    </Box>
   );
 };
 
