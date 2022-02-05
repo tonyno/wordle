@@ -43,7 +43,7 @@ export const Key = ({
     <Box
       style={{ width: `${width}px`, height: "50px" }}
       className={classes}
-      sx={mySx}
+      sx={{ ...mySx, ...theme.wordle.keyStyle }}
       onClick={() => onClick(value)}
     >
       {children || value}

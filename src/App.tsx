@@ -1,9 +1,9 @@
 import {
   createTheme,
   CssBaseline,
-  PaletteMode,
   StyledEngineProvider,
   ThemeProvider,
+  useMediaQuery,
 } from "@mui/material";
 import { useMemo, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -17,14 +17,19 @@ import History from "./components/statistics/History";
 import PersonalStats from "./components/statistics/PersonalStats";
 import Welcome from "./components/Welcome";
 import WordlePlayWrapper from "./components/WordlePlayWrapper";
-import { firstTimeVisit } from "./lib/localStorage";
+import { firstTimeVisit, getSettings, SettingsItem } from "./lib/localStorage";
 import { ApplicationContext } from "./lib/playContext";
 import { getWordIndex } from "./lib/words";
 import { getDesignTheme } from "./theme";
 
 function App() {
+  const isDarkModeEnabledInSystem = useMediaQuery(
+    "(prefers-color-scheme: dark)"
+  );
   const [firstTime, setFirstTime] = useState(firstTimeVisit());
-  const [currentTheme, setCurrentTheme] = useState<PaletteMode>("light");
+  const [currentSettings, setCurrentSettings] = useState<SettingsItem>(
+    getSettings(false, isDarkModeEnabledInSystem)
+  );
 
   const [appContext] = useState<ApplicationContext>({
     solutionIndex: getWordIndex(),
@@ -41,12 +46,12 @@ function App() {
   };
 
   const theme = useMemo(
-    () => createTheme(getDesignTheme(currentTheme)),
-    [currentTheme]
+    () => createTheme(getDesignTheme(currentSettings)),
+    [currentSettings]
   );
 
-  const themeChange = (theme: PaletteMode, colorBlindMode: boolean) => {
-    setCurrentTheme(theme);
+  const themeChange = (settings: SettingsItem) => {
+    setCurrentSettings(settings);
   };
 
   return (

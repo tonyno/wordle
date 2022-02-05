@@ -231,19 +231,26 @@ export type SettingsItem = {
   darkMode: boolean;
   colorBlindMode: boolean;
   bigFont: boolean;
-  userId: string;
+  nickname?: string;
+  userId?: string;
 };
 
-export const getSettings = (): SettingsItem => {
+export const getSettings = (
+  allowAutomaticSaving: boolean = true,
+  darkModeSystemPreference: boolean = false
+): SettingsItem => {
   const settings = localStorage.getItem(settingsKey);
   if (!settings) {
     const d: SettingsItem = {
-      darkMode: false,
+      darkMode: darkModeSystemPreference,
       colorBlindMode: false,
       bigFont: false,
-      userId: generateUUID(),
+      nickname: undefined,
+      userId: allowAutomaticSaving ? generateUUID() : undefined,
     };
-    saveSettings(d);
+    if (allowAutomaticSaving) {
+      saveSettings(d);
+    }
     return d;
   }
   const data = JSON.parse(settings) as SettingsItem;
@@ -254,6 +261,6 @@ export const saveSettings = (settings: SettingsItem) => {
   localStorage.setItem(settingsKey, JSON.stringify(settings));
 };
 
-export const getUserId = (): string => {
+export const getUserId = (): string | undefined => {
   return getSettings().userId;
 };

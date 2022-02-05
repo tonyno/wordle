@@ -1,18 +1,26 @@
-import { PaletteMode } from "@mui/material";
-import { red } from "@mui/material/colors";
+import { ThemeOptions } from "@mui/material/styles";
+import { SettingsItem } from "./lib/localStorage";
 
 declare module "@mui/material/styles" {
   interface Theme {
     wordle: {
+      bigFont: boolean;
       keyboard: any;
       cell: any;
+      cellStyle: any;
+      keyStyle: any;
+      topBarColor: string;
     };
   }
   // allow configuration using `createTheme`
   interface ThemeOptions {
     wordle?: {
+      bigFont?: boolean;
       keyboard?: any;
       cell?: any;
+      cellStyle?: any;
+      keyStyle?: any;
+      topBarColor?: string;
     };
   }
 }
@@ -195,33 +203,46 @@ const keyboardColorsCB = {
   },
 };
 
-export const getDesignTheme = (mode: PaletteMode) => {
-  let keyboard: any = keyboardColors[mode];
-  keyboard = { ...keyboard, ...keyboardColorsCB };
+export const getDesignTheme = (settings: SettingsItem): ThemeOptions => {
+  const mode = settings.darkMode ? "dark" : "light";
 
+  let keyboard: any = keyboardColors[mode];
   let cell: any = cellColors[mode];
-  cell = { ...cell, ...cellColorsCB };
+
+  if (settings.colorBlindMode) {
+    keyboard = { ...keyboard, ...keyboardColorsCB };
+    cell = { ...cell, ...cellColorsCB };
+  }
 
   return {
     palette: {
       mode,
       primary: {
-        main: "#556cd6",
+        main: "#3f51b5",
       },
       secondary: {
-        main: "#19857b",
+        main: "#f50057",
       },
-      error: {
-        main: red.A400,
+      background: {
+        default: mode === "light" ? "#fafafa" : "#000000",
       },
     },
     wordle: {
+      bigFont: settings.bigFont,
+      topBarColor: mode === "light" ? "rgb(148 163 184)" : "rgb(71 85 105)",
       keyboard: keyboard,
       cell: cell,
+      cellStyle: {
+        fontSize: settings.bigFont ? "2.5rem" : "1.125rem",
+      },
+      keyStyle: {
+        fontSize: settings.bigFont ? "2rem" : "0.875rem",
+      },
     },
     typography: {
+      fontSize: settings.bigFont ? 18 : undefined,
       body1: {
-        fontSize: "1rem",
+        fontSize: settings.bigFont ? "1.25rem" : "1rem",
       },
     },
   };

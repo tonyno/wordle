@@ -43,7 +43,7 @@ export const Cell = ({ value, status, skipAnimation }: Props) => {
   return (
     <Box
       className={`${classes} ${cellAnimation}`}
-      sx={theme.wordle.cell[themeKey]}
+      sx={{ ...theme.wordle.cell[themeKey], ...theme.wordle.cellStyle }}
     >
       {value}
     </Box>
