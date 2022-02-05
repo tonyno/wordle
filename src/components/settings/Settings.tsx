@@ -1,6 +1,11 @@
 import { Box, Grid, PaletteMode, Switch } from "@mui/material";
 import * as React from "react";
 import { useState } from "react";
+import {
+  getSettings,
+  saveSettings,
+  SettingsItem,
+} from "../../lib/localStorage";
 import { logMyEvent } from "../../lib/settingsFirebase";
 import PageTitle from "../statistics/PageTitle";
 
@@ -10,16 +15,18 @@ type PropType = {
 
 const Settings = ({ onThemeChange }: PropType) => {
   //const navigate = useNavigate();
-  const [darkMode, setDarkMode] = useState(false);
+  const [data, setData] = useState<SettingsItem>(getSettings());
+  console.log(data);
 
   React.useEffect(() => {
     logMyEvent("settings");
   }, []);
 
   const handleDarkModeChange = () => {
-    const newStatus = !darkMode;
-    onThemeChange(newStatus ? "dark" : "light", false);
-    setDarkMode(newStatus);
+    const newData = { ...data, darkMode: !data.darkMode };
+    onThemeChange(newData.darkMode ? "dark" : "light", false);
+    saveSettings(newData);
+    setData(newData);
   };
 
   return (
@@ -29,7 +36,7 @@ const Settings = ({ onThemeChange }: PropType) => {
         <Grid item xs={12}>
           Tmavý režim
           <Switch
-            checked={darkMode}
+            checked={data.darkMode}
             onChange={handleDarkModeChange}
             inputProps={{ "aria-label": "controlled" }}
           />

@@ -31,12 +31,7 @@ export const Key = ({
   onClick,
 }: Props) => {
   const theme = useTheme();
-  console.log(theme);
   const classes = cx(styles.Key, {
-    // [styles.KeyUnselected]: !status,
-    // [styles.KeyAbsent]: status === "absent",
-    // [styles.KeyCorrect]: status === "correct",
-    // [styles.KeyPresent]: status === "present",
     [styles.KeyRed]: color === "red",
     [styles.KeyGreen]: color === "green",
   });

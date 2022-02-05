@@ -1,8 +1,10 @@
 import md5 from "md5";
+import { generateUUID } from "./other";
 import { PlayContext } from "./playContext";
 const gameStateKey = "gameState";
 const gameStateKeyNew = "actualGameState";
 const gameStatisticsKey = "stats";
+const settingsKey = "settings";
 
 type StoredGameState = {
   guesses: string[];
@@ -223,4 +225,35 @@ export const dumpLocalStorage = (): string => {
   }
   retVal += "}";
   return retVal;
+};
+
+export type SettingsItem = {
+  darkMode: boolean;
+  colorBlindMode: boolean;
+  bigFont: boolean;
+  userId: string;
+};
+
+export const getSettings = (): SettingsItem => {
+  const settings = localStorage.getItem(settingsKey);
+  if (!settings) {
+    const d: SettingsItem = {
+      darkMode: false,
+      colorBlindMode: false,
+      bigFont: false,
+      userId: generateUUID(),
+    };
+    saveSettings(d);
+    return d;
+  }
+  const data = JSON.parse(settings) as SettingsItem;
+  return data;
+};
+
+export const saveSettings = (settings: SettingsItem) => {
+  localStorage.setItem(settingsKey, JSON.stringify(settings));
+};
+
+export const getUserId = (): string => {
+  return getSettings().userId;
 };

@@ -41,7 +41,7 @@ if __name__ == '__main__':
     result = ContingencyField()
     exceptions = 0
 
-    DAY = 19
+    DAY = 20
 
     loosers = []
 

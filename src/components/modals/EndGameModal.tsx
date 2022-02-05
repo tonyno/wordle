@@ -71,7 +71,8 @@ const EndGameModal = ({
         >
           {gameStatus === "loose" ? (
             <Typography variant="body2">
-              Správné slovo: <b color="#DC2626">{playContext.solution}</b>
+              Správné slovo:{" "}
+              <b style={{ color: "#DC2626" }}>{playContext.solution}</b>
             </Typography>
           ) : (
             ""
@@ -91,7 +92,7 @@ const EndGameModal = ({
             )}
           </Box>
         </Box>
-        <Box sx={{ mt: "0.75rem" }}>
+        <Box sx={{ mt: "0.75rem", textAlign: "center" }}>
           <Button
             variant="contained"
             startIcon={<ShareIcon />}
@@ -128,6 +129,7 @@ const EndGameModal = ({
               lineHeight: "1rem",
               fontStyle: "italic",
               mt: "0.5rem",
+              textAlign: "center",
             }}
           >
             {canShare() ? (
