@@ -1,6 +1,8 @@
-import classnames from "classnames";
+import { Box, useTheme } from "@mui/material";
+import cx from "classnames";
 import { useEffect, useState } from "react";
 import { CharStatus } from "../../lib/statuses";
+import styles from "./Cell.module.css";
 
 type Props = {
   value?: string;
@@ -9,6 +11,7 @@ type Props = {
 };
 
 export const Cell = ({ value, status, skipAnimation }: Props) => {
+  const theme = useTheme();
   const [cellAnimation, setCellAnimation] = useState("");
 
   useEffect(() => {
@@ -18,21 +21,31 @@ export const Cell = ({ value, status, skipAnimation }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
-  const classes = classnames(
-    "w-12 h-12 border-solid border-2 flex items-center justify-center mx-0.5 text-lg font-bold rounded",
-    {
-      "bg-white border-slate-200": !status,
-      "border-slate-300": value && !status,
-      "bg-slate-400 text-white border-slate-400": status === "absent",
-      "bg-green-500 text-white border-green-500": status === "correct",
-      "bg-yellow-500 text-white border-yellow-500": status === "present",
-      "cell-animation": !!value && !skipAnimation,
+  const classes = cx(styles.Cell, {
+    // "bg-white border-slate-200": !status,
+    // "border-slate-300": value && !status,
+    // "bg-slate-400 text-white border-slate-400": status === "absent",
+    // "bg-green-500 text-white border-green-500": status === "correct",
+    // "bg-yellow-500 text-white border-yellow-500": status === "present",
+    "cell-animation": !!value && !skipAnimation,
+  });
+  let themeKey: string;
+  if (!status) {
+    if (value) {
+      themeKey = "valueWithoutStatus";
+    } else {
+      themeKey = "default";
     }
-  );
+  } else {
+    themeKey = status;
+  }
 
   return (
-    <>
-      <div className={`${classes} ${cellAnimation}`}>{value}</div>
-    </>
+    <Box
+      className={`${classes} ${cellAnimation}`}
+      sx={{ ...theme.wordle.cell[themeKey], ...theme.wordle.cellStyle }}
+    >
+      {value}
+    </Box>
   );
 };

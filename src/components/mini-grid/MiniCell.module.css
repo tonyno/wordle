@@ -1,0 +1,16 @@
+.MiniCell {
+  display: flex;
+  margin-left: 0.125rem;
+  margin-right: 0.125rem;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  font-weight: 700;
+  justify-content: center;
+  align-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.25rem;
+  border-width: 2px;
+  border-style: solid;
+  border-color: rgb(226 232 240);
+}

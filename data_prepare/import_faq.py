@@ -27,6 +27,7 @@ if __name__ == '__main__':
             obj = {
                 'title': row['TITLE'],
                 'description': row['DESCRIPTION'],
+                'id': str(row['ID']),
                 'category': row['CATEGORY']
             }
             JSON_DATA.append(obj)

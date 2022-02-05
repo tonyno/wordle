@@ -108,6 +108,8 @@ export default function History() {
       <Box component="main" sx={{ flexGrow: 1 }}>
         {errorStats && (
           <MyAlert
+            open={true}
+            onClose={() => {}}
             message={
               "Nepodařilo se načíst statistiku hráčů. Ujistěte se, že máte funkční připojení k internetu. Chyba: " +
               errorStats.message

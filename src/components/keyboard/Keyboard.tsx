@@ -5,6 +5,7 @@ import { KeyValue } from "../../lib/keyboard";
 import { PlayContext } from "../../lib/playContext";
 import { getStatuses } from "../../lib/statuses";
 import { Key } from "./Key";
+import styles from "./Keyboard.module.css";
 
 type Props = {
   playContext: PlayContext;
@@ -57,7 +58,7 @@ export const Keyboard = ({
 
   return (
     <div>
-      <div className="flex justify-center mb-1">
+      <div className={styles.KeyboardRow}>
         <Key value="Ě" onClick={onClick} status={charStatuses["Ě"]} />
         <Key value="Š" onClick={onClick} status={charStatuses["Š"]} />
         <Key value="Č" onClick={onClick} status={charStatuses["Č"]} />
@@ -69,7 +70,7 @@ export const Keyboard = ({
         <Key value="É" onClick={onClick} status={charStatuses["É"]} />
         <Key value="Ů" onClick={onClick} status={charStatuses["Ů"]} />
       </div>
-      <div className="flex justify-center mb-1">
+      <div className={styles.KeyboardRow}>
         <Key value="Q" onClick={onClick} status={charStatuses["Q"]} />
         <Key value="W" onClick={onClick} status={charStatuses["W"]} />
         <Key value="E" onClick={onClick} status={charStatuses["E"]} />
@@ -81,7 +82,7 @@ export const Keyboard = ({
         <Key value="O" onClick={onClick} status={charStatuses["O"]} />
         <Key value="P" onClick={onClick} status={charStatuses["P"]} />
       </div>
-      <div className="flex justify-center mb-1">
+      <div className={styles.KeyboardRow}>
         <Key value="A" onClick={onClick} status={charStatuses["A"]} />
         <Key value="S" onClick={onClick} status={charStatuses["S"]} />
         <Key value="D" onClick={onClick} status={charStatuses["D"]} />
@@ -92,7 +93,7 @@ export const Keyboard = ({
         <Key value="K" onClick={onClick} status={charStatuses["K"]} />
         <Key value="L" onClick={onClick} status={charStatuses["L"]} />
       </div>
-      <div className="flex justify-center">
+      <div className={styles.KeyboardRow}>
         <Key width={65.4} value="ENTER" onClick={onClick} color="green">
           <CheckCircleIcon />
         </Key>

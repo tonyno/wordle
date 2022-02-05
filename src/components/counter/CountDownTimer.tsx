@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Typography, useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
 import { ApplicationContext } from "../../lib/playContext";
 import { msToTime, pad, timeToNextWord } from "../../lib/timeFunctions";
@@ -7,16 +7,19 @@ import { msToTime, pad, timeToNextWord } from "../../lib/timeFunctions";
  *
  * @returns String to display to user with remaining time. Or null if we run out of the time.
  */
-const getDurationMsg = (solutionIndex: number | undefined): string | null => {
+const getDurationMsg = (
+  solutionIndex: number | undefined,
+  shortVersion: boolean = false
+): string | null => {
   if (!solutionIndex) return "";
   let remaining = timeToNextWord();
   if (remaining > 23 * (1000 * 60 * 60) + 59 * (1000 * 60) + 57 * 1000)
     return null;
   let timeObj = msToTime(remaining);
   return (
-    "Slovo č." +
+    (shortVersion ? "č. " : "Slovo č.") +
     solutionIndex +
-    ", další za " +
+    (shortVersion ? " / " : ", další za ") +
     pad(timeObj.hours, 2) +
     ":" +
     pad(timeObj.minutes, 2) +
@@ -35,8 +38,10 @@ type Props = {
 };
 
 const CountDownTimer = ({ appContext, differentTopMessage }: Props) => {
+  const theme = useTheme();
+  const bigFont = theme.wordle.bigFont;
   const [timeStr, setTimeStr] = useState(
-    getDurationMsg(appContext?.solutionIndex)
+    getDurationMsg(appContext?.solutionIndex, bigFont)
   );
   const [stop, setStop] = useState(false);
 
@@ -44,10 +49,10 @@ const CountDownTimer = ({ appContext, differentTopMessage }: Props) => {
 
   const tick = () => {
     if (stop || differentTopMessage) return;
-    let timeStr = getDurationMsg(appContext?.solutionIndex);
+    let timeStr = getDurationMsg(appContext?.solutionIndex, bigFont);
     if (!timeStr) {
       setStop(true);
-      setTimeStr("Nové slovo. Obnovte stránku.");
+      setTimeStr(bigFont ? "Nové slovo" : "Nové slovo. Obnovte stránku.");
     } else {
       setTimeStr(timeStr);
     }
@@ -66,7 +71,7 @@ const CountDownTimer = ({ appContext, differentTopMessage }: Props) => {
   }, [appContext]);
 
   return (
-    <Typography variant="body2" display="block" className="white">
+    <Typography display="block" variant="body2">
       {differentTopMessage ? differentTopMessage : timeStr}
     </Typography>
   );

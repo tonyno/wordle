@@ -33,6 +33,8 @@ const WordlePlayContext = ({ appContext, setNewMessage }: Props) => {
 
       {currentWordError && (
         <MyAlert
+          open={true}
+          onClose={() => {}}
           message={
             "Nepodařilo se získat další slovo. Ujistěte se, že máte nastaveno správné systémové datum a máte funkční připojení k internetu. Chyba: " +
             currentWordError.message

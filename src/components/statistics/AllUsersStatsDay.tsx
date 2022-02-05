@@ -34,6 +34,8 @@ const AllUsersStatsDay = ({ setNewMessage }: Props) => {
     <>
       {errorData && (
         <MyAlert
+          open={true}
+          onClose={() => {}}
           message={
             "Nepodařilo se načíst statistiku. Ujistěte se, že máte funkční připojení k internetu. Chyba: " +
             errorData.message
