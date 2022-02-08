@@ -42,8 +42,8 @@ const cellColors = {
     },
     correct: {
       color: "#ffffff",
-      bgcolor: "rgb(34 197 94)",
-      borderColor: "rgb(34 197 94)",
+      bgcolor: "#22C55E",
+      borderColor: "#22C55E",
     },
     present: {
       color: "#ffffff",

@@ -51,10 +51,10 @@ const Settings = ({ onThemeChange }: PropType) => {
 
   return (
     <Container maxWidth="md">
-      <Box justifyContent="center" component="main" sx={{ flexGrow: 1, p: 1 }}>
+      <Box justifyContent="center" component="main" sx={{ flexGrow: 1, pt: 2 }}>
         <PageTitle title="Nastavení" />
 
-        <Card sx={{ maxWidth: "md", mt: 5 }}>
+        <Card sx={{ maxWidth: "md", mt: "1rem" }}>
           {" "}
           <CardContent>
             <Grid container spacing={1}>

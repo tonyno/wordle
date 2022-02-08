@@ -1,8 +1,5 @@
-import { addDoc, collection, doc, query } from "firebase/firestore";
-import {
-  useCollectionDataOnce,
-  useDocumentDataOnce,
-} from "react-firebase-hooks/firestore";
+import { addDoc, collection, doc } from "firebase/firestore";
+import { useDocumentDataOnce } from "react-firebase-hooks/firestore";
 import { isProduction } from "./environments";
 import { PlayContext } from "./playContext";
 import { firestore } from "./settingsFirebase";
@@ -51,19 +48,39 @@ export const useGetFaq = (): any => {
   return useDocumentDataOnce(faqRef);
 };
 
-export type StatsType = {
-  firstGuesses: any;
+export type FirstWords = { [key in string]: number }; // TODO duplicated in stats.ts in functions
+
+export type FirstWordDb = { word: string; count: number }; // TODO duplicated in stats.ts in functions
+
+export type StatsDay = {
+  // TODO duplicated in stats.ts in functions
+  dateStr: string;
   games: number;
-  guessesDistribution: number[];
-  id: string;
   loose: number;
   win: number;
+  firstGuesses: FirstWordDb[];
+  guessesDistribution: number[];
+  score: number;
+  solution: string;
+  solutionIndex: number;
 };
 
+export type GameStats = {
+  [dateStr: string]: StatsDay;
+};
+
+// export const useGetStats = (): any => {
+//   const colRef = collection(firestore, "stats");
+//   const queryRef = query(colRef);
+//   return useCollectionDataOnce(queryRef, {
+//     idField: "id",
+//   });
+// };
+
 export const useGetStats = (): any => {
-  const colRef = collection(firestore, "stats");
-  const queryRef = query(colRef);
-  return useCollectionDataOnce(queryRef, {
+  // TODO any -> GameStats
+  const statsRef = doc(firestore, "gameStats", "wordle");
+  return useDocumentDataOnce(statsRef, {
     idField: "id",
   });
 };
@@ -73,36 +90,6 @@ export const useGetStatsDocument = (documentId: string): any => {
   return useDocumentDataOnce(statsRef, {
     idField: "id",
   });
-};
-
-export const calculateStatsScore = (item: StatsType): number => {
-  // item = {
-  //   guessesDistribution: [0, 0, 100, 100, 0, 0],
-  //   loose: 0,
-  //   firstGuesses: [],
-  //   games: 500,
-  //   id: "xx",
-  //   win: 0,
-  // };
-  const guesses = item?.guessesDistribution;
-  //console.log("calculateStatsScore ", guesses);
-  const score =
-    100 *
-    ((6 * guesses[0] +
-      5 * guesses[1] +
-      4 * guesses[2] +
-      3 * guesses[3] +
-      2 * guesses[4] +
-      1 * guesses[5]) /
-      (6 *
-        (guesses[0] +
-          guesses[1] +
-          guesses[2] +
-          guesses[3] +
-          guesses[4] +
-          guesses[5] +
-          guesses[6]))); // guesses[6] equals to item?.loose
-  return Math.round(score);
 };
 
 // getting based on data from FS:

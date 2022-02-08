@@ -6,16 +6,21 @@ const gameStateKeyNew = "actualGameState";
 const gameStatisticsKey = "stats";
 const settingsKey = "settings";
 
-type StoredGameState = {
+export type StoredGameState = {
   guesses: string[];
   solutionMd5: string;
 };
 
-type GameStateItem = {
+export type GameStateItem = {
   guesses: string[];
   isGameWon?: boolean;
   isGameLoose?: boolean;
   solutionMd5?: string; // just to have verification of not cheating and not bug on our side saving to wrong day
+};
+
+// e.g.: {"day21":{"guesses":["TONDA","DRIVE"],"isGameWon":false,"isGameLoose":false,"solutionMd5":"c4e455548dc4e94af326de3e658698b7"},"day18":{"guesses":["KOČKA","KOČKA","KOČKA","KOČKA","KOČKA","KOČKA"],"isGameWon":false,"isGameLoose":true,"solutionMd5":"dbd10e7d6971156dfb980557f0239c07"},"day22":{"guesses":["TONDA","LENKA","MOSTY"],"isGameWon":false,"isGameLoose":false,"solutionMd5":"39c2b07a337c0c7474839ce283c2d20e"},"day99":{"guesses":["PRKNO","START","MAKÉJ","HURÁÁ","ZLATO","ESTER"],"isGameWon":true,"isGameLoose":false,"solutionMd5":"22948a71c653af34c8d03d4b3fd5ca1c"}}
+export type GameStateHistory = {
+  [key: string]: GameStateItem;
 };
 
 type Stats = {
@@ -82,10 +87,12 @@ export const saveGameStateToLocalStorageNew = (
   localStorage.setItem(gameStateKeyNew, JSON.stringify(data));
 };
 
-export const loadGameStateFromLocalStorageNew = (): any => {
+export const loadGameStateFromLocalStorageNew = ():
+  | GameStateHistory
+  | undefined => {
   const state = localStorage.getItem(gameStateKeyNew);
-  if (!state) return {};
-  const data = JSON.parse(state); // TODO how to specify structure of dictionary with unknown keys
+  if (!state) return undefined;
+  const data = JSON.parse(state) as GameStateHistory; // TODO how to specify structure of dictionary with unknown keys
   return data;
 };
 
@@ -111,7 +118,7 @@ export const saveGameStateToLocalStorage = (
 
 export const loadGameStateFromLocalStorage = (
   playContext: PlayContext
-): any => {
+): StoredGameState | null => {
   try {
     const state = localStorage.getItem(gameStateKey);
     // the word was not changed and was found in local storage
@@ -130,13 +137,14 @@ export const loadGameStateFromLocalStorage = (
     if (dataHistory["day" + playContext.solutionIndex]) {
       return {
         guesses: dataHistory["day" + playContext.solutionIndex]?.guesses,
-        solutionIndex: md5(playContext.solution),
-      };
+        solutionMd5: md5(playContext.solution),
+      } as StoredGameState;
     }
     return null;
   } catch (err) {
     console.error("loadGameStateFromLocalStorage error ", err);
   }
+  return null;
 };
 
 export const migration1 = () => {
