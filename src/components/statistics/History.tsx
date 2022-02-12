@@ -22,8 +22,7 @@ export default function History() {
   }, [stats]);
 
   const rows = useMemo(
-    () =>
-      myStatsLocalStorage ? getHistoryItems(myStatsLocalStorage, stats) : null,
+    () => getHistoryItems(myStatsLocalStorage, stats),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [stats]
   );

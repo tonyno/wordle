@@ -108,6 +108,11 @@ const ChartBarOthers = ({
       legend: {
         show: false,
       },
+      chart: {
+        toolbar: {
+          show: false,
+        },
+      },
     },
   };
 

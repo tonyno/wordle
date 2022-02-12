@@ -61,10 +61,13 @@ export const getDateFromSolutionIndex = (solutionIndex: number): Date => {
 //   return days;
 // };
 
-export const getDaysList = (): number[] => {
+export const getDaysList = (
+  maximumDayMinus: number = 0,
+  minimumDay: number = 0
+): number[] => {
   // TODO paging
   let retVal: number[] = [];
-  for (let i = getWordIndex(); i >= 0; i--) {
+  for (let i = getWordIndex() - maximumDayMinus; i >= minimumDay; i--) {
     retVal.push(i);
   }
   return retVal;

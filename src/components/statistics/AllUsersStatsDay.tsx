@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useGetStats } from "../../lib/dataAdapter";
 import { loadGameStateFromLocalStorageNew } from "../../lib/localStorage";
 import { logMyEvent } from "../../lib/settingsFirebase";
@@ -24,7 +24,7 @@ type Props = {
 
 const AllUsersStatsDay = ({ setNewMessage }: Props) => {
   /*const [faqData, faqLoading, faqError] = useGetFaq();*/
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
   let { solutionIndex } = useParams();
   const safeSolutionIndex = getSolutionIndexFromUrlSafe(solutionIndex);
   const [day] = useState(safeSolutionIndex);

@@ -1,4 +1,4 @@
-import { Card, CardContent } from "@mui/material";
+import { Card, CardContent, Typography } from "@mui/material";
 import ChartBarOthers from "./ChartBarOthers";
 
 export type HistoryDayProps = {
@@ -12,14 +12,22 @@ export const HistoryDayCard = ({
   myScore,
   mode,
 }: HistoryDayProps) => {
+  const sum = distribution ? distribution.reduce((acc, d) => acc + d, 0) : 0;
+
   return (
     <Card>
       <CardContent>
-        <ChartBarOthers
-          guessesDistribution={distribution}
-          myScore={myScore}
-          mode={mode}
-        />
+        {sum > 0 ? (
+          <ChartBarOthers
+            guessesDistribution={distribution}
+            myScore={myScore}
+            mode={mode}
+          />
+        ) : (
+          <Typography variant="body2" color="text.disabled">
+            Žádná data nejsou k dispozici k vykreslení grafu.
+          </Typography>
+        )}
       </CardContent>
     </Card>
   );

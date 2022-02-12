@@ -75,7 +75,18 @@ const Statistics = () => {
                   Jste lepší než {"" + data?.percentil + "%"} hráčů hry.
                 </Typography>
                 <Typography>
-                  Počítáno z {data?.games} dokončených her.
+                  Počítáno z {data?.playedGames} dokončených her z{" "}
+                  {data?.totalGames}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="text.disabled"
+                  sx={{ mt: 1 }}
+                >
+                  Započítávají se hry od 20.1., které jste dohrál/a + pro které
+                  byla již spočítána statistika všech hráčů (neobsahuje aktuální
+                  den). Nejlepšího score dosáhnete dohráním <b>všech</b> her od
+                  20.1.2022 na co nejméně pokusů.
                 </Typography>
               </CardContent>
               <CardActions disableSpacing>

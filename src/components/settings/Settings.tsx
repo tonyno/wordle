@@ -25,7 +25,7 @@ type PropType = {
 const Settings = ({ onThemeChange }: PropType) => {
   //const navigate = useNavigate();
   const [data, setData] = useState<SettingsItem>(getSettings());
-  console.log(data);
+  //console.log(data);
 
   React.useEffect(() => {
     logMyEvent("settings");

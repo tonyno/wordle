@@ -48,7 +48,7 @@ export const getPercentil = (
 };
 
 export const getHistoryItems = (
-  myStatsLocalStorage: GameStateHistory,
+  myStatsLocalStorage: GameStateHistory | undefined,
   statsAllPlayersDb: GameStats
 ) => {
   const rows = getDaysList().map((solutionIndex: number) => {
@@ -134,7 +134,8 @@ export const getAllPlayersDataForOneDay = (
 
 type PersonalScore = {
   percentil?: number;
-  games?: number;
+  playedGames?: number;
+  totalGames?: number;
 };
 
 export const getPersonalScore = (
@@ -142,9 +143,11 @@ export const getPersonalScore = (
   statsAllPlayersDb: GameStats
 ): PersonalScore | undefined => {
   let sum = 0;
-  let games = 0;
-  for (const key in myStatsLocalStorage) {
-    if (!key.startsWith("day")) continue;
+  let playedGames = 0;
+  let totalGames = 0;
+  getDaysList(1, 6).forEach((solutionIndex) => {
+    const key = "day" + solutionIndex;
+
     const dbStatsData =
       statsAllPlayersDb && key in statsAllPlayersDb
         ? statsAllPlayersDb[key]
@@ -164,8 +167,13 @@ export const getPersonalScore = (
       const percentil = getPercentil(dbStatsData.guessesDistribution, myScore);
       //console.log("Day " + key + " percentil " + percentil);
       sum += percentil;
-      games += 1;
+      playedGames += 1;
     }
-  }
-  return { percentil: Math.round(sum / games), games: games };
+    totalGames += 1;
+  });
+  return {
+    percentil: Math.round(sum / totalGames),
+    playedGames: playedGames,
+    totalGames: totalGames,
+  };
 };
