@@ -1,5 +1,3 @@
-import BarChartIcon from "@mui/icons-material/BarChart";
-import EqualizerIcon from "@mui/icons-material/Equalizer";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Divider, useTheme } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
@@ -41,7 +39,10 @@ const TopMenu = ({ appContext, differentTopMessage }: Props) => {
     <div>
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static">
-          <Toolbar variant="dense" sx={{ backgroundColor: theme.wordle.topBarColor }}>
+          <Toolbar
+            variant="dense"
+            sx={{ backgroundColor: theme.wordle.topBarColor }}
+          >
             <IconButton
               edge="start"
               color="inherit"
@@ -64,7 +65,7 @@ const TopMenu = ({ appContext, differentTopMessage }: Props) => {
               sx={{ flexGrow: 1 }}
             ></Typography>
             <div>
-              <IconButton
+              {/* <IconButton
                 size="large"
                 aria-label="account of current user"
                 aria-controls="menu-appbar"
@@ -75,7 +76,7 @@ const TopMenu = ({ appContext, differentTopMessage }: Props) => {
                 color="inherit"
               >
                 <EqualizerIcon />
-              </IconButton>
+              </IconButton> */}
               <IconButton
                 size="large"
                 aria-label="account of current user"
@@ -103,11 +104,19 @@ const TopMenu = ({ appContext, differentTopMessage }: Props) => {
               >
                 <MenuItem
                   onClick={() => {
+                    navigate("/mystats");
+                    handleClose();
+                  }}
+                >
+                  Osobní statistika
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
                     navigate("/history");
                     handleClose();
                   }}
                 >
-                  Předchozí slova + <BarChartIcon />
+                  Historie slov
                 </MenuItem>
                 <Divider light />
                 <MenuItem

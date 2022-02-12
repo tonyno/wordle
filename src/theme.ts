@@ -29,16 +29,16 @@ const cellColors = {
   light: {
     default: {
       bgcolor: "#ffffff",
-      borderColor: "rgb(226 232 240)",
+      borderColor: "#e1e9f0", // https://www.google.com/search?q=rgb+to+hex&oq=rgb+to+hex&aqs=chrome..69i57j0i512l6j69i60.4452j0j7&sourceid=chrome&ie=UTF-8
     },
     valueWithoutStatus: {
       bgcolor: "#ffffff",
-      borderColor: "rgb(203 213 225)",
+      borderColor: "#cad5e0",
     },
     absent: {
       color: "#ffffff",
-      bgcolor: "rgb(148 163 184)",
-      borderColor: "rgb(148 163 184)",
+      bgcolor: "#93a3b8",
+      borderColor: "#93a3b8",
     },
     correct: {
       color: "#ffffff",
@@ -47,8 +47,8 @@ const cellColors = {
     },
     present: {
       color: "#ffffff",
-      bgcolor: "rgb(234 179 8)",
-      borderColor: "rgb(234 179 8)",
+      bgcolor: "#eab308",
+      borderColor: "#eab308",
     },
   },
   dark: {

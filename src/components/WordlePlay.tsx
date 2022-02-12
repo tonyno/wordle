@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { saveGameResultFirebase } from "../lib/dataAdapter";
 import {
@@ -174,6 +174,11 @@ const WordlePlay = ({ playContext }: Props) => {
         onEnter={onEnter}
         guesses={guesses}
       />
+      {playContext?.alertMessage && (
+        <Typography sx={{ textAlign: "center", color: "red" }}>
+          {playContext?.alertMessage}
+        </Typography>
+      )}
       <EndGameModal
         playContext={playContext}
         isOpen={isWinModalOpen}

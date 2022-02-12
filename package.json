@@ -20,7 +20,6 @@
     "react-firebase-hooks": "^4.0.2",
     "react-router-dom": "^6.2.1",
     "react-scripts": "5.0.0",
-    "recharts": "^2.1.8",
     "typescript": "^4.5.4",
     "web-vitals": "^2.1.3"
   },

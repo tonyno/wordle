@@ -204,7 +204,7 @@ export const migration1 = () => {
  * @see loadGuessInitialState what is similar function
  */
 export const getMyHistoricalResultToGraphs = (
-  localStorageObject: any
+  localStorageObject: GameStateItem
 ): number | null => {
   try {
     //console.log(localStorageObject);

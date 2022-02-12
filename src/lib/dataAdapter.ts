@@ -107,6 +107,7 @@ export const useGetWordOfDay = (date: Date): any => {
     context = {
       solution: data?.solution,
       solutionIndex: data?.solutionIndex,
+      alertMessage: data?.alertMessage,
     };
     if (DEBUG_WORD) {
       context = {

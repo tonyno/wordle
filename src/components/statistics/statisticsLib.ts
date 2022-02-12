@@ -1,5 +1,8 @@
-import { GameStats } from "../../lib/dataAdapter";
-import { GameStateHistory } from "../../lib/localStorage";
+import { GameStats, StatsDay } from "../../lib/dataAdapter";
+import {
+  GameStateHistory,
+  getMyHistoricalResultToGraphs,
+} from "../../lib/localStorage";
 import { dateToStrCZShort } from "../../lib/timeFunctions";
 import { getDateFromSolutionIndex, getDaysList } from "../../lib/words";
 
@@ -8,7 +11,8 @@ export type HistoryData = {
   dateStr: string; // 01.01.'22
   solutionIndex: number;
   solution?: string;
-  myScore?: string; // 5/6
+  myScore?: number | null;
+  myScoreStr?: string; // 5/6
   percentil?: number;
   finishedGame: boolean;
   playsCount?: number; // 3557
@@ -23,6 +27,26 @@ export type HistoryData = {
 //   return "" + value + "/6";
 // };
 
+export const getPercentil = (
+  guessesDistribution: number[],
+  myScore: number
+): number => {
+  if (!guessesDistribution || guessesDistribution.length !== 7) {
+    return 0; // something is wrong
+  }
+  let total = guessesDistribution.reduce((a, b) => a + b, 0);
+  let sum = 0;
+  for (let i = 6; i >= 0; --i) {
+    if (i === myScore - 1) {
+      sum += guessesDistribution[i] / 2; // take the average in that column
+      break;
+    }
+    sum += guessesDistribution[i];
+  }
+  //console.log(myScore, sum, total);
+  return Math.round(100 * (sum / total));
+};
+
 export const getHistoryItems = (
   myStatsLocalStorage: GameStateHistory,
   statsAllPlayersDb: GameStats
@@ -30,6 +54,7 @@ export const getHistoryItems = (
   const rows = getDaysList().map((solutionIndex: number) => {
     const key = "day" + solutionIndex;
     const date = getDateFromSolutionIndex(solutionIndex);
+
     const dbStatsData =
       statsAllPlayersDb && key in statsAllPlayersDb
         ? statsAllPlayersDb[key]
@@ -44,13 +69,24 @@ export const getHistoryItems = (
         localStorageData.isGameWon === true)
         ? true
         : false;
+    const myScore = localStorageData
+      ? getMyHistoricalResultToGraphs(localStorageData)
+      : undefined;
+    const myScoreStr = myScore
+      ? (myScore === 7 ? "N" : "" + myScore) + "/6"
+      : undefined;
+
     const record: HistoryData = {
       date: date,
       dateStr: dateToStrCZShort(date),
       solutionIndex: solutionIndex,
       solution: finishedGame && dbStatsData ? dbStatsData.solution : undefined,
-      myScore: "5/6",
-      percentil: 30,
+      myScore: myScore,
+      myScoreStr: myScoreStr,
+      percentil:
+        dbStatsData && myScore && finishedGame
+          ? getPercentil(dbStatsData.guessesDistribution, myScore)
+          : undefined,
       finishedGame: finishedGame,
       playsCount: dbStatsData ? dbStatsData.games : undefined,
       successRate: dbStatsData ? dbStatsData.score : undefined,
@@ -61,29 +97,75 @@ export const getHistoryItems = (
     return record;
   });
   return rows;
+};
 
-  // const rows = getDaysListUpToday()
-  //   .reverse()
-  //   .map((item) => {
-  //     const key: string = "day" + item.solutionIndex;
-  //     const record: HistoryData = {
-  //       solutionIndex: item.solutionIndex,
-  //       // playable:
-  //       //   item.solutionIndex >= 0 && item.solutionIndex <= maxSolutionIndex,
-  //       date: item.date,
-  //       dateStr: dateToStrCZShort(item.date) + " (" + item.solutionIndex + ")",
-  //       // dateCode: dateToStr(item.date),
-  //       myScore:
-  //         myStatsLocalStorage && myStatsLocalStorage[key]
-  //           ? getMyScore(myStatsLocalStorage[key])
-  //           : "",
-  //       playsCount: 10, // statsDict && statsDict[key] ? statsDict[key]?.games : "-",
-  //       successRate: "X",
-  //       // statsDict && statsDict[key]
-  //       //   ? "" + calculateStatsScore(statsDict[key]) + "%"
-  //       //   : "-",
-  //     };
-  //     return record;
-  //   });
-  // return rows;
+type AllPlayersOneDayData = {
+  stats?: StatsDay;
+  myScore?: number | null;
+};
+
+export const getAllPlayersDataForOneDay = (
+  myStatsLocalStorage: GameStateHistory,
+  statsAllPlayersDb: GameStats,
+  solutionIndex: number
+): AllPlayersOneDayData => {
+  if (!solutionIndex || solutionIndex === -1)
+    return { stats: undefined, myScore: undefined };
+  const key = "day" + solutionIndex;
+
+  const dbStatsData =
+    statsAllPlayersDb && key in statsAllPlayersDb
+      ? statsAllPlayersDb[key]
+      : null;
+
+  const localStorageData =
+    myStatsLocalStorage && key in myStatsLocalStorage
+      ? myStatsLocalStorage[key]
+      : null;
+  const myScore = localStorageData
+    ? getMyHistoricalResultToGraphs(localStorageData)
+    : undefined;
+  return {
+    stats:
+      dbStatsData && dbStatsData.guessesDistribution ? dbStatsData : undefined,
+    myScore: myScore,
+  };
+};
+
+type PersonalScore = {
+  percentil?: number;
+  games?: number;
+};
+
+export const getPersonalScore = (
+  myStatsLocalStorage: GameStateHistory,
+  statsAllPlayersDb: GameStats
+): PersonalScore | undefined => {
+  let sum = 0;
+  let games = 0;
+  for (const key in myStatsLocalStorage) {
+    if (!key.startsWith("day")) continue;
+    const dbStatsData =
+      statsAllPlayersDb && key in statsAllPlayersDb
+        ? statsAllPlayersDb[key]
+        : null;
+    const localStorageData = myStatsLocalStorage[key];
+    const finishedGame =
+      localStorageData &&
+      (localStorageData.isGameLoose === true ||
+        localStorageData.isGameWon === true)
+        ? true
+        : false;
+    const myScore =
+      localStorageData && finishedGame
+        ? getMyHistoricalResultToGraphs(localStorageData)
+        : undefined;
+    if (finishedGame && myScore && dbStatsData) {
+      const percentil = getPercentil(dbStatsData.guessesDistribution, myScore);
+      //console.log("Day " + key + " percentil " + percentil);
+      sum += percentil;
+      games += 1;
+    }
+  }
+  return { percentil: Math.round(sum / games), games: games };
 };
