@@ -44,21 +44,33 @@ export const getDateFromSolutionIndex = (solutionIndex: number): Date => {
   return newDate;
 };
 
-type DaysListItem = {
-  solutionIndex: number;
-  date: Date;
-};
+// type DaysListItem = {
+//   solutionIndex: number;
+//   date: Date;
+// };
 
-export const getDaysListUpToday = (): DaysListItem[] => {
-  let days: DaysListItem[] = [];
-  for (let i = 0; i <= getWordIndex(); ++i) {
-    const item: DaysListItem = {
-      solutionIndex: i,
-      date: addDays(new Date(startDate), i),
-    };
-    days.push(item);
+// export const getDaysListUpToday = (): DaysListItem[] => {
+//   let days: DaysListItem[] = [];
+//   for (let i = 0; i <= getWordIndex(); ++i) {
+//     const item: DaysListItem = {
+//       solutionIndex: i,
+//       date: addDays(new Date(startDate), i),
+//     };
+//     days.push(item);
+//   }
+//   return days;
+// };
+
+export const getDaysList = (
+  maximumDayMinus: number = 0,
+  minimumDay: number = 0
+): number[] => {
+  // TODO paging
+  let retVal: number[] = [];
+  for (let i = getWordIndex() - maximumDayMinus; i >= minimumDay; i--) {
+    retVal.push(i);
   }
-  return days;
+  return retVal;
 };
 
 export const getSolutionIndexFromUrlSafe = (

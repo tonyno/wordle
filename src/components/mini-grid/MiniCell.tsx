@@ -1,23 +1,17 @@
+import { Box, useTheme } from "@mui/material";
 import { CharStatus } from "../../lib/statuses";
-import classnames from "classnames";
+import styles from "./MiniCell.module.css";
 
 type Props = {
   status: CharStatus;
 };
 
 export const MiniCell = ({ status }: Props) => {
-  const classes = classnames(
-    "w-10 h-10 border-solid border-2 border-slate-200 flex items-center justify-center mx-0.5 text-lg font-bold rounded",
-    {
-      "bg-white": status === "absent",
-      "bg-green-500": status === "correct",
-      "bg-yellow-500": status === "present",
-    }
-  );
+  const theme = useTheme();
 
-  return (
-    <>
-      <div className={classes}></div>
-    </>
-  );
+  let bgColor = theme.wordle.cell.default.bgcolor;
+  if (status === "correct") bgColor = theme.wordle.cell.correct.bgcolor;
+  else if (status === "present") bgColor = theme.wordle.cell.present.bgcolor;
+
+  return <Box className={styles.MiniCell} sx={{ bgcolor: bgColor }}></Box>;
 };

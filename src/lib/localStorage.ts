@@ -1,19 +1,31 @@
 import md5 from "md5";
+import { generateUUID } from "./other";
 import { PlayContext } from "./playContext";
 const gameStateKey = "gameState";
 const gameStateKeyNew = "actualGameState";
 const gameStatisticsKey = "stats";
+const settingsKey = "settings";
+const followingKey = "following";
 
-type StoredGameState = {
+export type StoredGameState = {
   guesses: string[];
   solutionMd5: string;
+  startTime?: number;
+  endTime?: number;
 };
 
-type GameStateItem = {
+export type GameStateItem = {
   guesses: string[];
   isGameWon?: boolean;
   isGameLoose?: boolean;
   solutionMd5?: string; // just to have verification of not cheating and not bug on our side saving to wrong day
+  startTime?: number;
+  endTime?: number;
+};
+
+// e.g.: {"day21":{"guesses":["TONDA","DRIVE"],"isGameWon":false,"isGameLoose":false,"solutionMd5":"c4e455548dc4e94af326de3e658698b7"},"day18":{"guesses":["KOČKA","KOČKA","KOČKA","KOČKA","KOČKA","KOČKA"],"isGameWon":false,"isGameLoose":true,"solutionMd5":"dbd10e7d6971156dfb980557f0239c07"},"day22":{"guesses":["TONDA","LENKA","MOSTY"],"isGameWon":false,"isGameLoose":false,"solutionMd5":"39c2b07a337c0c7474839ce283c2d20e"},"day99":{"guesses":["PRKNO","START","MAKÉJ","HURÁÁ","ZLATO","ESTER"],"isGameWon":true,"isGameLoose":false,"solutionMd5":"22948a71c653af34c8d03d4b3fd5ca1c"}}
+export type GameStateHistory = {
+  [key: string]: GameStateItem;
 };
 
 type Stats = {
@@ -53,7 +65,9 @@ export const saveGameStateToLocalStorageNew = (
   guesses: string[],
   playContext: PlayContext,
   isGameWon: boolean,
-  isGameLoose: boolean
+  isGameLoose: boolean,
+  startTime?: number,
+  endTime?: number
 ) => {
   const state = localStorage.getItem(gameStateKeyNew);
   let data: any; // TODO Jonas. Nejaka moznost definovat strukturu kde klice jsou ruzne hodnoty? Map?
@@ -75,15 +89,19 @@ export const saveGameStateToLocalStorageNew = (
     isGameWon: isGameWon,
     isGameLoose: isGameLoose,
     solutionMd5: md5(playContext.solution), // this field was added later, will be missing in some previous data
+    startTime: startTime,
+    endTime: endTime,
   };
   data["day" + playContext.solutionIndex] = gameState;
   localStorage.setItem(gameStateKeyNew, JSON.stringify(data));
 };
 
-export const loadGameStateFromLocalStorageNew = (): any => {
+export const loadGameStateFromLocalStorageNew = ():
+  | GameStateHistory
+  | undefined => {
   const state = localStorage.getItem(gameStateKeyNew);
-  if (!state) return {};
-  const data = JSON.parse(state); // TODO how to specify structure of dictionary with unknown keys
+  if (!state) return undefined;
+  const data = JSON.parse(state) as GameStateHistory; // TODO how to specify structure of dictionary with unknown keys
   return data;
 };
 
@@ -96,20 +114,31 @@ export const saveGameStateToLocalStorage = (
   guesses: string[],
   playContext: PlayContext,
   isGameWon: boolean,
-  isGameLoose: boolean
+  isGameLoose: boolean,
+  startTime?: number,
+  endTime?: number
 ) => {
   //console.log("Saving to localstorage ", guesses, isGameWon);
   const gameState = {
     guesses,
     solutionMd5: md5(playContext.solution),
+    startTime: startTime,
+    endTime: endTime,
   };
   localStorage.setItem(gameStateKey, JSON.stringify(gameState));
-  saveGameStateToLocalStorageNew(guesses, playContext, isGameWon, isGameLoose);
+  saveGameStateToLocalStorageNew(
+    guesses,
+    playContext,
+    isGameWon,
+    isGameLoose,
+    startTime,
+    endTime
+  );
 };
 
 export const loadGameStateFromLocalStorage = (
   playContext: PlayContext
-): any => {
+): StoredGameState | null => {
   try {
     const state = localStorage.getItem(gameStateKey);
     // the word was not changed and was found in local storage
@@ -128,13 +157,16 @@ export const loadGameStateFromLocalStorage = (
     if (dataHistory["day" + playContext.solutionIndex]) {
       return {
         guesses: dataHistory["day" + playContext.solutionIndex]?.guesses,
-        solutionIndex: md5(playContext.solution),
-      };
+        solutionMd5: md5(playContext.solution),
+        startTime: dataHistory["day" + playContext.solutionIndex]?.startTime,
+        endTime: dataHistory["day" + playContext.solutionIndex]?.endTime,
+      } as StoredGameState;
     }
     return null;
   } catch (err) {
     console.error("loadGameStateFromLocalStorage error ", err);
   }
+  return null;
 };
 
 export const migration1 = () => {
@@ -194,7 +226,7 @@ export const migration1 = () => {
  * @see loadGuessInitialState what is similar function
  */
 export const getMyHistoricalResultToGraphs = (
-  localStorageObject: any
+  localStorageObject: GameStateItem
 ): number | null => {
   try {
     //console.log(localStorageObject);
@@ -223,4 +255,58 @@ export const dumpLocalStorage = (): string => {
   }
   retVal += "}";
   return retVal;
+};
+
+export type SettingsItem = {
+  darkMode: boolean;
+  colorBlindMode: boolean;
+  bigFont: boolean;
+  nickname?: string;
+  userId?: string;
+};
+
+export const getSettings = (
+  allowAutomaticSaving: boolean = true,
+  darkModeSystemPreference: boolean = false
+): SettingsItem => {
+  const settings = localStorage.getItem(settingsKey);
+  if (!settings) {
+    const d: SettingsItem = {
+      darkMode: darkModeSystemPreference,
+      colorBlindMode: false,
+      bigFont: false,
+      nickname: undefined,
+      userId: allowAutomaticSaving ? generateUUID() : undefined,
+    };
+    if (allowAutomaticSaving) {
+      saveSettings(d);
+    }
+    return d;
+  }
+  const data = JSON.parse(settings) as SettingsItem;
+  return data;
+};
+
+export const saveSettings = (settings: SettingsItem) => {
+  localStorage.setItem(settingsKey, JSON.stringify(settings));
+};
+
+export const getUserId = (): string | undefined => {
+  return getSettings()?.userId;
+};
+
+type FollowingType = {
+  userIds: string[];
+};
+
+export const addFollower = (userId: string) => {
+  const following = localStorage.getItem(followingKey);
+  let data: FollowingType;
+  if (following) {
+    data = JSON.parse(following) as FollowingType;
+  } else {
+    data = { userIds: [] };
+  }
+  data.userIds.push(userId);
+  localStorage.setItem(followingKey, JSON.stringify(data));
 };

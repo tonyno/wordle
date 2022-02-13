@@ -1,13 +1,15 @@
 import ShareIcon from "@mui/icons-material/Share";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import { Dialog, IconButton } from "@mui/material";
+import { Alert, Box, Dialog, IconButton, Typography } from "@mui/material";
 import Button from "@mui/material/Button";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+import { useState } from "react";
 import { PlayContext } from "../../lib/playContext";
 import { canShare, shareStatus } from "../../lib/share";
 import { PlayState } from "../../lib/statuses";
+import { msToMinAndSeconds } from "../../lib/timeFunctions";
 import { MiniGrid } from "../mini-grid/MiniGrid";
 
 type Props = {
@@ -16,7 +18,6 @@ type Props = {
   gameStatus: PlayState;
   handleClose: () => void;
   guesses: string[];
-  handleShare: () => void;
   gameDurationMs?: number;
 };
 
@@ -26,9 +27,10 @@ const EndGameModal = ({
   gameStatus,
   handleClose,
   guesses,
-  handleShare,
   gameDurationMs,
 }: Props) => {
+  const [shareNotification, setShareNotification] = useState(false);
+
   return (
     <Dialog
       open={isOpen}
@@ -62,51 +64,45 @@ const EndGameModal = ({
         </IconButton>
       </DialogTitle>
       <DialogContent>
-        <div
-          className="text-center"
+        <Box
+          sx={{ textAlign: "center" }}
           onClick={() => {
             handleClose();
           }}
         >
           {gameStatus === "loose" ? (
-            <p className="text-gray-500">
+            <Typography variant="body2">
               Správné slovo:{" "}
-              <b className="text-red-600">{playContext.solution}</b>
-            </p>
+              <b style={{ color: "#DC2626" }}>{playContext.solution}</b>
+            </Typography>
           ) : (
             ""
           )}
-          <div className="mt-3 sm:mt-6">
+          <Box sx={{ mt: "0.75rem" }}>
             <MiniGrid playContext={playContext} guesses={guesses} />
-            <p className="text-sm text-gray-500 mt-3 sm:mt-6">
-              {gameStatus === "win"
-                ? "Skvělá práce."
-                : "Nevadí, vyjde to zítra."}
-            </p>
-          </div>
-        </div>
-        <div className="mt-3 sm:mt-6">
-          {/* {canShare() && (
-            <Box sx={{ mb: 2 }}>
-              <Button
-                variant="contained"
-                startIcon={<ShareIcon />}
-                className="inline-flex justify-center w-full"
-                onClick={() => {
-                  shareStatus(playContext, guesses, gameStatus, true);
-                }}
-              >
-                Sdílet
-              </Button>
-              <p className="text-xs text-gray-500 italic">
-                *) Pro FB použijte kopírování do schránky.
-              </p>
-            </Box>
-            )} */}
+            {shareNotification ? (
+              <Alert severity="info" sx={{ mt: 3, mb: 3 }}>
+                Vaše hra byla úspěšně vložena do schránky.
+              </Alert>
+            ) : (
+              <Typography variant="body2" sx={{ mt: "0.75rem" }}>
+                {gameStatus === "win"
+                  ? "Skvělá práce. "
+                  : "Nevadí, vyjde to zítra. "}
+                {gameDurationMs ? msToMinAndSeconds(gameDurationMs) : ""}
+              </Typography>
+            )}
+          </Box>
+        </Box>
+        <Box sx={{ mt: "0.75rem", textAlign: "center" }}>
           <Button
             variant="contained"
             startIcon={<ShareIcon />}
-            className="inline-flex justify-center w-full"
+            sx={{
+              display: "inline-flex",
+              justifyContent: "center",
+              width: "100%",
+            }}
             onClick={() => {
               shareStatus(
                 playContext,
@@ -123,12 +119,21 @@ const EndGameModal = ({
                   true,
                   gameDurationMs
                 );
-              handleShare();
+              setShareNotification(true);
             }}
           >
             Sdílet
           </Button>
-          <p className="text-xs text-gray-500 italic text-center mt-2">
+
+          <Typography
+            sx={{
+              fontSize: "0.75rem",
+              lineHeight: "1rem",
+              fontStyle: "italic",
+              mt: "0.5rem",
+              textAlign: "center",
+            }}
+          >
             {canShare() ? (
               <>
                 Sdílení vloží výsledek do schránky + zobrazí dialog na výběr
@@ -138,8 +143,8 @@ const EndGameModal = ({
               ""
             )}
             Okno zavřete kliknutím mimo okno.
-          </p>
-        </div>
+          </Typography>
+        </Box>
       </DialogContent>
     </Dialog>
   );

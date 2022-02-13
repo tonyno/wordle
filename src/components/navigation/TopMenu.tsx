@@ -1,7 +1,5 @@
-import BarChartIcon from "@mui/icons-material/BarChart";
-import EqualizerIcon from "@mui/icons-material/Equalizer";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Divider } from "@mui/material";
+import { Divider, useTheme } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
@@ -24,6 +22,7 @@ type Props = {
 
 const TopMenu = ({ appContext, differentTopMessage }: Props) => {
   const navigate = useNavigate();
+  const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
   const [isAboutModalOpen, setIsAboutModalOpen] = useState(false);
@@ -40,7 +39,10 @@ const TopMenu = ({ appContext, differentTopMessage }: Props) => {
     <div>
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static">
-          <Toolbar variant="dense" className="bg-slate-400">
+          <Toolbar
+            variant="dense"
+            sx={{ backgroundColor: theme.wordle.topBarColor }}
+          >
             <IconButton
               edge="start"
               color="inherit"
@@ -63,7 +65,7 @@ const TopMenu = ({ appContext, differentTopMessage }: Props) => {
               sx={{ flexGrow: 1 }}
             ></Typography>
             <div>
-              <IconButton
+              {/* <IconButton
                 size="large"
                 aria-label="account of current user"
                 aria-controls="menu-appbar"
@@ -74,7 +76,7 @@ const TopMenu = ({ appContext, differentTopMessage }: Props) => {
                 color="inherit"
               >
                 <EqualizerIcon />
-              </IconButton>
+              </IconButton> */}
               <IconButton
                 size="large"
                 aria-label="account of current user"
@@ -102,11 +104,19 @@ const TopMenu = ({ appContext, differentTopMessage }: Props) => {
               >
                 <MenuItem
                   onClick={() => {
+                    navigate("/mystats");
+                    handleClose();
+                  }}
+                >
+                  Osobní statistika
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
                     navigate("/history");
                     handleClose();
                   }}
                 >
-                  Předchozí slova + <BarChartIcon />
+                  Historie slov
                 </MenuItem>
                 <Divider light />
                 <MenuItem
@@ -124,6 +134,14 @@ const TopMenu = ({ appContext, differentTopMessage }: Props) => {
                   }}
                 >
                   Časté otázky a odpovědi (FAQ)
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    navigate("/settings");
+                    handleClose();
+                  }}
+                >
+                  Nastavení
                 </MenuItem>
                 <MenuItem
                   onClick={() => {

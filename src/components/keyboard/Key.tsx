@@ -1,7 +1,9 @@
-import classnames from "classnames";
+import { Box, useTheme } from "@mui/material";
+import cx from "classnames";
 import { ReactNode } from "react";
 import { KeyValue } from "../../lib/keyboard";
 import { CharStatus } from "../../lib/statuses";
+import styles from "./Key.module.css";
 
 type KeyColor = "red" | "green";
 
@@ -14,6 +16,12 @@ type Props = {
   onClick: (value: KeyValue) => void;
 };
 
+// https://mui.com/system/styled/
+// const KeyWithTheme = styled("div")(({ theme }) => ({
+//   //color: theme.wordle.style.color,
+//   //fontSize: theme.wordle.style.fontSize,
+// }));
+
 export const Key = ({
   children,
   status,
@@ -22,27 +30,23 @@ export const Key = ({
   color,
   onClick,
 }: Props) => {
-  const classes = classnames(
-    "flex items-center justify-center rounded mx-0.5 text-sm font-bold cursor-pointer",
-    {
-      "bg-slate-200 hover:bg-slate-300 active:bg-slate-400": !status,
-      "bg-slate-400 text-white": status === "absent",
-      "bg-green-500 hover:bg-green-600 active:bg-green-700 text-white":
-        status === "correct",
-      "bg-yellow-500 hover:bg-yellow-600 active:bg-yellow-700 text-white":
-        status === "present",
-      "text-red-600": color === "red",
-      "text-green-600": color === "green",
-    }
-  );
+  const theme = useTheme();
+  const classes = cx(styles.Key, {
+    [styles.KeyRed]: color === "red",
+    [styles.KeyGreen]: color === "green",
+  });
+  let mySx = status
+    ? theme.wordle.keyboard[status]
+    : theme.wordle.keyboard.default;
 
   return (
-    <div
+    <Box
       style={{ width: `${width}px`, height: "50px" }}
       className={classes}
+      sx={{ ...mySx, ...theme.wordle.keyStyle }}
       onClick={() => onClick(value)}
     >
       {children || value}
-    </div>
+    </Box>
   );
 };

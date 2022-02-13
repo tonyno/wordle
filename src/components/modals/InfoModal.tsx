@@ -1,5 +1,6 @@
-import { Dialog, Transition } from "@headlessui/react";
-import { Fragment } from "react";
+import { Box, Dialog, DialogContentText } from "@mui/material";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
 import { logMyEvent } from "../../lib/settingsFirebase";
 import { Cell } from "../grid/Cell";
 
@@ -11,97 +12,77 @@ type Props = {
 export const InfoModal = ({ isOpen, handleClose }: Props) => {
   if (isOpen) logMyEvent("infoModal");
   return (
-    <Transition.Root show={isOpen} as={Fragment}>
-      <Dialog
-        as="div"
-        className="fixed z-10 inset-0 overflow-y-auto"
-        onClose={handleClose}
-      >
-        <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
+    <Dialog
+      open={isOpen}
+      onClose={handleClose}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+      maxWidth="xs"
+      fullWidth={true}
+    >
+      <DialogTitle>Jak hrát HadejSlova.cz</DialogTitle>
+      <DialogContent>
+        <DialogContentText variant="body2">
+          Uhodni slovo na 6 pokusů. Po každém pokusu se písmenko obarví barvou
+          podle toho jak daleko byl Tvůj tip od uhodnutí slova.
+        </DialogContentText>
+
+        <Box sx={{ textAlign: "center" }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              mb: "0.25rem",
+              mt: "1rem",
+            }}
           >
-            <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-          </Transition.Child>
+            <Cell value="K" status="correct" skipAnimation={true} />
+            <Cell value="O" skipAnimation={true} />
+            <Cell value="Č" skipAnimation={true} />
+            <Cell value="K" skipAnimation={true} />
+            <Cell value="A" skipAnimation={true} />
+          </Box>
+          <DialogContentText variant="body2">
+            Písmeno <b>K</b> je ve slově a na <b>správném</b> místě.
+          </DialogContentText>
 
-          {/* This element is to trick the browser into centering the modal contents. */}
-          <span
-            className="hidden sm:inline-block sm:align-middle sm:h-screen"
-            aria-hidden="true"
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              mb: "0.25rem",
+              mt: "1rem",
+            }}
           >
-            &#8203;
-          </span>
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-            enterTo="opacity-100 translate-y-0 sm:scale-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-            leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+            <Cell value="P" skipAnimation={true} />
+            <Cell value="I" skipAnimation={true} />
+            <Cell value="L" status="present" skipAnimation={true} />
+            <Cell value="O" skipAnimation={true} />
+            <Cell value="T" skipAnimation={true} />
+          </Box>
+          <DialogContentText variant="body2">
+            Písmeno <b>L</b> je v hledaném slově, ale na chybném místě.
+          </DialogContentText>
+
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              mb: "0.25rem",
+              mt: "1rem",
+            }}
           >
-            <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6">
-              <div>
-                <div className="text-center">
-                  <Dialog.Title
-                    as="h3"
-                    className="text-lg leading-6 font-medium text-gray-900"
-                  >
-                    Jak hrát <a href="https://hadejslova.cz/">HádejSlova.cz</a>
-                  </Dialog.Title>
-                  <div className="mt-2">
-                    <p className="text-sm text-gray-500">
-                      Uhodni slovo na 6 pokusů. Po každém pokusu se písmenko
-                      obarví barvou podle toho jak daleko byl Tvůj tip od
-                      uhodnutí slova.
-                    </p>
-
-                    <div className="flex justify-center mb-1 mt-4">
-                      <Cell value="K" status="correct" skipAnimation={true} />
-                      <Cell value="O" skipAnimation={true} />
-                      <Cell value="Č" skipAnimation={true} />
-                      <Cell value="K" skipAnimation={true} />
-                      <Cell value="A" skipAnimation={true} />
-                    </div>
-                    <p className="text-sm text-gray-500">
-                      Písmeno <b>K</b> je ve slově a na <b>správném</b> místě.
-                    </p>
-
-                    <div className="flex justify-center mb-1 mt-4">
-                      <Cell value="P" skipAnimation={true} />
-                      <Cell value="I" skipAnimation={true} />
-                      <Cell value="L" status="present" skipAnimation={true} />
-                      <Cell value="O" skipAnimation={true} />
-                      <Cell value="T" skipAnimation={true} />
-                    </div>
-                    <p className="text-sm text-gray-500">
-                      Písmeno <b>L</b> je v hledaném slově, ale na chybném
-                      místě.
-                    </p>
-
-                    <div className="flex justify-center mb-1 mt-4">
-                      <Cell value="M" skipAnimation={true} />
-                      <Cell value="E" skipAnimation={true} />
-                      <Cell value="T" skipAnimation={true} />
-                      <Cell value="R" status="absent" skipAnimation={true} />
-                      <Cell value="O" skipAnimation={true} />
-                    </div>
-                    <p className="text-sm text-gray-500">
-                      Písmeno <b>R</b> se v hledaném slově nevyskytuje.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Transition.Child>
-        </div>
-      </Dialog>
-    </Transition.Root>
+            <Cell value="M" skipAnimation={true} />
+            <Cell value="E" skipAnimation={true} />
+            <Cell value="T" skipAnimation={true} />
+            <Cell value="R" status="absent" skipAnimation={true} />
+            <Cell value="O" skipAnimation={true} />
+          </Box>
+          <DialogContentText variant="body2">
+            Písmeno <b>R</b> se v hledaném slově nevyskytuje.
+          </DialogContentText>
+        </Box>
+      </DialogContent>
+    </Dialog>
   );
 };
