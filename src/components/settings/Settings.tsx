@@ -1,14 +1,17 @@
 import {
   Box,
+  Button,
   Card,
   CardContent,
   Container,
   Grid,
   Switch,
+  TextField,
   Typography,
 } from "@mui/material";
 import * as React from "react";
 import { useState } from "react";
+import { saveSharedResult } from "../../lib/dataAdapter";
 import {
   getSettings,
   saveSettings,
@@ -25,6 +28,7 @@ type PropType = {
 const Settings = ({ onThemeChange }: PropType) => {
   //const navigate = useNavigate();
   const [data, setData] = useState<SettingsItem>(getSettings());
+  const [saveDirty, setSaveDirty] = useState<boolean>(false);
   //console.log(data);
 
   React.useEffect(() => {
@@ -49,13 +53,22 @@ const Settings = ({ onThemeChange }: PropType) => {
     save({ ...data, bigFont: !data.bigFont });
   };
 
+  const changeNickname = (s: string) => {
+    save({ ...data, nickname: s });
+    setSaveDirty(true);
+  };
+
+  const shareGameResultsToServer = async () => {
+    setSaveDirty(false);
+    await saveSharedResult();
+  };
+
   return (
     <Container maxWidth="md">
       <Box justifyContent="center" component="main" sx={{ flexGrow: 1, pt: 2 }}>
         <PageTitle title="Nastavení" />
 
         <Card sx={{ maxWidth: "md", mt: "1rem" }}>
-          {" "}
           <CardContent>
             <Grid container spacing={1}>
               <Grid item xs={12}>
@@ -119,6 +132,55 @@ const Settings = ({ onThemeChange }: PropType) => {
                 </Typography>
               </Grid>
             </Grid>{" "}
+          </CardContent>
+        </Card>
+
+        <Card sx={{ maxWidth: "md", mt: "1rem" }}>
+          <CardContent>
+            <Grid container spacing={1}>
+              <Grid item xs={12}>
+                <Typography variant="h6" gutterBottom component="div">
+                  Sdílení výsledků
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  id="nickname"
+                  label="Přezdívka"
+                  value={data.nickname}
+                  onChange={(event) => changeNickname(event.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Button
+                  variant="contained"
+                  disabled={!saveDirty}
+                  onClick={() => shareGameResultsToServer()}
+                >
+                  Uložit výsledky na server
+                </Button>
+              </Grid>
+              <Grid item xs={12}>
+                {/* <Typography>
+                  Pokud chcete nasdílet své výsledky svým kamarádům, požádejte
+                  je aby otevřeli následující odkaz. Tento odkaz vás automaticky
+                  přidá do jejich sledování. Díky tomu budou moci každý den
+                  porovnat své výsledky s vámi.{" "}
+                  <Typography>
+                    Pokud naopak chcete vy sledovat své kamarády, požádejte je
+                    aby vám zaslali svůj odkaz.
+                  </Typography>
+                </Typography>
+                <Typography sx={{ mt: "1rem" }}>Odkaz pro sdílení:</Typography>
+                <Typography sx={{ mt: "0.5rem" }}></Typography>
+                <code>{"https://hadejslova.cz/follow/" + data.userId}</code> */}
+                <Typography sx={{ color: "red" }}>
+                  Sdílení není zatím funkční. Bude realizováno v průběhu února.
+                </Typography>
+                <code>{data.userId}</code>
+              </Grid>
+            </Grid>
           </CardContent>
         </Card>
       </Box>

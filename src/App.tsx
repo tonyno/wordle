@@ -9,6 +9,7 @@ import { useMemo, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import DumpLocalStorage from "./components/debugTools/DumpLocalStorage";
 import Faq from "./components/faq/Faq";
+import IncomingFollowLink from "./components/follow/IncomingFollowLink";
 import HistoryPlay from "./components/HistoryPlay";
 import TopMenu from "./components/navigation/TopMenu";
 import Settings from "./components/settings/Settings";
@@ -88,6 +89,10 @@ function App() {
             <Route path="/faq" element={<Faq />} />
             <Route path="/mystats" element={<PersonalStats />} />
             <Route path="/history" element={<History />} />
+            <Route
+              path="/follow/:followLink"
+              element={<IncomingFollowLink />}
+            />
             <Route
               path="/settings"
               element={<Settings onThemeChange={themeChange} />}

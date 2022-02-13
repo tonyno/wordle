@@ -27,14 +27,12 @@ const WordlePlay = ({ playContext }: Props) => {
     dataFromLocalStorage?.guesses || []
   );
   const [currentGuess, setCurrentGuess] = useState("");
-  //const [isGameWon, setIsGameWon] = useState(false);
-  //const [isGameLost, setIsGameLost] = useState(false);
   const [gameStatus, setGameStatus] = useState<PlayState>("notStarted");
   const [isWinModalOpen, setIsWinModalOpen] = useState(false);
   const [errorWordNotInDictionary, setErrorWordNotInDictionary] =
     useState(false);
   const [gameStartTime, setGameStartTime] = useState<Date | null>(null);
-  const [gameDurationMs, setGameDurationMs] = useState(0);
+  const [gameEndTime, setGameEndTime] = useState<Date | null>(null);
 
   try {
     migration1();
@@ -47,14 +45,24 @@ const WordlePlay = ({ playContext }: Props) => {
     logMyEvent("start", navigator.userAgent || navigator.vendor);
     //console.log("Loaded from localStorage: ", dataFromLocalStorage);
     //console.log("guesses ", guesses);
-    setGameStartTime(null); // if word changed, then clean the time
-    setGameDurationMs(0);
     if (!dataFromLocalStorage) {
+      setGameStartTime(null); // if word changed, then clean the time
+      setGameEndTime(null); // if word changed, then clean the time
       setCurrentGuess("");
       setGuesses([]);
       setGameStatus("notStarted");
     } else {
       const initialStatus = getGameStateFromGuesses(playContext, guesses);
+      setGameStartTime(
+        dataFromLocalStorage?.startTime
+          ? new Date(dataFromLocalStorage?.startTime)
+          : null
+      );
+      setGameEndTime(
+        dataFromLocalStorage?.endTime
+          ? new Date(dataFromLocalStorage?.endTime)
+          : null
+      );
       //console.log("useEffect() start: ", initialStatus);
       if (initialStatus === "win" && gameStatus !== "win") {
         setGameStatus("win");
@@ -111,15 +119,21 @@ const WordlePlay = ({ playContext }: Props) => {
         // entering first word, remember the time when started
         setGameStartTime(new Date());
       }
-      setGameDurationMs(
-        gameStartTime ? Date.now() - gameStartTime?.getTime() : 0
-      );
+      const newEndTime = new Date();
+      setGameEndTime(newEndTime);
+      // setGameDurationMs(
+      //   gameStartTime ? Date.now() - gameStartTime?.getTime() : 0
+      // );
 
       saveGameStateToLocalStorage(
         newGuesses,
         playContext,
         winningWord,
-        newGameState === "loose"
+        newGameState === "loose",
+        gameStartTime ? gameStartTime.getTime() : undefined,
+        newGameState === "win" || newGameState === "loose"
+          ? newEndTime.getTime()
+          : undefined
       );
       setGuesses(newGuesses);
       setCurrentGuess("");
@@ -131,7 +145,10 @@ const WordlePlay = ({ playContext }: Props) => {
           "TBD",
           "win",
           guesses,
-          actualGuessAttempt
+          actualGuessAttempt,
+          gameStartTime && newEndTime
+            ? newEndTime.getTime() - gameStartTime.getTime()
+            : undefined
         );
         updateFinishedGameStats(true, actualGuessAttempt);
         return setGameStatus("win");
@@ -144,7 +161,10 @@ const WordlePlay = ({ playContext }: Props) => {
           "TBD",
           "loose",
           guesses,
-          actualGuessAttempt
+          actualGuessAttempt,
+          gameStartTime && newEndTime
+            ? newEndTime.getTime() - gameStartTime.getTime()
+            : undefined
         );
         updateFinishedGameStats(false, actualGuessAttempt);
         return setGameStatus("loose");
@@ -185,7 +205,11 @@ const WordlePlay = ({ playContext }: Props) => {
         gameStatus={gameStatus}
         handleClose={() => setIsWinModalOpen(false)}
         guesses={guesses}
-        gameDurationMs={gameDurationMs}
+        gameDurationMs={
+          gameStartTime && gameEndTime
+            ? gameEndTime.getTime() - gameStartTime.getTime()
+            : undefined
+        }
       />
     </Box>
   );

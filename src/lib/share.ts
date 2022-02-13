@@ -1,7 +1,7 @@
 import { ourUrl } from "../constants/otherConstants";
 import { defaultPlayContext, PlayContext } from "./playContext";
 import { getGuessStatuses, PlayState } from "./statuses";
-import { msToTime } from "./timeFunctions";
+import { msToMinAndSeconds } from "./timeFunctions";
 
 type SharaData = {
   title: string;
@@ -17,16 +17,7 @@ const getShareDataText = (
   includeUrl: boolean = true
 ): string => {
   const attempts = gameStatus === "win" ? "" + guesses.length : "N";
-  let timeStr = "";
-  if (gameDurationMs && gameDurationMs > 1) {
-    const duration = msToTime(gameDurationMs);
-    timeStr =
-      "\nČas: " +
-      (duration.hours * 60 + duration.minutes) +
-      "min " +
-      duration.seconds +
-      "s";
-  }
+  let timeStr = gameDurationMs ? msToMinAndSeconds(gameDurationMs) : undefined;
   const step = gameStatus === "win" ? " #krok" + guesses.length : " #prohra";
   return (
     "\nHadejSlova.cz den " +
@@ -38,7 +29,7 @@ const getShareDataText = (
     "\n#hadejSlova #den" +
     playContext.solutionIndex +
     step +
-    timeStr +
+    (timeStr ? "\n" + timeStr : "") +
     "\nČeská verze Wordle\n" +
     (includeUrl ? ourUrl : "")
   );

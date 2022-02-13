@@ -9,6 +9,7 @@ import { useState } from "react";
 import { PlayContext } from "../../lib/playContext";
 import { canShare, shareStatus } from "../../lib/share";
 import { PlayState } from "../../lib/statuses";
+import { msToMinAndSeconds } from "../../lib/timeFunctions";
 import { MiniGrid } from "../mini-grid/MiniGrid";
 
 type Props = {
@@ -86,8 +87,9 @@ const EndGameModal = ({
             ) : (
               <Typography variant="body2" sx={{ mt: "0.75rem" }}>
                 {gameStatus === "win"
-                  ? "Skvělá práce."
-                  : "Nevadí, vyjde to zítra."}
+                  ? "Skvělá práce. "
+                  : "Nevadí, vyjde to zítra. "}
+                {gameDurationMs ? msToMinAndSeconds(gameDurationMs) : ""}
               </Typography>
             )}
           </Box>

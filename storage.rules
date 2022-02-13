@@ -34,7 +34,12 @@ service cloud.firestore {
 
     match /gameStats/{document=**} {
       allow get: if true;
-    }   
+    }  
+
+    match /sharedResult/{document=**} {
+      allow get, create, update: if true;
+    }  
+
   }
 }
 

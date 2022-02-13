@@ -5,10 +5,13 @@ const gameStateKey = "gameState";
 const gameStateKeyNew = "actualGameState";
 const gameStatisticsKey = "stats";
 const settingsKey = "settings";
+const followingKey = "following";
 
 export type StoredGameState = {
   guesses: string[];
   solutionMd5: string;
+  startTime?: number;
+  endTime?: number;
 };
 
 export type GameStateItem = {
@@ -16,6 +19,8 @@ export type GameStateItem = {
   isGameWon?: boolean;
   isGameLoose?: boolean;
   solutionMd5?: string; // just to have verification of not cheating and not bug on our side saving to wrong day
+  startTime?: number;
+  endTime?: number;
 };
 
 // e.g.: {"day21":{"guesses":["TONDA","DRIVE"],"isGameWon":false,"isGameLoose":false,"solutionMd5":"c4e455548dc4e94af326de3e658698b7"},"day18":{"guesses":["KOČKA","KOČKA","KOČKA","KOČKA","KOČKA","KOČKA"],"isGameWon":false,"isGameLoose":true,"solutionMd5":"dbd10e7d6971156dfb980557f0239c07"},"day22":{"guesses":["TONDA","LENKA","MOSTY"],"isGameWon":false,"isGameLoose":false,"solutionMd5":"39c2b07a337c0c7474839ce283c2d20e"},"day99":{"guesses":["PRKNO","START","MAKÉJ","HURÁÁ","ZLATO","ESTER"],"isGameWon":true,"isGameLoose":false,"solutionMd5":"22948a71c653af34c8d03d4b3fd5ca1c"}}
@@ -60,7 +65,9 @@ export const saveGameStateToLocalStorageNew = (
   guesses: string[],
   playContext: PlayContext,
   isGameWon: boolean,
-  isGameLoose: boolean
+  isGameLoose: boolean,
+  startTime?: number,
+  endTime?: number
 ) => {
   const state = localStorage.getItem(gameStateKeyNew);
   let data: any; // TODO Jonas. Nejaka moznost definovat strukturu kde klice jsou ruzne hodnoty? Map?
@@ -82,6 +89,8 @@ export const saveGameStateToLocalStorageNew = (
     isGameWon: isGameWon,
     isGameLoose: isGameLoose,
     solutionMd5: md5(playContext.solution), // this field was added later, will be missing in some previous data
+    startTime: startTime,
+    endTime: endTime,
   };
   data["day" + playContext.solutionIndex] = gameState;
   localStorage.setItem(gameStateKeyNew, JSON.stringify(data));
@@ -105,15 +114,26 @@ export const saveGameStateToLocalStorage = (
   guesses: string[],
   playContext: PlayContext,
   isGameWon: boolean,
-  isGameLoose: boolean
+  isGameLoose: boolean,
+  startTime?: number,
+  endTime?: number
 ) => {
   //console.log("Saving to localstorage ", guesses, isGameWon);
   const gameState = {
     guesses,
     solutionMd5: md5(playContext.solution),
+    startTime: startTime,
+    endTime: endTime,
   };
   localStorage.setItem(gameStateKey, JSON.stringify(gameState));
-  saveGameStateToLocalStorageNew(guesses, playContext, isGameWon, isGameLoose);
+  saveGameStateToLocalStorageNew(
+    guesses,
+    playContext,
+    isGameWon,
+    isGameLoose,
+    startTime,
+    endTime
+  );
 };
 
 export const loadGameStateFromLocalStorage = (
@@ -138,6 +158,8 @@ export const loadGameStateFromLocalStorage = (
       return {
         guesses: dataHistory["day" + playContext.solutionIndex]?.guesses,
         solutionMd5: md5(playContext.solution),
+        startTime: dataHistory["day" + playContext.solutionIndex]?.startTime,
+        endTime: dataHistory["day" + playContext.solutionIndex]?.endTime,
       } as StoredGameState;
     }
     return null;
@@ -270,5 +292,21 @@ export const saveSettings = (settings: SettingsItem) => {
 };
 
 export const getUserId = (): string | undefined => {
-  return getSettings().userId;
+  return getSettings()?.userId;
+};
+
+type FollowingType = {
+  userIds: string[];
+};
+
+export const addFollower = (userId: string) => {
+  const following = localStorage.getItem(followingKey);
+  let data: FollowingType;
+  if (following) {
+    data = JSON.parse(following) as FollowingType;
+  } else {
+    data = { userIds: [] };
+  }
+  data.userIds.push(userId);
+  localStorage.setItem(followingKey, JSON.stringify(data));
 };

@@ -43,6 +43,16 @@ export function msToTime(duration: number): HoursMinSecs {
   return retVal;
 }
 
+export const msToMinAndSeconds = (duration: number): string => {
+  let timeStr = "";
+  if (duration && duration > 1) {
+    const hms = msToTime(duration);
+    timeStr =
+      "Čas: " + (hms.hours * 60 + hms.minutes) + "min " + hms.seconds + "s";
+  }
+  return timeStr;
+};
+
 export const timeToNextWord = (): number => {
   const epochMs = startDate.getTime();
   const now = Date.now();

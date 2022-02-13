@@ -1,6 +1,12 @@
-import { addDoc, collection, doc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, setDoc } from "firebase/firestore";
 import { useDocumentDataOnce } from "react-firebase-hooks/firestore";
 import { isProduction } from "./environments";
+import {
+  GameStateHistory,
+  getSettings,
+  getUserId,
+  loadGameStateFromLocalStorageNew,
+} from "./localStorage";
 import { PlayContext } from "./playContext";
 import { firestore } from "./settingsFirebase";
 import { PlayState } from "./statuses";
@@ -12,7 +18,8 @@ export const saveGameResultFirebase = async (
   userUid: string,
   result: PlayState,
   guesses: string[],
-  numberOfGuesses: number // 0 = no guesses, I hit the correct word on first attempt (one line in table)
+  numberOfGuesses: number, // 0 = no guesses, I hit the correct word on first attempt (one line in table)
+  duration?: number
 ) => {
   // https://firebase.google.com/docs/firestore/manage-data/add-data
   // https://firebase.google.com/docs/firestore/query-data/queries
@@ -33,6 +40,7 @@ export const saveGameResultFirebase = async (
       result,
       guesses,
       numberOfGuesses,
+      duration,
     }
   );
 };
@@ -119,4 +127,34 @@ export const useGetWordOfDay = (date: Date): any => {
     context = { solution: "", solutionIndex: -1 };
   }
   return [context, loading, error];
+};
+
+type SharedResult = {
+  nickname: string;
+  items: GameStateHistory;
+};
+
+export const saveSharedResult = async () => {
+  const userId = getUserId();
+  const nickname = getSettings()?.nickname;
+  if (!userId || !nickname) {
+    console.info(
+      "User doesn't have user id, cannot save the shared result. Exitting."
+    );
+    return;
+  }
+  const docRef = doc(firestore, "sharedResult", userId);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+  }
+  const localStorageData = loadGameStateFromLocalStorageNew();
+  if (!localStorageData) {
+    console.info("No data in local storage, skipping...");
+    return;
+  }
+  const data: SharedResult = {
+    nickname: nickname,
+    items: localStorageData,
+  };
+  await setDoc(docRef, data);
 };
