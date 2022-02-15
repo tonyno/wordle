@@ -35,12 +35,15 @@ export const saveGameResultFirebase = async (
       "result"
     ),
     {
-      playContext: playContext,
+      playContext: {
+        solution: playContext.solution,
+        solutionIndex: playContext.solutionIndex,
+      },
       userUid,
       result,
       guesses,
       numberOfGuesses,
-      duration,
+      duration: duration ? duration : 0,
     }
   );
 };
