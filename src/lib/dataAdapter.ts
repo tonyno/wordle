@@ -1,4 +1,5 @@
 import { addDoc, collection, doc, getDoc, setDoc } from "firebase/firestore";
+import { useEffect, useState } from "react";
 import { useDocumentDataOnce } from "react-firebase-hooks/firestore";
 import { isProduction } from "./environments";
 import {
@@ -157,4 +158,33 @@ export const saveSharedResult = async () => {
     items: localStorageData,
   };
   await setDoc(docRef, data);
+};
+
+type SharedResultType = {
+  [userId: string]: SharedResult;
+};
+
+export const useGetSharedResults = (
+  userIds: string[]
+): [SharedResultType, boolean] => {
+  const [data, setData] = useState<SharedResultType>({});
+  const [loading, setLoading] = useState(true);
+  const getData = async () => {
+    let retVal: SharedResultType = {};
+    userIds.forEach(async (item) => {
+      const docRef = doc(firestore, "sharedResult", item);
+      const docSnap = await getDoc(docRef);
+      //console.log("Executing query");
+      if (docSnap.exists()) {
+        retVal[item] = docSnap.data() as SharedResult;
+      }
+    });
+    setData(retVal);
+    setLoading(false);
+  };
+  useEffect(() => {
+    getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  return [data, loading];
 };

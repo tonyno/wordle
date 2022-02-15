@@ -295,8 +295,12 @@ export const getUserId = (): string | undefined => {
   return getSettings()?.userId;
 };
 
+type FollowingUserIdType = {
+  [userId: string]: number;
+};
+
 type FollowingType = {
-  userIds: string[];
+  userIds: FollowingUserIdType;
 };
 
 export const addFollower = (userId: string) => {
@@ -305,8 +309,23 @@ export const addFollower = (userId: string) => {
   if (following) {
     data = JSON.parse(following) as FollowingType;
   } else {
-    data = { userIds: [] };
+    data = { userIds: {} };
   }
-  data.userIds.push(userId);
+  data = {
+    ...data,
+    userIds: { ...data.userIds, [userId]: new Date().getTime() },
+  };
   localStorage.setItem(followingKey, JSON.stringify(data));
+};
+
+export const getFollowers = (): string[] => {
+  const following = localStorage.getItem(followingKey);
+  let data: FollowingType;
+  if (following) {
+    data = JSON.parse(following) as FollowingType;
+    return Object.keys(data?.userIds).map((key) => {
+      return key;
+    });
+  }
+  return [];
 };
