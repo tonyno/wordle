@@ -199,7 +199,7 @@ const WordlePlay = ({ playContext }: Props) => {
           {playContext?.alertMessage}
         </Typography>
       )}
-      <Typography sx={{ textAlign: "center" }}>
+      <Typography sx={{ textAlign: "center" }} variant="body2">
         🇨🇿🇺🇦 Prosím{" "}
         <Link href="https://www.clovekvtisni.cz/darujte/jednorazove?amount=1000&accountId=7">
           podpořte
