@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Link, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { saveGameResultFirebase } from "../lib/dataAdapter";
 import {
@@ -199,6 +199,16 @@ const WordlePlay = ({ playContext }: Props) => {
           {playContext?.alertMessage}
         </Typography>
       )}
+      <Typography sx={{ textAlign: "center" }}>
+        🇨🇿🇺🇦 Prosím{" "}
+        <Link href="https://www.clovekvtisni.cz/darujte/jednorazove?amount=1000&accountId=7">
+          podpořte
+        </Link>{" "}
+        Ukrajinu. 🇺🇦🇨🇿
+        <br />
+        Každá koruna se počítá. 50 Kč od každého hráče HadejSlova = 750tis Kč za
+        den, celkem 6,500,000 Kč za všechny hráče.
+      </Typography>
       <EndGameModal
         playContext={playContext}
         isOpen={isWinModalOpen}

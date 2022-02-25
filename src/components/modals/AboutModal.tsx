@@ -73,7 +73,10 @@ export const AboutModal = ({ isOpen, handleClose }: Props) => {
           ,{" "}
           <Link href="https://www.expressinfo.cz/recenze/recenze-her/hadej-slova-cz-zahrajte-si-hru-wordle-cesky-zdarma/8420/">
             EI
-          </Link>
+          </Link>{" "}
+          {/* 
+          https://www.respekt.cz/tydenik/2022/7/hadej-s-nami?issueId=100552
+          */}
           .
         </DialogContentText>
         <DialogContentText
