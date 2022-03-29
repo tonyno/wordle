@@ -13,7 +13,7 @@ const db = admin.firestore();
 // https://firebase.google.com/docs/functions/schedule-functions
 // https://cloud.google.com/appengine/docs/standard/python/config/cronref
 exports.unlockNewWord = functions.pubsub
-  .schedule("every day 08:00")
+  .schedule("every day 15:00")
   .timeZone("Europe/Prague")
   .onRun(async (context) => {
     try {
@@ -73,6 +73,7 @@ exports.statistics = functions
     );
 
     await statisticsForDay(solutionIndex);
+    await statisticsForDay(solutionIndex - 7); // also update data one week ago
 
     // for (let i = 0; i <= 25; ++i) {
     //   functions.logger.info("Processing day " + i);
