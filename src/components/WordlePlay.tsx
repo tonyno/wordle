@@ -205,9 +205,6 @@ const WordlePlay = ({ playContext }: Props) => {
           podpořte
         </Link>{" "}
         Ukrajinu. 🇺🇦🇨🇿
-        <br />
-        Každá koruna se počítá. 50 Kč od každého hráče HadejSlova = 750tis Kč za
-        den, celkem 6,500,000 Kč za všechny hráče.
       </Typography>
       <EndGameModal
         playContext={playContext}
