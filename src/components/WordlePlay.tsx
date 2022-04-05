@@ -200,11 +200,9 @@ const WordlePlay = ({ playContext }: Props) => {
         </Typography>
       )}
       <Typography sx={{ textAlign: "center" }} variant="body2">
-        🇨🇿🇺🇦 Prosím{" "}
-        <Link href="https://www.clovekvtisni.cz/darujte/jednorazove?amount=1000&accountId=7">
-          podpořte
-        </Link>{" "}
-        Ukrajinu. 🇺🇦🇨🇿
+        <b>Buď láska.</b> Kdo pošle do 11.4. nejvíc peněz pro 🇺🇦, dostane
+        odměnu. Více{" "}
+        <Link href="https://forms.gle/9v1UhdAegc1aseDa6">informací zde.</Link>
       </Typography>
       <EndGameModal
         playContext={playContext}

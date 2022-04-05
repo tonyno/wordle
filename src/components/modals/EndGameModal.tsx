@@ -1,7 +1,14 @@
 import ShareIcon from "@mui/icons-material/Share";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import { Alert, Box, Dialog, IconButton, Typography } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Dialog,
+  IconButton,
+  Link,
+  Typography,
+} from "@mui/material";
 import Button from "@mui/material/Button";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -142,7 +149,10 @@ const EndGameModal = ({
             ) : (
               ""
             )}
-            Okno zavřete kliknutím mimo okno.
+            Zvažte podporu Ukrajině.{" "}
+            <Link href="https://forms.gle/9v1UhdAegc1aseDa6">
+              Informace zde.
+            </Link>
           </Typography>
         </Box>
       </DialogContent>
