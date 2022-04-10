@@ -16,3 +16,19 @@
     padding-right: 2rem;
   }
 }
+
+.blink_me {
+  animation: blinker 3s linear infinite;
+}
+
+@keyframes blinker {
+  0% {
+    color: red;
+  }
+  50% {
+    color: green;
+  }
+  100% {
+    color: red;
+  }
+}
