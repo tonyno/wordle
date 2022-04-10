@@ -76,6 +76,7 @@ export const AboutModal = ({ isOpen, handleClose }: Props) => {
           </Link>{" "}
           {/* 
           https://www.respekt.cz/tydenik/2022/7/hadej-s-nami?issueId=100552
+          https://reporterpremium.cz/a/paukZ/svet-si-zamiloval-online-slovni-hru-ted-je-i-v-cestine
           */}
           .
         </DialogContentText>
