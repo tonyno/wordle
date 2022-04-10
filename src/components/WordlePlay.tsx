@@ -188,9 +188,11 @@ const WordlePlay = ({ playContext }: Props) => {
         currentGuess={currentGuess}
       />
       <Typography sx={{ textAlign: "center" }} variant="body2">
-        <b className={styles.blink_me}>Buď láska.</b> Kdo pošle do 15.4. nejvíc
-        peněz pro 🇺🇦, dostane odměnu. Více{" "}
-        <Link href="https://forms.gle/9v1UhdAegc1aseDa6">informací zde.</Link>
+        <b className={styles.blink_me}>Buď láska.</b> Kdo pošle od 5.4. do 15.4.
+        nejvíc peněz pro 🇺🇦, dostane odměnu.{" "}
+        <Link href="https://forms.gle/9v1UhdAegc1aseDa6">
+          <b>Info zde.</b>
+        </Link>
       </Typography>
       <Keyboard
         playContext={playContext}
