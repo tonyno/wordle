@@ -1,4 +1,3 @@
-import { ourUrl } from "../constants/otherConstants";
 import { defaultPlayContext, PlayContext } from "./playContext";
 import { getGuessStatuses, PlayState } from "./statuses";
 import { msToMinAndSeconds } from "./timeFunctions";
@@ -13,8 +12,7 @@ const getShareDataText = (
   playContext: PlayContext,
   guesses: string[],
   gameStatus: PlayState,
-  gameDurationMs?: number,
-  includeUrl: boolean = true
+  gameDurationMs?: number
 ): string => {
   const attempts = gameStatus === "win" ? "" + guesses.length : "N";
   let timeStr = gameDurationMs ? msToMinAndSeconds(gameDurationMs) : undefined;
@@ -29,9 +27,7 @@ const getShareDataText = (
     "\n#hadejSlova #den" +
     playContext.solutionIndex +
     step +
-    (timeStr ? "\n" + timeStr : "") +
-    "\nČeská verze Wordle\n" +
-    (includeUrl ? ourUrl : "")
+    (timeStr ? "\n" + timeStr : "")
   );
 };
 
@@ -43,14 +39,8 @@ const getShareData = (
 ): SharaData => {
   let shareData = {
     title: "HadejSlova.cz",
-    text: getShareDataText(
-      playContext,
-      guesses,
-      gameStatus,
-      gameDurationMs,
-      false
-    ),
-    url: ourUrl,
+    text: getShareDataText(playContext, guesses, gameStatus, gameDurationMs),
+    // url: ourUrl,
   };
   return shareData;
 };
