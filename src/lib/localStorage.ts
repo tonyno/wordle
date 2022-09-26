@@ -79,6 +79,7 @@ export const saveGameStateToLocalStorageNew = (
         "saveGameStateToLocalStorageNew error when loading old data, removing them. ",
         err
       );
+      localStorage.setItem("error1", "" + err);
       data = {};
     }
   } else {
@@ -165,6 +166,7 @@ export const loadGameStateFromLocalStorage = (
     return null;
   } catch (err) {
     console.error("loadGameStateFromLocalStorage error ", err);
+    localStorage.setItem("error2", "" + err);
   }
   return null;
 };
