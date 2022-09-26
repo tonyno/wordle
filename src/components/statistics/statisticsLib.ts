@@ -171,8 +171,9 @@ export const getPersonalScore = (
     }
     totalGames += 1;
   });
+  console.log("Percentil " + Math.round(sum / totalGames));
   return {
-    percentil: Math.round(sum / totalGames),
+    percentil: Math.round(100 * (sum / totalGames)) / 100,
     playedGames: playedGames,
     totalGames: totalGames,
   };

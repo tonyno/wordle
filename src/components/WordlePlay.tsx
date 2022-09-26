@@ -199,9 +199,13 @@ const WordlePlay = ({ playContext }: Props) => {
           {playContext?.alertMessage}
         </Typography>
       )}
-      <Typography sx={{ textAlign: "center" }} variant="body2">
-        🇨🇿🇺🇦 Prosím <Link href="https://supportukraine.cz/">podpořte</Link>{" "}
-        Ukrajinu. 🇺🇦🇨🇿
+      <Typography
+        sx={{ textAlign: "center", fontWeight: "bold", mt: 2 }}
+        variant="body2"
+      >
+        🇨🇿🇺🇦 Prosím kupte{" "}
+        <Link href="https://www.zbraneproukrajinu.cz/">Putinovi dárek</Link>.
+        🇺🇦🇨🇿
       </Typography>
       <EndGameModal
         playContext={playContext}

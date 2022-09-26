@@ -1,5 +1,5 @@
-import { Box, Grid } from "@mui/material";
-import { useEffect, useMemo } from "react";
+import { Box, Button, Grid } from "@mui/material";
+import { useEffect, useMemo, useState } from "react";
 import { useGetStats } from "../../lib/dataAdapter";
 import { loadGameStateFromLocalStorageNew } from "../../lib/localStorage";
 import { logMyEvent } from "../../lib/settingsFirebase";
@@ -10,6 +10,7 @@ import PageTitle from "./PageTitle";
 import { getHistoryItems } from "./statisticsLib";
 
 export default function History() {
+  const [numberOfItems, setNumberOfItems] = useState<number>(10);
   const myStatsLocalStorage = loadGameStateFromLocalStorageNew();
   const [stats, loadingStats, errorStats] = useGetStats();
   //const [statsDict, setStatsDict] = useState<any>({}); // TODO any
@@ -26,6 +27,10 @@ export default function History() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [stats]
   );
+
+  const onNextPage = () => {
+    setNumberOfItems(numberOfItems + 10);
+  };
 
   if (loadingStats) {
     return <MainLoader title="Načítám statistiku hráčů...." />;
@@ -49,12 +54,20 @@ export default function History() {
 
       <Grid container alignItems="stretch" spacing={2} sx={{ pt: 2 }}>
         {rows &&
-          rows.map((row) => (
+          rows.slice(0, numberOfItems).map((row) => (
             <Grid item xs={12} md={6} lg={4} key={row.solutionIndex}>
               <HistoryCard data={row} />
             </Grid>
           ))}
       </Grid>
+      <Button
+        onClick={onNextPage}
+        variant="contained"
+        sx={{ mt: 2 }}
+        disabled={numberOfItems >= rows.length}
+      >
+        Načíst další..
+      </Button>
     </Box>
   );
 }
