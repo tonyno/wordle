@@ -1,4 +1,11 @@
-import { Box, Button, Grid } from "@mui/material";
+import {
+  Box,
+  Button,
+  FormControlLabel,
+  FormGroup,
+  Grid,
+  Switch,
+} from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import { useGetStats } from "../../lib/dataAdapter";
 import { loadGameStateFromLocalStorageNew } from "../../lib/localStorage";
@@ -7,12 +14,21 @@ import MyAlert from "../alerts/MyAlert";
 import MainLoader from "../muiStyled/MainLoader";
 import HistoryCard from "./HistoryCard";
 import PageTitle from "./PageTitle";
-import { getHistoryItems } from "./statisticsLib";
+import { getHistoryItems, HistoryData } from "./statisticsLib";
+
+const PAGE_SIZE = 25;
 
 export default function History() {
-  const [numberOfItems, setNumberOfItems] = useState<number>(10);
+  const [numberOfItems, setNumberOfItems] = useState<number>(PAGE_SIZE);
   const myStatsLocalStorage = loadGameStateFromLocalStorageNew();
   const [stats, loadingStats, errorStats] = useGetStats();
+  const [showUnfinishedGames, setShowUnfinishedGames] = useState(false);
+
+  const handleChangeShowUnfinishedGames = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setShowUnfinishedGames(event.target.checked);
+  };
   //const [statsDict, setStatsDict] = useState<any>({}); // TODO any
   //const navigate = useNavigate();
 
@@ -29,7 +45,11 @@ export default function History() {
   );
 
   const onNextPage = () => {
-    setNumberOfItems(numberOfItems + 10);
+    setNumberOfItems(numberOfItems + PAGE_SIZE);
+  };
+
+  const filterItems = (item: HistoryData) => {
+    return (showUnfinishedGames && !item.finishedGame) || !showUnfinishedGames;
   };
 
   if (loadingStats) {
@@ -39,6 +59,18 @@ export default function History() {
   return (
     <Box justifyContent="center" component="main" sx={{ flexGrow: 1, p: 2 }}>
       <PageTitle title="Historie" />
+      <FormGroup>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={showUnfinishedGames}
+              onChange={handleChangeShowUnfinishedGames}
+              inputProps={{ "aria-label": "controlled" }}
+            />
+          }
+          label="Pouze nedokončené hry"
+        />
+      </FormGroup>
 
       {errorStats && (
         <MyAlert
@@ -54,11 +86,14 @@ export default function History() {
 
       <Grid container alignItems="stretch" spacing={2} sx={{ pt: 2 }}>
         {rows &&
-          rows.slice(0, numberOfItems).map((row) => (
-            <Grid item xs={12} md={6} lg={4} key={row.solutionIndex}>
-              <HistoryCard data={row} />
-            </Grid>
-          ))}
+          rows
+            .filter(filterItems)
+            .slice(0, numberOfItems)
+            .map((row) => (
+              <Grid item xs={12} md={6} lg={4} key={row.solutionIndex}>
+                <HistoryCard data={row} />
+              </Grid>
+            ))}
       </Grid>
       <Button
         onClick={onNextPage}

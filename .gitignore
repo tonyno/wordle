@@ -37,3 +37,4 @@ data_prepare/output/*.json
 ui-debug.log
 deploy*.bat
 firebase-debug.log
+.VSCodeCounter
