@@ -1,4 +1,4 @@
-import { Box, Link, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { saveGameResultFirebase } from "../lib/dataAdapter";
 import {
@@ -199,14 +199,10 @@ const WordlePlay = ({ playContext }: Props) => {
           {playContext?.alertMessage}
         </Typography>
       )}
-      <Typography
-        sx={{ textAlign: "center", fontWeight: "bold", mt: 2 }}
-        variant="body2"
-      >
-        🇨🇿🇺🇦 Prosím kupte{" "}
-        <Link href="https://www.zbraneproukrajinu.cz/">Putinovi dárek</Link>.
-        🇺🇦🇨🇿
+      <Typography sx={{ textAlign: "center", mt: 2 }} variant="body2">
+        {" "}
       </Typography>
+
       <EndGameModal
         playContext={playContext}
         isOpen={isWinModalOpen}
