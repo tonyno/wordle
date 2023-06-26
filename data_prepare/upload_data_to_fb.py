@@ -12,7 +12,7 @@ from firebase_admin import credentials, firestore
 def get_data() -> List[str]:
     words_list = []
     all_words = {}
-    f = open('data_prepare/input/final_words_cleaned_iteration1.txt',
+    f = open('data_prepare/input/final_words_cleaned_new2.txt',
              'r', encoding='utf-8')
     for line in f:
         word = line.strip().lower()
@@ -25,75 +25,59 @@ def get_data() -> List[str]:
 
 
 # https://stackoverflow.com/questions/67654272/using-document-id-name-to-query-with-where-operators
-def get_previous_words(db, lastDate):
-    doc_ref = db.collection(u'word').where(
-        u'exactTimeStamp', u'<=', lastDate).stream()
-    return [item.to_dict()['solution'] for item in doc_ref]
+# def get_previous_words(db, lastDate):
+#     doc_ref = db.collection(u'word').where(
+#         u'exactTimeStamp', u'<=', lastDate).stream()
+#     return [item.to_dict()['solution'] for item in doc_ref]
 
 
-def delete_last_words(db, lastDate):
-    print("Deleting data after {}".format(lastDate))
-    doc_ref = db.collection(u'word').where(
-        u'exactTimeStamp', u'>=', lastDate).stream()
-    for doc in doc_ref:
-        # https://firebase.google.com/docs/firestore/manage-data/delete-data#python_5
-        doc.reference.delete()
+# def delete_last_words(db, lastDate):
+#     print("Deleting data after {}".format(lastDate))
+#     doc_ref = db.collection(u'word').where(
+#         u'exactTimeStamp', u'>=', lastDate).stream()
+#     for doc in doc_ref:
+#         # https://firebase.google.com/docs/firestore/manage-data/delete-data#python_5
+#         doc.reference.delete()
 
 
 if __name__ == '__main__':
 
     # Use a service account
     cred = credentials.Certificate(
-        'data_calculate/wordle-cz-firebase-adminsdk-q7ldn-e3709d97e1.json')
+        'data_calculate/wordle-cz-firebase-adminsdk-q7ldn-01d406365d.json')
     firebase_admin.initialize_app(cred)
 
     db = firestore.client()
 
-    w = get_data()
-    words_original = list(set(w))
-    print("Original amount {}, deduplicated to {}".format(
-        len(w), len(words_original)))
-    # The date where everything started. Do not change this so the solutionIndex has corrent numbers.
-    actual_date = datetime.datetime(2022, 1, 13, 18, 0)
-
-    # first item where writing is alowed, give it to two days from today
-    min_date = datetime.datetime.now() + datetime.timedelta(days=2)
-    already_existing_words = get_previous_words(
-        db, min_date+datetime.timedelta(days=1))
-    print("Already existing words: ", already_existing_words)
-
-    print("Original words: ", words_original)
-    words = list(
-        filter(lambda x: x not in already_existing_words, words_original))
-    print("Words after removal existing: ", len(words))
-    print("Updating words since ", min_date)
+    words = get_data()
+    print("Loaded {} items".format(len(words)))
 
     random.shuffle(words)
     random.shuffle(words)
     random.shuffle(words)
     random.shuffle(words)
 
-    # in order if any removal happens not need to remove from db
-    words = words[0:530]
-
-    # need to run this if we reduce the count of words compared to previous run
-    #delete_last_words(db, datetime.datetime(2023, 5, 1))
+    OFFSET = 530
+    actual_date = datetime.datetime(2023, 6, 27, 18, 0)
 
     id = 0
     for id, word in enumerate(words):
         actual_date = actual_date + datetime.timedelta(days=1)
-        if (actual_date < min_date):
-            continue
+        print("Uploading id {}, solutionIndex {}, date {}".format(
+            id, id+OFFSET, actual_date))
 
-        #print(actual_date, word)
         word = words[id]
         actual_date_str = actual_date.strftime('%Y-%m-%d')
         doc_ref = db.collection(u'word').document(actual_date_str)
         doc_ref.set({
             'exactTimeStamp': actual_date,
             'solution': word,
-            'solutionIndex': id,
+            'solutionIndex': id + OFFSET,
             'solutionMd5':  hashlib.md5(word.encode('utf-8')).hexdigest(),
             'locked': True
         })
+
+        # if id > 3:
+        #     break
+
     print("Uploaded, final index: ", id)

@@ -27,12 +27,10 @@ data_calculate/wordle-cz-firebase-adminsdk-*.json
 src/constants/wordlist.ts
 src/lib/settingsFirebase.ts
 other/*
-data_prepare/input/*.dic
-data_prepare/input/*.txt
 data_prepare/output/*.ts
+data_prepare/output/.exploration*
 src/constants/wordlist_OLD.txt
 data_prepare/input/localstorage_analysis/*
-data_prepare/input/*.tsv
 data_prepare/output/*.json
 ui-debug.log
 deploy*.bat
