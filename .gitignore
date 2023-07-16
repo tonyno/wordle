@@ -29,6 +29,8 @@ src/lib/settingsFirebase.ts
 other/*
 data_prepare/output/*.ts
 data_prepare/output/.exploration*
+data_prepare/input/final*.*
+data_prepare/input/backup
 src/constants/wordlist_OLD.txt
 data_prepare/input/localstorage_analysis/*
 data_prepare/output/*.json
