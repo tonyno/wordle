@@ -1,6 +1,9 @@
 import { Box, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { saveGameResultFirebase } from "../lib/dataAdapter";
+import {
+  saveAllResultsToFirebase,
+  saveGameResultFirebase,
+} from "../lib/dataAdapter";
 import {
   loadGameStateFromLocalStorage,
   migration1,
@@ -151,6 +154,7 @@ const WordlePlay = ({ playContext }: Props) => {
             : undefined
         );
         updateFinishedGameStats(true, actualGuessAttempt);
+        saveAllResultsToFirebase();
         return setGameStatus("win");
       }
 
@@ -167,6 +171,7 @@ const WordlePlay = ({ playContext }: Props) => {
             : undefined
         );
         updateFinishedGameStats(false, actualGuessAttempt);
+        saveAllResultsToFirebase();
         return setGameStatus("loose");
       }
     }

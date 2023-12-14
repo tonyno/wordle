@@ -50,7 +50,7 @@ const ChartBarOthers = ({
     series: [
       {
         name: "Počet her",
-        data: guessesDistribution,
+        data: guessesDistribution as number[],
       },
     ],
     options: {

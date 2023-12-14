@@ -2,6 +2,7 @@ import { addDoc, collection, doc, getDoc, setDoc } from "firebase/firestore";
 import { useDocumentDataOnce } from "react-firebase-hooks/firestore";
 import { isProduction } from "./environments";
 import {
+  AllResults,
   GameStateHistory,
   getSettings,
   getUserId,
@@ -160,4 +161,24 @@ export const saveSharedResult = async () => {
     items: localStorageData,
   };
   await setDoc(docRef, data);
+};
+
+export const saveAllResultsToFirebase = async () => {
+  const settings = getSettings();
+  const history = loadGameStateFromLocalStorageNew();
+  if (!settings.userId || !history) {
+    console.error("Missing userId or history data");
+    return;
+  }
+  const data: AllResults = {
+    history,
+    settings,
+  };
+  const docRef = doc(firestore, "allResults", settings.userId);
+  await setDoc(docRef, data);
+};
+
+export const getAllResultsFromFirebase = async (userId: string) => {
+  const docRef = doc(firestore, "allResults", userId);
+  return await getDoc(docRef);
 };

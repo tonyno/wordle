@@ -312,3 +312,8 @@ export const addFollower = (userId: string) => {
   data.userIds.push(userId);
   localStorage.setItem(followingKey, JSON.stringify(data));
 };
+
+export type AllResults = {
+  history: GameStateHistory;
+  settings: SettingsItem;
+};

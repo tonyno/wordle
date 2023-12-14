@@ -5,13 +5,20 @@ import {
   CardContent,
   Container,
   Grid,
+  Link,
+  List,
+  ListItem,
   Switch,
   TextField,
   Typography,
 } from "@mui/material";
 import * as React from "react";
 import { useState } from "react";
-import { saveSharedResult } from "../../lib/dataAdapter";
+import {
+  getAllResultsFromFirebase,
+  saveAllResultsToFirebase,
+  saveSharedResult,
+} from "../../lib/dataAdapter";
 import {
   getSettings,
   saveSettings,
@@ -25,10 +32,19 @@ type PropType = {
   onThemeChange: (settings: SettingsItem) => void;
 };
 
+type Report = {
+  previousIdentifierExists: boolean | undefined;
+};
+
 const Settings = ({ onThemeChange }: PropType) => {
   //const navigate = useNavigate();
   const [data, setData] = useState<SettingsItem>(getSettings());
-  const [saveDirty, setSaveDirty] = useState<boolean>(false);
+  const [mergeIdentifier, setMergeIdentifier] = useState<string>("");
+  const [canBeUploadedToServer, setCanBeUploadedToServer] =
+    useState<boolean>(true);
+  const [report, setReport] = useState<Report>({
+    previousIdentifierExists: undefined,
+  });
   //console.log(data);
 
   React.useEffect(() => {
@@ -55,12 +71,21 @@ const Settings = ({ onThemeChange }: PropType) => {
 
   const changeNickname = (s: string) => {
     save({ ...data, nickname: s });
-    setSaveDirty(true);
   };
 
   const shareGameResultsToServer = async () => {
-    setSaveDirty(false);
+    setCanBeUploadedToServer(false);
+    saveAllResultsToFirebase();
     await saveSharedResult();
+  };
+
+  const loadFromOldIdentifier = async () => {
+    const data = await getAllResultsFromFirebase(mergeIdentifier);
+    setReport({ ...report, previousIdentifierExists: data.exists() });
+    if (!data.exists()) {
+      return;
+    }
+    console.log(data);
   };
 
   return (
@@ -140,12 +165,13 @@ const Settings = ({ onThemeChange }: PropType) => {
             <Grid container spacing={1}>
               <Grid item xs={12}>
                 <Typography variant="h6" gutterBottom component="div">
-                  Sdílení výsledků
+                  Ukládání výsledků do cloudu
                 </Typography>
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
+                  fullWidth
                   id="nickname"
                   label="Přezdívka"
                   value={data.nickname}
@@ -155,10 +181,10 @@ const Settings = ({ onThemeChange }: PropType) => {
               <Grid item xs={12}>
                 <Button
                   variant="contained"
-                  disabled={!saveDirty}
+                  disabled={!canBeUploadedToServer}
                   onClick={() => shareGameResultsToServer()}
                 >
-                  Uložit výsledky na server
+                  Uložit výsledky do cloudu
                 </Button>
               </Grid>
               <Grid item xs={12}>
@@ -175,10 +201,89 @@ const Settings = ({ onThemeChange }: PropType) => {
                 <Typography sx={{ mt: "1rem" }}>Odkaz pro sdílení:</Typography>
                 <Typography sx={{ mt: "0.5rem" }}></Typography>
                 <code>{"https://hadejslova.cz/follow/" + data.userId}</code> */}
-                <Typography sx={{ color: "red" }}>
-                  Sdílení není zatím funkční. Bude realizováno v průběhu února.
+                <Typography>
+                  Váš soukromý identifikátor (ponechte v soukromí):
                 </Typography>
-                <code>{data.userId}</code>
+                <code>{data.userId}</code>{" "}
+                <Button
+                  size="small"
+                  onClick={() => {
+                    if (data.userId) navigator.clipboard.writeText(data.userId);
+                  }}
+                >
+                  (kopírovat do schránky)
+                </Button>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+
+        <Card sx={{ maxWidth: "md", mt: "1rem" }}>
+          <CardContent>
+            <Grid container spacing={1}>
+              <Grid item xs={12}>
+                <Typography variant="h6" gutterBottom component="div">
+                  Sloučit s jiným účtem
+                </Typography>
+                <Typography>
+                  Postup pro sloučení účtů z různých zařízení:
+                </Typography>
+                <List
+                  sx={{
+                    listStyleType: "disc",
+                    pl: 2,
+                    "& .MuiListItem-root": {
+                      display: "list-item",
+                    },
+                  }}
+                >
+                  <ListItem>
+                    <b>Původní zařízení:</b> Otevřte HadejSlova ve svém starém
+                    zařízení, přejděte tam do "Nastavení".
+                  </ListItem>
+                  <ListItem>
+                    <b>Původní zařízení:</b> Nahrajte své výsledky ze starého
+                    zařízení kliknutím na tlačítko "Uložit výsledky do cloudu".
+                  </ListItem>
+                  <ListItem>
+                    <b>Původní zařízení:</b> Ze starého zařízení si zkopírujte
+                    identifikátor vašeho účtu (text ve tvaru:{" "}
+                    <code>3746-db27-384x-448...23</code>)
+                  </ListItem>
+
+                  <ListItem>
+                    <b>Přenos:</b> Přeneste tento kód do nového zařízení - např.
+                    Whatsappem, emailem, SMSkou. Nikomu svůj kód nesdělujte.
+                  </ListItem>
+                  <ListItem>
+                    <b>Nové zařízení:</b> V novém zařízení vložte tento kód do
+                    políčka níže a klikněte na tlačítko "Sloučit účty".
+                  </ListItem>
+                </List>
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="newAccount"
+                  label="Identifikátor vašeho předchozího účtu"
+                  value={mergeIdentifier}
+                  onChange={(event) => setMergeIdentifier(event.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Button
+                  variant="contained"
+                  disabled={!(mergeIdentifier && mergeIdentifier.length === 36)}
+                  onClick={loadFromOldIdentifier}
+                >
+                  Načíst
+                </Button>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography sx={{ color: "red" }}>
+                  Zatim nefunkcni, makam na tom.
+                </Typography>
               </Grid>
             </Grid>
           </CardContent>
