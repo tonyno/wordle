@@ -15,7 +15,7 @@ export const Grid = ({ playContext, guesses, currentGuess }: Props) => {
     guesses.length < 5 ? Array.from(Array(5 - guesses.length)) : [];
 
   return (
-    <Box sx={{ pb: "1.5rem" }}>
+    <Box sx={{ pb: "0.25rem" }}>
       {guesses.map((guess, i) => (
         <CompletedRow playContext={playContext} key={i} guess={guess} />
       ))}

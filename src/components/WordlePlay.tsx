@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Link, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import {
   saveAllResultsToFirebase,
@@ -204,8 +204,12 @@ const WordlePlay = ({ playContext }: Props) => {
           {playContext?.alertMessage}
         </Typography>
       )}
-      <Typography sx={{ textAlign: "center", mt: 2 }} variant="body2">
-        {" "}
+      <Typography sx={{ textAlign: "center", mt: 1 }} variant="body2">
+        🚨🚨 Rád bych přidal další hru.{" "}
+        <Link href="https://forms.gle/V13NzvuZAGVD2Bs19">
+          Doporučíte zde jakou?
+        </Link>{" "}
+        Díky moc. 🚨🚨
       </Typography>
 
       <EndGameModal
