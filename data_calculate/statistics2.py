@@ -39,7 +39,7 @@ if __name__ == '__main__':
 
     total_duration = 0  # seconds
     total_count = 0
-    for day in range(400, 420):  # 450
+    for day in range(600, 650):  # 450
         print("Day ", day)
         # https://firebase.google.com/docs/firestore/query-data/queries#python_6
         doc_ref = db.collection(u'gameResult').document(
@@ -63,3 +63,10 @@ if __name__ == '__main__':
 #     Games: 4459968, win: 4054716, loose: 405252
 # {'LOUKA': 72307, 'KOULE': 58103, 'LÁSKA': 42309, 'PRASE': 30952, 'KOČKA': 7703, 'KOTEL': 5739, 'PRDEL': 3772, 'VÁLKA': 1428, 'PENIS': 1182, 'VOLBY': 1153, 'VOLBA': 556, 'DÁREK': 495, 'HOKEJ': 446, 'AUDIO': 433, 'STROM': 283, 'KRYSA': 198, 'POŽÁR': 173, 'ŠKOLA': 156, 'TONDA': 128, 'KONEC': 122, 'MĚSTO': 113, 'MOUKA': 102, 'PERLA': 2, 'KNIHA': 2}
 # Total count 378982, avg: 9489
+
+
+
+# 15.12.2023
+# Games: 5615141, win: 5109685, loose: 505456
+# {'LOUKA': 96973, 'KOULE': 74814, 'LÁSKA': 59110, 'PRASE': 30952, 'KOČKA': 7703, 'KOTEL': 5795, 'PRDEL': 3772, 'AUDIO': 1592, 'VÁLKA': 1428, 'PENIS': 1182, 'VOLBY': 1153, 'VOLBA': 556, 'DÁREK': 495, 'HOKEJ': 446, 'STROM': 283, 'KRYSA': 198, 'POŽÁR': 173, 'MOUKA': 172, 'ŠKOLA': 156, 'TONDA': 128, 'KONEC': 122, 'MĚSTO': 113, 'POKUS': 84, 'PERLA': 2, 'KNIHA': 2}
+# Total count 284106, avg: 207

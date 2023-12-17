@@ -205,11 +205,7 @@ const WordlePlay = ({ playContext }: Props) => {
         </Typography>
       )}
       <Typography sx={{ textAlign: "center", mt: 1 }} variant="body2">
-        🚨🚨 Rád bych přidal další hru.{" "}
-        <Link href="https://forms.gle/V13NzvuZAGVD2Bs19">
-          Doporučíte zde jakou?
-        </Link>{" "}
-        Díky moc. 🚨🚨
+        {" "}
       </Typography>
 
       <EndGameModal
