@@ -1,7 +1,14 @@
 import ShareIcon from "@mui/icons-material/Share";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import { Alert, Box, Dialog, IconButton, Typography } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Dialog,
+  IconButton,
+  Link,
+  Typography,
+} from "@mui/material";
 import Button from "@mui/material/Button";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -136,8 +143,11 @@ const EndGameModal = ({
           >
             {canShare() ? (
               <>
-                Sdílení vloží výsledek do schránky + zobrazí dialog na výběr
-                aplikace ke sdílení. <br />
+                Sdílet své výsledky můžete například do{" "}
+                <Link href="https://www.facebook.com/groups/877607906265914">
+                  této Facebookové skupiny.
+                </Link>{" "}
+                <br />
               </>
             ) : (
               ""

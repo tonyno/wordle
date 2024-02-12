@@ -1,4 +1,4 @@
-import { Box, Link, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import {
   saveAllResultsToFirebase,
@@ -19,6 +19,7 @@ import { Grid } from "./grid/Grid";
 import { Keyboard } from "./keyboard/Keyboard";
 import EndGameModal from "./modals/EndGameModal";
 import styles from "./WordlePlay.module.css";
+import AdsenseComponent from "./Ads";
 
 type Props = {
   playContext: PlayContext;
@@ -186,7 +187,6 @@ const WordlePlay = ({ playContext }: Props) => {
         variant="error"
         autoHide={2000}
       />
-
       <Grid
         playContext={playContext}
         guesses={guesses}
@@ -207,7 +207,10 @@ const WordlePlay = ({ playContext }: Props) => {
       <Typography sx={{ textAlign: "center", mt: 1 }} variant="body2">
         {" "}
       </Typography>
-
+      <AdsenseComponent
+        adClient="ca-pub-9858251945255976"
+        adSlot="4677459022"
+      />
       <EndGameModal
         playContext={playContext}
         isOpen={isWinModalOpen}

@@ -174,6 +174,9 @@ export const saveAllResultsToFirebase = async () => {
     history,
     settings,
   };
+  if (!data?.settings?.nickname) {
+    data.settings.nickname = "";
+  }
   const docRef = doc(firestore, "allResults", settings.userId);
   await setDoc(docRef, data);
 };

@@ -83,9 +83,11 @@ export const shareStatus = (
       getShareData(playContext, guesses, gameStatus, gameDurationMs)
     );
   } else {
-    navigator.clipboard.writeText(
-      getShareDataText(playContext, guesses, gameStatus, gameDurationMs)
-    );
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(
+        getShareDataText(playContext, guesses, gameStatus, gameDurationMs)
+      );
+    }
   }
 };
 
