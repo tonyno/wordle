@@ -13,6 +13,7 @@ if __name__ == '__main__':
 
     db = firestore.client()
 
+    games_since_Feb_14 = 0
     items = 0
     games = 0
     win = 0
@@ -26,6 +27,7 @@ if __name__ == '__main__':
         for key, value in doc_ref.to_dict().items():
             items += 1
             # print(value)
+
             games += value['games']
             win += value['win']
             loose += value['loose']
@@ -49,8 +51,8 @@ if __name__ == '__main__':
             if 'duration' in data and 'result' in data and (data['duration'] / 1000) < 20*60:
                 total_duration += data['duration'] / 1000
                 total_count += 1
-            # if total_count > 50:
-            #     break
+            if total_count > 10:
+                break
 
     print("Games: {}, win: {}, loose: {}".format(games, win, loose))
     first_guesses = dict(
@@ -63,7 +65,6 @@ if __name__ == '__main__':
 #     Games: 4459968, win: 4054716, loose: 405252
 # {'LOUKA': 72307, 'KOULE': 58103, 'LÁSKA': 42309, 'PRASE': 30952, 'KOČKA': 7703, 'KOTEL': 5739, 'PRDEL': 3772, 'VÁLKA': 1428, 'PENIS': 1182, 'VOLBY': 1153, 'VOLBA': 556, 'DÁREK': 495, 'HOKEJ': 446, 'AUDIO': 433, 'STROM': 283, 'KRYSA': 198, 'POŽÁR': 173, 'ŠKOLA': 156, 'TONDA': 128, 'KONEC': 122, 'MĚSTO': 113, 'MOUKA': 102, 'PERLA': 2, 'KNIHA': 2}
 # Total count 378982, avg: 9489
-
 
 
 # 15.12.2023
