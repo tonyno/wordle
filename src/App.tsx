@@ -22,6 +22,7 @@ import { firstTimeVisit, getSettings, SettingsItem } from "./lib/localStorage";
 import { ApplicationContext } from "./lib/playContext";
 import { getWordIndex } from "./lib/words";
 import { getDesignTheme } from "./theme";
+import Policy from "./components/policy/Policy";
 
 function App() {
   const isDarkModeEnabledInSystem = useMediaQuery(
@@ -87,6 +88,7 @@ function App() {
               element={<AllUsersStatsDay setNewMessage={setNewMessage} />}
             />
             <Route path="/faq" element={<Faq />} />
+            <Route path="/policy" element={<Policy />} />
             <Route path="/mystats" element={<PersonalStats />} />
             <Route path="/history" element={<History />} />
             <Route
