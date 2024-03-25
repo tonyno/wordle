@@ -163,7 +163,7 @@ export const saveSharedResult = async () => {
   await setDoc(docRef, data);
 };
 
-export const saveAllResultsToFirebase = async () => {
+const prepaveForSaving = () => {
   const settings = getSettings();
   const history = loadGameStateFromLocalStorageNew();
   if (!settings.userId || !history) {
@@ -177,11 +177,29 @@ export const saveAllResultsToFirebase = async () => {
   if (!data?.settings?.nickname) {
     data.settings.nickname = "";
   }
-  const docRef = doc(firestore, "allResults", settings.userId);
-  await setDoc(docRef, data);
+  return data;
+};
+
+export const saveAllResultsToFirebase = async () => {
+  const settings = getSettings();
+  const data = prepaveForSaving();
+  if (data && settings.userId) {
+    const docRef = doc(firestore, "allResults", settings.userId);
+    await setDoc(docRef, data);
+  }
 };
 
 export const getAllResultsFromFirebase = async (userId: string) => {
   const docRef = doc(firestore, "allResults", userId);
   return await getDoc(docRef);
+};
+
+// Login feature
+
+export const saveGamesForLoggedUser = async (loggedUserID: string) => {
+  const data = prepaveForSaving();
+  if (data && loggedUserID) {
+    const docRef = doc(firestore, "savedGames", loggedUserID);
+    await setDoc(docRef, data);
+  }
 };

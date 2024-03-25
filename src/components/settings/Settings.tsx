@@ -13,17 +13,19 @@ import {
 } from "@mui/material";
 import * as React from "react";
 import { useState } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { saveGames, signInWithGoogle } from "../../lib/authorization";
 import {
   getAllResultsFromFirebase,
   saveAllResultsToFirebase,
   saveSharedResult,
 } from "../../lib/dataAdapter";
 import {
+  SettingsItem,
   getSettings,
   saveSettings,
-  SettingsItem,
 } from "../../lib/localStorage";
-import { logMyEvent } from "../../lib/settingsFirebase";
+import { auth, logMyEvent } from "../../lib/settingsFirebase";
 import { Cell } from "../grid/Cell";
 import PageTitle from "../statistics/PageTitle";
 
@@ -44,7 +46,8 @@ const Settings = ({ onThemeChange }: PropType) => {
   const [report, setReport] = useState<Report>({
     previousIdentifierExists: undefined,
   });
-  //console.log(data);
+  const [user] = useAuthState(auth);
+  console.log("USER ", user?.uid);
 
   React.useEffect(() => {
     logMyEvent("settings");
@@ -283,6 +286,18 @@ const Settings = ({ onThemeChange }: PropType) => {
                 <Typography sx={{ color: "red" }}>
                   Zatim nefunkcni, makam na tom.
                 </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <Button variant="contained" onClick={signInWithGoogle}>
+                  Login přes Google
+                </Button>
+                <Button
+                  variant="contained"
+                  onClick={() => saveGames(user)}
+                  sx={{ ml: 1 }}
+                >
+                  Ulozit data na server
+                </Button>
               </Grid>
             </Grid>
           </CardContent>
