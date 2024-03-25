@@ -12,13 +12,13 @@ import {
 } from "../lib/localStorage";
 import { PlayContext } from "../lib/playContext";
 import { logMyEvent } from "../lib/settingsFirebase";
-import { getGameStateFromGuesses, PlayState } from "../lib/statuses";
+import { PlayState, getGameStateFromGuesses } from "../lib/statuses";
 import { isWinningWord, isWordInWordList } from "../lib/words";
+import styles from "./WordlePlay.module.css";
 import MyAlert from "./alerts/MyAlert";
 import { Grid } from "./grid/Grid";
 import { Keyboard } from "./keyboard/Keyboard";
 import EndGameModal from "./modals/EndGameModal";
-import styles from "./WordlePlay.module.css";
 
 type Props = {
   playContext: PlayContext;
@@ -204,14 +204,7 @@ const WordlePlay = ({ playContext }: Props) => {
         </Typography>
       )}
       <Typography sx={{ textAlign: "center", mt: 5 }} variant="body2">
-        Přátelé, omlouvám se za reklamy, ale je to nutné pro provoz serveru.
-        <p>
-          Prosím, nezahoďte svojí přízeň, dejte mi čas to zoptimalizovat tak aby
-          tu reklamy moc nerušily. Jestli vás to tu hodně zlobí, prosím vraťte
-          se za pár dní, snad bude vše již sluníčkové. Budu rád za jakoukoliv
-          zpětnou vazbu na email{" "}
-          <a href="mailto:tonda.kmoch@gmail.com">tonda.kmoch@gmail.com</a>
-        </p>
+        {" "}
       </Typography>
       {/* <AdsenseComponent
         adClient="ca-pub-9858251945255976"
