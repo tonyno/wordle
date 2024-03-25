@@ -294,6 +294,7 @@ const Settings = ({ onThemeChange }: PropType) => {
                 <Button
                   variant="contained"
                   onClick={() => saveGames(user)}
+                  disabled={!user}
                   sx={{ ml: 1 }}
                 >
                   Ulozit data na server

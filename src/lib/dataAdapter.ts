@@ -4,6 +4,7 @@ import { isProduction } from "./environments";
 import {
   AllResults,
   GameStateHistory,
+  getFinishedGameStatsFromLocalStorage,
   getSettings,
   getUserId,
   loadGameStateFromLocalStorageNew,
@@ -166,6 +167,7 @@ export const saveSharedResult = async () => {
 const prepaveForSaving = () => {
   const settings = getSettings();
   const history = loadGameStateFromLocalStorageNew();
+  const stats = getFinishedGameStatsFromLocalStorage();
   if (!settings.userId || !history) {
     console.error("Missing userId or history data");
     return;
@@ -173,7 +175,13 @@ const prepaveForSaving = () => {
   const data: AllResults = {
     history,
     settings,
+    stats,
+    size:
+      JSON.stringify(history).length +
+      JSON.stringify(stats).length +
+      JSON.stringify(settings).length,
   };
+  console.log("Size of data: ", data.size);
   if (!data?.settings?.nickname) {
     data.settings.nickname = "";
   }
