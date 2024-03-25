@@ -82,7 +82,11 @@ const TopMenu = ({ appContext, differentTopMessage }: Props) => {
                 <EqualizerIcon />
               </IconButton> */}
               {user && user?.photoURL ? (
-                <Avatar src={user?.photoURL} onClick={handleMenu} />
+                <Avatar
+                  src={user?.photoURL}
+                  onClick={handleMenu}
+                  sx={{ cursor: "pointer" }}
+                />
               ) : (
                 <IconButton
                   size="large"
@@ -159,7 +163,16 @@ const TopMenu = ({ appContext, differentTopMessage }: Props) => {
                 >
                   O aplikaci..
                 </MenuItem>
-                {user && <MenuItem onClick={signOutUser}>Odhlásit</MenuItem>}
+                {user && (
+                  <MenuItem
+                    onClick={() => {
+                      signOutUser();
+                      handleClose();
+                    }}
+                  >
+                    Odhlásit
+                  </MenuItem>
+                )}
               </Menu>
             </div>
           </Toolbar>
