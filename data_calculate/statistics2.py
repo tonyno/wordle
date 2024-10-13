@@ -71,3 +71,12 @@ if __name__ == '__main__':
 # Games: 5615141, win: 5109685, loose: 505456
 # {'LOUKA': 96973, 'KOULE': 74814, 'LÁSKA': 59110, 'PRASE': 30952, 'KOČKA': 7703, 'KOTEL': 5795, 'PRDEL': 3772, 'AUDIO': 1592, 'VÁLKA': 1428, 'PENIS': 1182, 'VOLBY': 1153, 'VOLBA': 556, 'DÁREK': 495, 'HOKEJ': 446, 'STROM': 283, 'KRYSA': 198, 'POŽÁR': 173, 'MOUKA': 172, 'ŠKOLA': 156, 'TONDA': 128, 'KONEC': 122, 'MĚSTO': 113, 'POKUS': 84, 'PERLA': 2, 'KNIHA': 2}
 # Total count 284106, avg: 207
+
+# 12.10.2024
+# Games: 7186887, win: 6548724, loose: 638163
+# {'LOUKA': 131337, 'KOULE': 97527, 'LÁSKA': 83790, 'PRASE': 30952, 'KOČKA': 7703, 'KOTEL': 5818, 'PRDEL': 3772, 'AUDIO': 1858, 'VÁLKA': 1428, 'HOKEJ': 1352, 'PENIS': 1182, 'VOLBY': 1153,
+#     'DÁREK': 813, 'VOLBA': 556, 'STROM': 391, 'KONEC': 204, 'KRYSA': 198, 'POŽÁR': 173, 'MOUKA': 172, 'ŠKOLA': 156, 'TONDA': 128, 'MĚSTO': 113, 'POKUS': 84, 'TANEC': 74, 'PERLA': 2, 'KNIHA': 2}
+# Total count 53, avg: 252
+# 1.6 mio sessions on unora
+# 9.2 mio celkem
+# 

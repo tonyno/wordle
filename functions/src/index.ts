@@ -84,6 +84,8 @@ exports.statistics = functions
 
 exports.statisticsTest = functions.https.onRequest(
   async (request, response) => {
+    // await statisticsForDay(1001);
+    // await statisticsForDay(1000);
     // for (let i = 0; i <= 3; ++i) {
     //   functions.logger.info("Processing day " + i);
     //   await statisticsForDay(i);
@@ -160,8 +162,10 @@ const statisticsForDay = async (solutionIndex: number) => {
     solution: solutionWord,
   };
 
+  functions.logger.info("Going to save to the database");
   const entry = db.collection("gameStats").doc("wordle");
   const currentData = entry ? (await entry.get()).data() || {} : {};
+  functions.logger.info("Get completed");
   currentData[day] = statsResult;
   const retVal = await entry.set(currentData);
   functions.logger.info("Data updated. Result value: ", retVal);
